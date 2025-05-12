@@ -54,7 +54,7 @@ export class EntretienProComponent extends FormProvider {
   valueDefaultDate = "01-01-2025";
   valueDefaultNumber = 10;
   valueDefaultBool = true;
-  valueDefaultAppreciationGenerale = 'a-acquerir';
+  valueDefaultAppreciationGenerale = 'A Acquérir';
 
 
   valueDefaultNumberAgent = 1;
@@ -114,10 +114,10 @@ export class EntretienProComponent extends FormProvider {
     caAptitude: [this.valueDefault, [Validators.required]],
 
     // 3.2
-    agCompetences: [this.valueDefault, [Validators.required]],
-    agContribution: [this.valueDefault, [Validators.required]],
-    agCapacites: [this.valueDefault, [Validators.required]],
-    agAptitude: [this.valueDefault, [Validators.required]],
+    agCompetences: [this.valueDefaultAppreciationGenerale, [Validators.required]],
+    agContribution: [this.valueDefaultAppreciationGenerale, [Validators.required]],
+    agCapacites: [this.valueDefaultAppreciationGenerale, [Validators.required]],
+    agAptitude: [this.valueDefaultAppreciationGenerale, [Validators.required]],
 
 
     realisationObjectifs: [this.valueDefault, [Validators.required]],
