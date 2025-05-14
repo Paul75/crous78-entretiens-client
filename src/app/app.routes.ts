@@ -22,6 +22,11 @@ export const routes: Routes = [
     loadComponent: () => import(`./modules/general/forms/entretien-formation/entretien-formation.component`)
       .then(mod => mod.EntretienFormationComponent)
   },
+  {
+    path: 'admin',
+    loadComponent: () => import(`./modules/general/admin/admin.component`)
+      .then(mod => mod.AdminComponent)
+  },
 
 
   {

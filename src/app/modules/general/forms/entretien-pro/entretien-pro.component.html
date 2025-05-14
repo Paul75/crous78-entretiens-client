@@ -15,17 +15,48 @@
   >
     <div class="container">
       <div class="row row-cols-sm-auto">
+        <div class="mb-3 row">
+          <label for="id" class="col-sm-4 col-form-label">type :</label>
+          <div class="col-sm-8">
+            <input
+              type="text"
+              class="form-control"
+              name="type"
+              formControlName="type"
+              required
+              [class.is-invalid]="
+                entretienForm.get('type')?.invalid &&
+                (entretienForm.get('type')?.touched ||
+                  entretienForm.get('type')?.dirty)
+              "
+            />
+            <div
+              class="invalid-feedback"
+              *ngIf="
+                entretienForm.get('type')?.invalid &&
+                entretienForm.get('type')?.touched
+              "
+            >
+              <ng-container
+                *ngIf="entretienForm.get('type')?.errors?.['required']"
+              >
+                TYPE INVALIDE
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
         <div class="input-group">
           <input
             type="text"
             class="form-control"
             ngbDatepicker
             #d="ngbDatepicker"
-            formControlName="date_entretien"
+            formControlName="dateEntretien"
             [class.is-invalid]="
-              entretienForm.get('date_entretien')?.invalid &&
-              (entretienForm.get('date_entretien')?.touched ||
-                entretienForm.get('date_entretien')?.dirty)
+              entretienForm.get('dateEntretien')?.invalid &&
+              (entretienForm.get('dateEntretien')?.touched ||
+                entretienForm.get('dateEntretien')?.dirty)
             "
           />
           <button
@@ -37,14 +68,14 @@
           <div
             class="invalid-feedback"
             *ngIf="
-              entretienForm.get('date_entretien')?.invalid &&
-              entretienForm.get('date_entretien')?.touched
+              entretienForm.get('dateEntretien')?.invalid &&
+              entretienForm.get('dateEntretien')?.touched
             "
           >
             <ng-container
-              *ngIf="entretienForm.get('date_entretien')?.errors?.['required']"
+              *ngIf="entretienForm.get('dateEntretien')?.errors?.['required']"
             >
-              Le date de date_entretien est requise
+              Le date de dateEntretien est requise
             </ng-container>
           </div>
         </div>

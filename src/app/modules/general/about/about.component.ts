@@ -141,7 +141,7 @@ export class AboutComponent implements OnInit {
       'Cette application a été développée avec Angular version 16.1.7 et bootstrap 5.3.2' +
       ' Elle applique le Routing, le Lazy loading, le Server side rendering et les Progressive Web App (PWA)';
 
-    const title = 'angular-starter Title : About Page';
+    const title = 'Entretiens annuels : About Page';
 
     this.seoService.setMetaDescription(content);
     this.seoService.setMetaTitle(title);

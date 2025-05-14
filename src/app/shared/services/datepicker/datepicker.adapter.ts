@@ -3,7 +3,7 @@ import { NgbDateAdapter, NgbDateStruct } from "@ng-bootstrap/ng-bootstrap";
 
 @Injectable()
 export class CustomDatepickerAdapter extends NgbDateAdapter<string> {
-	readonly DELIMITER = '-';
+	readonly DELIMITER = '/';
 
 	fromModel(value: string | null): NgbDateStruct | null {
 		if (value) {

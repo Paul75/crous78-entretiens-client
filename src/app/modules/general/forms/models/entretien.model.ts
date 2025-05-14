@@ -6,13 +6,13 @@ export class EntretienModel {
     type: TypeEntretien;
     agent: AgentModel;
     superieur: AgentModel;
-    date_entretien: string;
+    dateEntretien: Date;
     
     constructor() {
         this.type = TypeEntretien.ENTRETIEN_PRO;
         this.agent = new AgentModel();
         this.superieur = new AgentModel();
-        this.date_entretien = '';
+        this.dateEntretien = new Date();
     }
   }
   

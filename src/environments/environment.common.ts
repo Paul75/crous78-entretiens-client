@@ -9,7 +9,7 @@ export const appInfo = {
 };
 
 export const applicationBase = {
-  name: 'angular-starter',
+  name: 'Entretiens annuels',
   angular: 'Angular 19.2.7',
   bootstrap: 'Bootstrap 5.3.5',
   fontawesome: 'Font Awesome 6.7.2',
