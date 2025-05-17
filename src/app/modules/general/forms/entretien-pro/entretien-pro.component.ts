@@ -18,6 +18,7 @@ import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppreciationGeneraleEnum } from '../enums/appreciation_generale.enum';
 import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
+import { DrawerModule } from 'primeng/drawer';
 import { FormProvider } from '../providers/form.provider';
 import { EntretienProStep1Component } from './step1/step1.component';
 import { EntretienProStep2Component } from './step2/step2.component';
@@ -28,6 +29,7 @@ import { EntretienProStep6Component } from './step6/step6.component';
 import { EntretienProStep7Component } from './step7/step7.component';
 import { EntretienService } from '../services/entretien.service';
 import { transformDateEn } from '../../../../shared/utils/date-utils';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-entretien-pro',
@@ -38,6 +40,7 @@ import { transformDateEn } from '../../../../shared/utils/date-utils';
     NgbDatepickerModule,
     ButtonModule,
     StepperModule,
+    DrawerModule,
     EntretienProStep1Component,
     EntretienProStep2Component,
     EntretienProStep3Component,
@@ -53,6 +56,8 @@ import { transformDateEn } from '../../../../shared/utils/date-utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntretienProComponent extends FormProvider {
+  id: string | undefined;
+
   appreciationGenerale: typeof AppreciationGeneraleEnum =
     AppreciationGeneraleEnum;
 
@@ -62,6 +67,16 @@ export class EntretienProComponent extends FormProvider {
   fontawesome = environment.application.fontawesome;
 
   typeForm = 'professionnel';
+
+  menuEntretien = [
+    "Informations générales",
+    "1 - DESCRIPTION DU POSTE OCCUPE PAR L'AGENT",
+    "2 - Evaluation de l'année écoulée",
+    "3 - VALEUR PROFESSIONNELLE ET MANIERE DE SERVIR DU FONCTIONNAIRE",
+    "4 - ACQUIS DE L’EXPERIENCE PROFESSIONNELLE",
+    "5 - OBJECTIFS FIXÉS POUR LA NOUVELLE ANNÉE",
+    "6 - PERSPECTIVES D'EVOLUTION PROFESSIONNELLE",
+  ]
 
   valueDefault = 'TEST....';
   valueDefaultDate = '01/01/2025';
@@ -195,13 +210,16 @@ export class EntretienProComponent extends FormProvider {
 
   constructor(
     private cdref: ChangeDetectorRef,
-    private entretienService: EntretienService
+    private entretienService: EntretienService,
+    private route: ActivatedRoute
   ) {
     super();
     this.createForm();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.id = this.route.snapshot.params['id'];
+  }
 
   getForm() {
     return this.entretienForm;

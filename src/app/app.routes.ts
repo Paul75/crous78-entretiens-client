@@ -1,54 +1,76 @@
 import { Routes } from '@angular/router';
 
-import { HomeComponent } from './modules/general/home/home.component'
+import { HomeComponent } from './modules/general/home/home.component';
 import { NotFoundComponent } from './modules/general/not-found/not-found.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent, },
-
+  { path: '', component: HomeComponent },
 
   {
     path: 'forms',
-    loadChildren: () => import(`./modules/general/forms/forms.routes`)
-      .then(routes => routes.routes)
+    loadChildren: () =>
+      import(`./modules/general/forms/forms.routes`).then(
+        (routes) => routes.routes
+      ),
   },
-  {
+  /*{
     path: 'entretien-pro',
-    loadComponent: () => import(`./modules/general/forms/entretien-pro/entretien-pro.component`)
-      .then(mod => mod.EntretienProComponent)
-  },
+    loadComponent: () =>
+      import(
+        `./modules/general/forms/entretien-pro/entretien-pro.component`
+      ).then((mod) => mod.EntretienProComponent),
+  },*/
   {
-    path: 'entretien-formation',
-    loadComponent: () => import(`./modules/general/forms/entretien-formation/entretien-formation.component`)
-      .then(mod => mod.EntretienFormationComponent)
+    path: 'entretien-pro/:id',
+    loadComponent: () =>
+      import(
+        `./modules/general/forms/entretien-pro/entretien-pro.component`
+      ).then((mod) => mod.EntretienProComponent),
+  },
+
+  {
+    path: 'entretien-formation/:id',
+    loadComponent: () =>
+      import(
+        `./modules/general/forms/entretien-formation/entretien-formation.component`
+      ).then((mod) => mod.EntretienFormationComponent),
   },
   {
     path: 'admin',
-    loadComponent: () => import(`./modules/general/admin/admin.component`)
-      .then(mod => mod.AdminComponent)
+    loadComponent: () =>
+      import(`./modules/general/admin/admin.component`).then(
+        (mod) => mod.AdminComponent
+      ),
   },
-
 
   {
     path: 'login',
-    loadComponent: () => import(`./modules/general/login/login.component`)
-      .then(mod => mod.LoginComponent)
+    loadComponent: () =>
+      import(`./modules/general/login/login.component`).then(
+        (mod) => mod.LoginComponent
+      ),
   },
   {
     path: 'signup',
-    loadComponent: () => import(`./modules/general/signup/signup.component`)
-      .then(mod => mod.SignupComponent)
+    loadComponent: () =>
+      import(`./modules/general/signup/signup.component`).then(
+        (mod) => mod.SignupComponent
+      ),
   },
   {
     path: 'contact',
-    loadChildren: () => import(`./modules/general/contact/contact.routes`)
-      .then(routes => routes.routes)
+    loadChildren: () =>
+      import(`./modules/general/contact/contact.routes`).then(
+        (routes) => routes.routes
+      ),
   },
   {
     path: 'about',
-    loadChildren: () => import('./modules/general/about/about.routes')
-      .then(routes => routes.routes)
+    loadChildren: () =>
+      import('./modules/general/about/about.routes').then(
+        (routes) => routes.routes
+      ),
   },
 
-  { path: '**', component: NotFoundComponent }
+  { path: '**', component: NotFoundComponent },
 ];

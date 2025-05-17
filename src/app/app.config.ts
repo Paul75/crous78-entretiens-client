@@ -14,13 +14,13 @@ import Aura from '@primeng/themes/aura';
 import localeFRExtra from "@angular/common/locales/extra/fr";
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
-import { NgbDateAdapter, NgbDateParserFormatter, NgbDatepickerI18n } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateAdapter, NgbDateParserFormatter, NgbDatepickerI18n, NgbProgressbar, NgbProgressbarModule } from '@ng-bootstrap/ng-bootstrap';
 import { CustomDatepickerI18n, I18n } from './shared/services/datepicker/datepicker.i18n';
 import { CustomDatepickerAdapter } from './shared/services/datepicker/datepicker.adapter';
 import { CustomDateParserFormatter } from './shared/services/datepicker/datepicker.formatter';
 registerLocaleData(localeFr, "fr", localeFRExtra);
 
-export const appConfig: ApplicationConfig = {
+export const appConfig: ApplicationConfig = { 
   providers: [
     provideHttpClient(
       withFetch(),
@@ -47,7 +47,8 @@ export const appConfig: ApplicationConfig = {
     I18n,
     { provide: NgbDatepickerI18n, useClass: CustomDatepickerI18n},
     { provide: NgbDateAdapter, useClass: CustomDatepickerAdapter },
-		{ provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter }
+		{ provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter },
+    { provide: NgbProgressbarModule }
   ]
     
 };
