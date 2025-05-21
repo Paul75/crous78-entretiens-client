@@ -17,22 +17,22 @@ export class PdfService {
   downloadPdf(entretienId: number): Observable<any> {
     /*const headers = new HttpHeaders({
       responseType: 'blob',
-    });
+    });*/
 
     return this.http
       .get(this.backendUrl + '/pdfs/' + entretienId, {
         responseType: 'blob'
       })
       .pipe(catchError(this.handleError('newEntretien', {})));
-    */
+    
    
-    const httpOptions = {
+    /*const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/pdf',
       }),
       responseType: 'blob' as 'json',
     };
-    return this.http.get<Blob>(this.backendUrl + '/pdfs/' + entretienId, httpOptions);
+    return this.http.get<Blob>(this.backendUrl + '/pdfs/' + entretienId, httpOptions);*/
   }
 
   private handleError<T>(operation: string, result: T) {

@@ -13,28 +13,6 @@ export const routes: Routes = [
         (routes) => routes.routes
       ),
   },
-  /*{
-    path: 'entretien-pro',
-    loadComponent: () =>
-      import(
-        `./modules/general/forms/entretien-pro/entretien-pro.component`
-      ).then((mod) => mod.EntretienProComponent),
-  },*/
-  {
-    path: 'entretien-pro/:id',
-    loadComponent: () =>
-      import(
-        `./modules/general/forms/entretien-pro/entretien-pro.component`
-      ).then((mod) => mod.EntretienProComponent),
-  },
-
-  {
-    path: 'entretien-formation/:id',
-    loadComponent: () =>
-      import(
-        `./modules/general/forms/entretien-formation/entretien-formation.component`
-      ).then((mod) => mod.EntretienFormationComponent),
-  },
   {
     path: 'admin',
     loadComponent: () =>

@@ -69,16 +69,15 @@ export class HomeComponent {
   getPDF() {
     this.pdfService.downloadPdf(this.currentEntretien).subscribe({
       next: (data: Blob) => {
-        console.log(data);
         const a = document.createElement('a');
         const objectUrl = URL.createObjectURL(data);
         a.href = objectUrl;
-        a.download = 'file.pdf';
+        a.download = 'entretien_pro.pdf';
         a.click();
         URL.revokeObjectURL(objectUrl);
+        a.remove();
       },
-      error: (e) => console.error('downloadPdf error: ', e),
-      complete: () => console.info('complete'),
+      error: (e) => console.error('downloadPdf error: ', e)
     });
   }
 }
