@@ -1,0 +1,47 @@
+import { AppreciationGeneraleEnum } from "../enums/appreciation_generale.enum";
+import { TypeEntretien } from "../enums/type-entretien.enum";
+import { AgentModel } from "../models/agent.model";
+// import { getCurrentDate } from "../utils/date-utils";
+
+export const URL_ENTRETIENS = 'entretien';
+export const NAME_ENTRETIEN = 'Entretien';
+
+export const DEFAULT_ENTRETIEN = {
+  id: 0,
+  type: TypeEntretien.ENTRETIEN_PRO,
+  statut: '',
+  dateEntretien: '',
+  structure: '',
+  intitulePoste: '',
+  dateAffectation: '',
+  emploiType: '',
+  positionPoste: '',
+  quotiteAffectation: '',
+  missions: '',
+  conduiteProjet: false,
+  encadrement: false,
+  cpeNbAgent: 0,
+  cpeCategA: 0,
+  cpeCategB: 0,
+  cpeCategC: 0,
+  rappelObjectifs: '',
+  evenementsSurvenus: '',
+  caCompetences: '',
+  caContribution: '',
+  caCapacites: '',
+  caAptitude: '',
+  agCompetences: AppreciationGeneraleEnum.NON_EVALUABLE,
+  agContribution: AppreciationGeneraleEnum.NON_EVALUABLE,
+  agCapacites: AppreciationGeneraleEnum.NON_EVALUABLE,
+  agAptitude: AppreciationGeneraleEnum.NON_EVALUABLE,
+  realisationObjectifs: '',
+  appreciationLitterale: '',
+  acquisExperiencePro: '',
+  objectifsActivites: '',
+  demarcheEnvisagee: '',
+  evolutionActivites: '',
+  evolutionCarriere: '',
+  agent: new AgentModel(),
+  superieur: new AgentModel(),
+  
+};

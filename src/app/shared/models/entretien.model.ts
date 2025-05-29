@@ -1,0 +1,42 @@
+import { TypeEntretien } from '@shared/enums/type-entretien.enum';
+import { AgentModel } from './agent.model';
+import { AppreciationGeneraleEnum } from '@shared/enums/appreciation_generale.enum';
+
+export interface Entretien {
+  id: number;
+  type: TypeEntretien;
+  statut: string;
+  dateEntretien: string;
+  structure: string;
+  intitulePoste: string;
+  dateAffectation: string|null;
+  emploiType: string;
+  positionPoste: string;
+  quotiteAffectation: string;
+  missions: string;
+  conduiteProjet: boolean;
+  encadrement: boolean;
+  cpeNbAgent: number;
+  cpeCategA: number;
+  cpeCategB: number;
+  cpeCategC: number;
+  rappelObjectifs: string;
+  evenementsSurvenus: string;
+  caCompetences: string;
+  caContribution: string;
+  caCapacites: string;
+  caAptitude: string;
+  agCompetences: AppreciationGeneraleEnum;
+  agContribution: AppreciationGeneraleEnum;
+  agCapacites: AppreciationGeneraleEnum;
+  agAptitude: AppreciationGeneraleEnum;
+  realisationObjectifs: string;
+  appreciationLitterale: string;
+  acquisExperiencePro: string;
+  objectifsActivites: string;
+  demarcheEnvisagee: string;
+  evolutionActivites: string;
+  evolutionCarriere: string;
+  agent: AgentModel;
+  superieur?: AgentModel;
+}

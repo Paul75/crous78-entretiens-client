@@ -28,7 +28,12 @@
               },
               "src/assets",
               "src/sitemap.xml",
-              "src/robots.txt"
+              "src/robots.txt",
+              {
+                "glob": "**/*",
+                "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                "output": "/assets/"
+              }
             ],
             "styles": [
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
@@ -57,8 +62,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "512kB",
-                  "maximumError": "1024kB"
+                  "maximumWarning": "512MB",
+                  "maximumError": "1024MB"
                 }
               ],
               "outputHashing": "all",

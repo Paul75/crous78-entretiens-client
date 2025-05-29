@@ -1,6 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection, isDevMode, LOCALE_ID } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.routes';
@@ -9,16 +8,17 @@ import { provideServiceWorker } from '@angular/service-worker';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
-
-
-import localeFRExtra from "@angular/common/locales/extra/fr";
 import { registerLocaleData } from '@angular/common';
+import { NgbDateAdapter, NgbDateParserFormatter, NgbDatepickerI18n, NgbProgressbarModule } from '@ng-bootstrap/ng-bootstrap';
 import localeFr from '@angular/common/locales/fr';
-import { NgbDateAdapter, NgbDateParserFormatter, NgbDatepickerI18n, NgbProgressbar, NgbProgressbarModule } from '@ng-bootstrap/ng-bootstrap';
-import { CustomDatepickerI18n, I18n } from './shared/services/datepicker/datepicker.i18n';
-import { CustomDatepickerAdapter } from './shared/services/datepicker/datepicker.adapter';
-import { CustomDateParserFormatter } from './shared/services/datepicker/datepicker.formatter';
-registerLocaleData(localeFr, "fr", localeFRExtra);
+import localeFRExtra from "@angular/common/locales/extra/fr";
+import { CustomDatepickerI18n, I18n } from '@shared/services/datepicker/datepicker.i18n';
+import { CustomDatepickerAdapter } from '@shared/services/datepicker/datepicker.adapter';
+import { CustomDateParserFormatter } from '@shared/services/datepicker/datepicker.formatter';
+import { AuthenticationService } from './core/authentication/authentication.service';
+import { AuthenticationGuard } from './core/authentication/authentication.guard';
+
+registerLocaleData(localeFr, "fr-FR", localeFRExtra);
 
 export const appConfig: ApplicationConfig = { 
   providers: [
@@ -41,6 +41,17 @@ export const appConfig: ApplicationConfig = {
     providePrimeNG({
       theme: {
         preset: Aura
+      },
+      translation: {
+        accept: 'Aceptar',
+        reject: 'Rechazar',
+        startsWith:	'Commence par',
+        contains: 'Contient',
+        notContains: 'Ne contient pas',
+        endsWith: 'Se termine par',
+        equals: 'Égal à',
+        notEquals: 'Différent de',
+        noFilter: 'Pas de filtre'
       }
     }),
     { provide: LOCALE_ID, useValue: "fr-FR"},
@@ -48,7 +59,10 @@ export const appConfig: ApplicationConfig = {
     { provide: NgbDatepickerI18n, useClass: CustomDatepickerI18n},
     { provide: NgbDateAdapter, useClass: CustomDatepickerAdapter },
 		{ provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter },
-    { provide: NgbProgressbarModule }
+    { provide: NgbProgressbarModule },
+    AuthenticationService,
+    AuthenticationGuard
+    // { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ]
     
 };

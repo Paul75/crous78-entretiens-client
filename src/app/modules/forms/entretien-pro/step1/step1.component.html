@@ -1,0 +1,701 @@
+<form [formGroup]="form">
+  <div class="flex-auto flex row">
+    <div class="col">
+      <h5 class="text-center">AGENT</h5>
+      <hr class="border-bottom border-dark border-2" />
+
+      <div formGroupName="agent">
+        <div class="mb-3 row">
+          <label for="id" class="col-sm-4 col-form-label">ID :</label>
+          <div class="col-sm-8">
+            <input
+              type="text"
+              class="form-control"
+              name="id"
+              formControlName="id"
+              required
+              [class.is-invalid]="
+                registerFormControl['agent'].get('id')?.invalid &&
+                (registerFormControl['agent'].get('id')?.touched ||
+                  registerFormControl['agent'].get('id')?.dirty)
+              "
+            />
+            <div
+              class="invalid-feedback"
+              *ngIf="
+                registerFormControl['agent'].get('id')?.invalid &&
+                registerFormControl['agent'].get('id')?.touched
+              "
+            >
+              <ng-container
+                *ngIf="registerFormControl['agent'].get('id')?.errors?.['required']"
+              >
+                ID INVALIDE
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label for="matricule" class="col-sm-4 col-form-label">matricule :</label>
+          <div class="col-sm-8">
+            <input
+              type="text"
+              class="form-control"
+              name="matricule"
+              formControlName="matricule"
+              required
+              [class.is-invalid]="
+                registerFormControl['agent'].get('matricule')?.invalid &&
+                (registerFormControl['agent'].get('matricule')?.touched ||
+                  registerFormControl['agent'].get('matricule')?.dirty)
+              "
+            />
+            <div
+              class="invalid-feedback"
+              *ngIf="
+                registerFormControl['agent'].get('matricule')?.invalid &&
+                registerFormControl['agent'].get('matricule')?.touched
+              "
+            >
+              <ng-container
+                *ngIf="registerFormControl['agent'].get('matricule')?.errors?.['required']"
+              >
+                matricule INVALIDE
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label for="nomUsage" class="col-sm-4 col-form-label"
+            >Nom d'usage :</label
+          >
+          <div class="col-sm-8">
+            <input
+              type="text"
+              class="form-control"
+              name="nomUsage"
+              formControlName="nomUsage"
+              [class.is-invalid]="
+                registerFormControl['agent'].get('nomUsage')?.invalid &&
+                (registerFormControl['agent'].get('nomUsage')?.touched ||
+                  registerFormControl['agent'].get('nomUsage')?.dirty)
+              "
+            />
+            <div
+              class="invalid-feedback"
+              *ngIf="
+                registerFormControl['agent'].get('nomUsage')?.invalid &&
+                registerFormControl['agent'].get('nomUsage')?.touched
+              "
+            >
+              <ng-container
+                *ngIf="registerFormControl['agent'].get('nomUsage')?.errors?.['required']"
+              >
+                Le nom d'usage est requis
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['agent'].get('nomUsage')?.errors?.['minlength']"
+              >
+                Minimum 2 charactères
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['agent'].get('nomUsage')?.errors?.['maxlength']"
+              >
+                Maximum de charactères atteint
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label for="" class="col-sm-4 col-form-label">Nom de famille :</label>
+          <div class="col-sm-8">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="nom"
+              [class.is-invalid]="
+                registerFormControl['agent'].get('nom')?.invalid &&
+                (registerFormControl['agent'].get('nom')?.touched ||
+                  registerFormControl['agent'].get('nom')?.dirty)
+              "
+            />
+
+            <div
+              class="invalid-feedback"
+              *ngIf="
+                registerFormControl['agent'].get('nom')?.invalid &&
+                registerFormControl['agent'].get('nom')?.touched
+              "
+            >
+              <ng-container
+                *ngIf="registerFormControl['agent'].get('nom')?.errors?.['required']"
+              >
+                Le nom est requis
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['agent'].get('nom')?.errors?.['minlength']"
+              >
+                Minimum 2 charactères
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['agent'].get('nom')?.errors?.['maxlength']"
+              >
+                Maximum de charactères atteint
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label for="" class="col-sm-4 col-form-label">Prénom :</label>
+          <div class="col-sm-8">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="prenom"
+              [class.is-invalid]="
+                registerFormControl['agent'].get('prenom')?.invalid &&
+                (registerFormControl['agent'].get('prenom')?.touched ||
+                  registerFormControl['agent'].get('prenom')?.dirty)
+              "
+            />
+
+            <div
+              class="invalid-feedback"
+              *ngIf="
+                registerFormControl['agent'].get('prenom')?.invalid &&
+                registerFormControl['agent'].get('prenom')?.touched
+              "
+            >
+              <ng-container
+                *ngIf="registerFormControl['agent'].get('prenom')?.errors?.['required']"
+              >
+                Le nom est requis
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['agent'].get('prenom')?.errors?.['minlength']"
+              >
+                Minimum 2 charactères
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['agent'].get('prenom')?.errors?.['maxlength']"
+              >
+                Maximum de charactères atteint
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label for="" class="col-sm-4 col-form-label"
+            >Date de naissance :</label
+          >
+          <div class="col-sm-8">
+            <div class="row row-cols-sm-auto">
+              <div class="input-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  ngbDatepicker
+                  #d="ngbDatepicker"
+                  formControlName="dateNaissance"
+                  [class.is-invalid]="
+                    registerFormControl['agent'].get('dateNaissance')
+                      ?.invalid &&
+                    (registerFormControl['agent'].get('dateNaissance')
+                      ?.touched ||
+                      registerFormControl['agent'].get('dateNaissance')?.dirty)
+                  "
+                />
+                <button
+                  class="btn btn-outline-secondary bi bi-calendar3"
+                  (click)="d.toggle()"
+                  type="button"
+                ></button>
+
+                <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    registerFormControl['agent'].get('dateNaissance')
+                      ?.invalid &&
+                    registerFormControl['agent'].get('dateNaissance')?.touched
+                  "
+                >
+                  <ng-container
+                    *ngIf="registerFormControl['agent'].get('dateNaissance')?.errors?.['required']"
+                  >
+                    Le date de naissance est requise
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label for="" class="col-sm-4 col-form-label">Corps-grade :</label>
+          <div class="col-sm-8">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="corpsGrade"
+              [class.is-invalid]="
+                registerFormControl['agent'].get('corpsGrade')?.invalid &&
+                (registerFormControl['agent'].get('corpsGrade')?.touched ||
+                  registerFormControl['agent'].get('corpsGrade')?.dirty)
+              "
+            />
+
+            <div
+              class="invalid-feedback"
+              *ngIf="
+                registerFormControl['agent'].get('corpsGrade')?.invalid &&
+                registerFormControl['agent'].get('corpsGrade')?.touched
+              "
+            >
+              <ng-container
+                *ngIf="registerFormControl['agent'].get('corpsGrade')?.errors?.['required']"
+              >
+                Le corps-grade est requis
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['agent'].get('corpsGrade')?.errors?.['minlength']"
+              >
+                Minimum 2 charactères
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['agent'].get('corpsGrade')?.errors?.['maxlength']"
+              >
+                Maximum de charactères atteint
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label for="" class="col-sm-4 col-form-label">Echelon :</label>
+          <div class="col-sm-8">
+            <input
+              type="text"
+              class="form-control"
+              id="inputPassword"
+              formControlName="echelon"
+              [class.is-invalid]="
+                registerFormControl['agent'].get('echelon')?.invalid &&
+                (registerFormControl['agent'].get('echelon')?.touched ||
+                  registerFormControl['agent'].get('echelon')?.dirty)
+              "
+            />
+
+            <div
+              class="invalid-feedback"
+              *ngIf="
+                registerFormControl['agent'].get('echelon')?.invalid &&
+                registerFormControl['agent'].get('echelon')?.touched
+              "
+            >
+              <ng-container
+                *ngIf="registerFormControl['agent'].get('echelon')?.errors?.['required']"
+              >
+                L'échelon est requis
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['agent'].get('echelon')?.errors?.['minlength']"
+              >
+                Minimum 2 charactères
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['agent'].get('echelon')?.errors?.['maxlength']"
+              >
+                Maximum de charactères atteint
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label for="staticEmail" class="col-sm-4 col-form-label"
+            >Date de promotion dans l'échelon :</label
+          >
+          <div class="col-sm-8">
+            <div class="row row-cols-sm-auto">
+              <div class="input-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  ngbDatepicker
+                  #dPromotion="ngbDatepicker"
+                  formControlName="datePromotion"
+                />
+                <button
+                  class="btn btn-outline-secondary bi bi-calendar3"
+                  (click)="dPromotion.toggle()"
+                  type="button"
+                ></button>
+
+                <!-- <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    registerFormControl['agent'].get('datePromotion')
+                      ?.invalid &&
+                    registerFormControl['agent'].get('datePromotion')?.touched
+                  "
+                >
+                  <ng-container
+                    *ngIf="registerFormControl['agent'].get('datePromotion')?.errors?.['required']"
+                  >
+                    La date de promotion dans l'échelon est requise
+                  </ng-container>
+                </div>-->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <h5 class="text-center">SUPERIEUR HIERARCHIQUE DIRECT</h5>
+      <hr class="border-bottom border-dark border-2" />
+
+      <div formGroupName="superieur">
+        <div class="mb-3 row">
+          <label for="id" class="col-sm-4 col-form-label">ID :</label>
+          <div class="col-sm-8">
+            <input
+              type="text"
+              class="form-control-plaintext"
+              name="id"
+              formControlName="id"
+              [class.is-invalid]="
+                registerFormControl['superieur'].get('id')?.invalid &&
+                (registerFormControl['superieur'].get('id')?.touched ||
+                  registerFormControl['superieur'].get('id')?.dirty)
+              "
+            />
+            <div
+              class="invalid-feedback"
+              *ngIf="
+                registerFormControl['superieur'].get('id')?.invalid &&
+                registerFormControl['superieur'].get('id')?.touched
+              "
+            >
+              <ng-container
+                *ngIf="registerFormControl['superieur'].get('id')?.errors?.['required']"
+              >
+                ID INVALIDE
+              </ng-container>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <label for="matricule" class="col-sm-4 col-form-label">matricule :</label>
+          <div class="col-sm-8">
+            <input
+              type="text"
+              class="form-control-plaintext"
+              name="matricule"
+              formControlName="matricule"
+              [class.is-invalid]="
+                registerFormControl['superieur'].get('matricule')?.invalid &&
+                (registerFormControl['superieur'].get('matricule')?.touched ||
+                  registerFormControl['superieur'].get('matricule')?.dirty)
+              "
+            />
+            <div
+              class="invalid-feedback"
+              *ngIf="
+                registerFormControl['superieur'].get('matricule')?.invalid &&
+                registerFormControl['superieur'].get('matricule')?.touched
+              "
+            >
+              <ng-container
+                *ngIf="registerFormControl['superieur'].get('matricule')?.errors?.['required']"
+              >
+                matricule INVALIDE
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label for="staticEmail" class="col-sm-3 col-form-label">Nom :</label>
+          <div class="col-sm-9">
+            <input
+              type="text"
+              class="form-control"
+              class="form-control-plaintext"
+              formControlName="nom"
+              [class.is-invalid]="
+                registerFormControl['superieur'].get('nom')?.invalid &&
+                (registerFormControl['superieur'].get('nom')?.touched ||
+                  registerFormControl['superieur'].get('nom')?.dirty)
+              "
+            />
+
+            <div
+              class="invalid-feedback"
+              *ngIf="
+                registerFormControl['superieur'].get('nom')?.invalid &&
+                registerFormControl['superieur'].get('nom')?.touched
+              "
+            >
+              <ng-container
+                *ngIf="registerFormControl['superieur'].get('nom')?.errors?.['required']"
+              >
+                Le nom est requis
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['superieur'].get('nom')?.errors?.['minlength']"
+              >
+                Minimum 2 charactères
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['superieur'].get('nom')?.errors?.['maxlength']"
+              >
+                Maximum de charactères atteint
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label for="staticEmail" class="col-sm-3 col-form-label"
+            >Prénom :</label
+          >
+          <div class="col-sm-9">
+            <input
+              type="text"
+              class="form-control"
+              class="form-control-plaintext"
+              formControlName="prenom"
+              [class.is-invalid]="
+                registerFormControl['superieur'].get('prenom')?.invalid &&
+                (registerFormControl['superieur'].get('prenom')?.touched ||
+                  registerFormControl['superieur'].get('prenom')?.dirty)
+              "
+            />
+
+            <div
+              class="invalid-feedback"
+              *ngIf="
+                registerFormControl['superieur'].get('prenom')?.invalid &&
+                registerFormControl['superieur'].get('prenom')?.touched
+              "
+            >
+              <ng-container
+                *ngIf="registerFormControl['superieur'].get('prenom')?.errors?.['required']"
+              >
+                Le prénom est requis
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['superieur'].get('prenom')?.errors?.['minlength']"
+              >
+                Minimum 2 charactères
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['superieur'].get('prenom')?.errors?.['maxlength']"
+              >
+                Maximum de charactères atteint
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label for="staticEmail" class="col-sm-3 col-form-label"
+            >Corps-grade :</label
+          >
+          <div class="col-sm-9">
+            <input
+              type="text"
+              class="form-control form-control-plaintext"
+              formControlName="corpsGrade"
+              [class.is-invalid]="
+                registerFormControl['superieur'].get('corpsGrade')?.invalid &&
+                (registerFormControl['superieur'].get('corpsGrade')?.touched ||
+                  registerFormControl['superieur'].get('corpsGrade')?.dirty)
+              "
+            />
+
+            <div
+              class="invalid-feedback"
+              *ngIf="
+                registerFormControl['superieur'].get('corpsGrade')?.invalid &&
+                registerFormControl['superieur'].get('corpsGrade')?.touched
+              "
+            >
+              <ng-container
+                *ngIf="registerFormControl['superieur'].get('corpsGrade')?.errors?.['required']"
+              >
+                Le corps-grade est requis
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['superieur'].get('corpsGrade')?.errors?.['minlength']"
+              >
+                Minimum 2 charactères
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['superieur'].get('corpsGrade')?.errors?.['maxlength']"
+              >
+                Maximum de charactères atteint
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label for="staticEmail" class="col-sm-3 col-form-label"
+            >Intitulé de la fonction :</label
+          >
+          <div class="col-sm-9">
+            <input
+              type="text"
+              class="form-control form-control-plaintext"
+              formControlName="fonction"
+              [class.is-invalid]="
+                registerFormControl['superieur'].get('fonction')?.invalid &&
+                (registerFormControl['superieur'].get('fonction')?.touched ||
+                  registerFormControl['superieur'].get('fonction')?.dirty)
+              "
+            />
+
+            <div
+              class="invalid-feedback"
+              *ngIf="
+                registerFormControl['superieur'].get('fonction')?.invalid &&
+                registerFormControl['superieur'].get('fonction')?.touched
+              "
+            >
+              <ng-container
+                *ngIf="registerFormControl['superieur'].get('fonction')?.errors?.['required']"
+              >
+                La fonction est requise
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['superieur'].get('fonction')?.errors?.['minlength']"
+              >
+                Minimum 2 charactères
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['superieur'].get('fonction')?.errors?.['maxlength']"
+              >
+                Maximum de charactères atteint
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label for="staticEmail" class="col-sm-3 col-form-label"
+            >Structure :</label
+          >
+          <div class="col-sm-9">
+            <input
+              type="text"
+              class="form-control form-control-plaintext"
+              formControlName="structure"
+              [class.is-invalid]="
+                registerFormControl['superieur'].get('structure')?.invalid &&
+                (registerFormControl['superieur'].get('structure')?.touched ||
+                  registerFormControl['superieur'].get('structure')?.dirty)
+              "
+            />
+
+            <div
+              class="invalid-feedback"
+              *ngIf="
+                registerFormControl['superieur'].get('structure')?.invalid &&
+                registerFormControl['superieur'].get('structure')?.touched
+              "
+            >
+              <ng-container
+                *ngIf="registerFormControl['superieur'].get('structure')?.errors?.['required']"
+              >
+                La structure est requise
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['superieur'].get('structure')?.errors?.['minlength']"
+              >
+                Minimum 2 charactères
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['superieur'].get('structure')?.errors?.['maxlength']"
+              >
+                Maximum de charactères atteint
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label for="staticEmail" class="col-sm-3 col-form-label"
+            >Adresse / ville :</label
+          >
+          <div class="col-sm-9">
+            <input
+              type="text"
+              class="form-control form-control-plaintext"
+              formControlName="adresse"
+              [class.is-invalid]="
+                registerFormControl['superieur'].get('adresse')?.invalid &&
+                (registerFormControl['superieur'].get('adresse')?.touched ||
+                  registerFormControl['superieur'].get('adresse')?.dirty)
+              "
+            />
+
+            <div
+              class="invalid-feedback"
+              *ngIf="
+                registerFormControl['superieur'].get('adresse')?.invalid &&
+                registerFormControl['superieur'].get('adresse')?.touched
+              "
+            >
+              <ng-container
+                *ngIf="registerFormControl['superieur'].get('adresse')?.errors?.['required']"
+              >
+                L'adresse est requise
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['superieur'].get('adresse')?.errors?.['minlength']"
+              >
+                Minimum 2 charactères
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['superieur'].get('adresse')?.errors?.['maxlength']"
+              >
+                Maximum de charactères atteint
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="mb-3 row">
+          <label for="staticEmail" class="col-sm-3 col-form-label">Date de l'entretien prof. :</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control"  class="form-control-plaintext" formControlName="date_entretien" 
+            [class.is-invalid]="registerFormControl['superieur'].get('date_entretien')?.invalid
+              && (registerFormControl['superieur'].get('date_entretien')?.touched 
+              || registerFormControl['superieur'].get('date_entretien')?.dirty)"
+             />
+            
+            <div class="invalid-feedback" *ngIf="registerFormControl['superieur'].get('date_entretien')?.invalid && registerFormControl['superieur'].get('date_entretien')?.touched">
+              <ng-container *ngIf="registerFormControl['superieur'].get('date_entretien')?.errors?.['required']">
+                La date d'entretien est requise
+              </ng-container>
+              <ng-container *ngIf="registerFormControl['superieur'].get('date_entretien')?.errors?.['minlength']">
+                Minimum 2 charactères
+              </ng-container>
+              <ng-container *ngIf="registerFormControl['superieur'].get('date_entretien')?.errors?.['maxlength']">
+                Maximum de charactères atteint
+              </ng-container>
+            </div>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</form>

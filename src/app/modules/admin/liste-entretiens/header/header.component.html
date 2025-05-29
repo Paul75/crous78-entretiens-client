@@ -1,0 +1,11 @@
+<div
+  class="badge text-wrap"
+  [ngClass]="{
+    preparation: entretien.statut === 'En préparation',
+    'rendez-vous': entretien.statut === 'Rendez-vous pris',
+    saisie: entretien.statut === 'En cours de saisie',
+    valide: entretien.statut === 'Entretien validé'
+  }"
+>
+  {{ entretien.statut }}
+</div>

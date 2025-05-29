@@ -1,0 +1,68 @@
+<div class="container">
+  <div class="row">
+    <div class="col"><h2>Accueil</h2></div>
+    <div class="col text-end">
+      <h1>{{ anneeScolaire.getAnneeScolaireActuelle(currentYear) }}</h1>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col">
+          <h3>Entretien professionnel</h3>
+
+          <p>Utilisateur :</p>
+
+          <div class="row lineEntretien">
+            <div class="col" routerLink="/forms/entretien-pro/1">
+              <div class="row">
+                <div class="col">BOREL</div>
+                <div class="col">Xiaojing</div>
+                <div
+                  class="col text-center"
+                  [style.backgroundColor]="
+                    getColorStatut(statutDemande.PREPARE)
+                  "
+                >
+                  {{ statutDemande.PREPARE }}
+                </div>
+                <div class="col-1 text-center btn btn-link my-0 py-0">
+                  <i class="bi bi-pencil-square"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-1 text-center btn btn-link my-0 py-0">
+              <a href="javascript:void(0)" (click)="getPDF()">
+                <i class="bi bi-filetype-pdf"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <h3>Entretien formation</h3>
+
+          <p>Utilisateur :</p>
+
+          <div
+            class="row lineEntretien"
+            routerLink="/forms/entretien-formation/1"
+          >
+            <div class="col">BOREL</div>
+            <div class="col">Xiaojing</div>
+            <div
+              class="col text-center"
+              [style.backgroundColor]="getColorStatut(statutDemande.RDV)"
+            >
+              {{ statutDemande.RDV }}
+            </div>
+            <div class="col-1">
+              <i class="bi bi-pencil-square"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

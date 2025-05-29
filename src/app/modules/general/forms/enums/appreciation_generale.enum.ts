@@ -1,6 +1,0 @@
-export enum AppreciationGeneraleEnum {    
-  A_ACQUERIR = "A_ACQUERIR",
-  A_DEVELOPPER = "A_DEVELOPPER",
-  MAITRISE = "MAITRISE",
-  EXPERT = "EXPERT"
-}
