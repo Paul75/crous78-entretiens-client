@@ -12,57 +12,46 @@
         <div class="col">
           <h3>Entretien professionnel</h3>
 
-          <p>Utilisateur :</p>
-
-          <div class="row lineEntretien">
-            <div class="col" routerLink="/forms/entretien-pro/1">
-              <div class="row">
-                <div class="col">BOREL</div>
-                <div class="col">Xiaojing</div>
-                <div
-                  class="col text-center"
-                  [style.backgroundColor]="
-                    getColorStatut(statutDemande.PREPARE)
-                  "
-                >
-                  {{ statutDemande.PREPARE }}
-                </div>
-                <div class="col-1 text-center btn btn-link my-0 py-0">
-                  <i class="bi bi-pencil-square"></i>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-1 text-center btn btn-link my-0 py-0">
-              <a href="javascript:void(0)" (click)="getPDF()">
-                <i class="bi bi-filetype-pdf"></i>
-              </a>
-            </div>
-          </div>
+          @if(listeEntretien && listeEntretien.entretienPro) {
+            <app-home-item [entretien]="listeEntretien.entretienPro" />
+          } @else {
+            <div class="alert alert-info" role="alert">PAS D'ENTRETIEN</div>
+          }
         </div>
         <div class="col">
           <h3>Entretien formation</h3>
 
-          <p>Utilisateur :</p>
-
-          <div
-            class="row lineEntretien"
-            routerLink="/forms/entretien-formation/1"
-          >
-            <div class="col">BOREL</div>
-            <div class="col">Xiaojing</div>
-            <div
-              class="col text-center"
-              [style.backgroundColor]="getColorStatut(statutDemande.RDV)"
-            >
-              {{ statutDemande.RDV }}
-            </div>
-            <div class="col-1">
-              <i class="bi bi-pencil-square"></i>
-            </div>
-          </div>
+          @if(listeEntretien && listeEntretien.entretienForm) {
+            <app-home-item [entretien]="listeEntretien.entretienForm" />
+          } @else {
+            <div class="alert alert-info" role="alert">PAS D'ENTRETIEN</div>
+          }
         </div>
       </div>
     </div>
   </div>
+
+  <p-dialog
+    [header]="'Entretien'"
+    [(visible)]="visibleDetailPdf"
+    [modal]="true"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    [style]="{ width: '50vw' }"
+    [draggable]="false"
+    [resizable]="false"
+    [maximizable]="true"
+    (onShow)="onActivatePdfTab()"
+    (onHide)="onDialogHide()"
+  >
+    @if (showViewer) {
+    <ngx-extended-pdf-viewer
+      [src]="src"
+      [height]="'auto'"
+      [textLayer]="true"
+      [showHandToolButton]="true"
+      [filenameForDownload]="'Public Domain.pdf'"
+    >
+    </ngx-extended-pdf-viewer>
+    }
+  </p-dialog>
 </div>

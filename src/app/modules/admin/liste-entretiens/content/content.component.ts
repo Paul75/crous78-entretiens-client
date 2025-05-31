@@ -6,7 +6,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ButtonGroupModule } from 'primeng/buttongroup';
 import { AdminListeEntretiensHeaderComponent } from '../header/header.component';
-import { CommunicationService } from '../../services/communication.service';
+import { CommunicationPdfService } from '@shared/services/entretiens/communication-pdf.service';
 
 @Component({
   selector: 'app-admin-liste-entretiens-content',
@@ -24,15 +24,13 @@ export class AdminListeEntretiensContentComponent {
   @Input()
   entretiens!: Entretien[];
 
-  private communicationService = inject(CommunicationService);
+  private communicationService = inject(CommunicationPdfService);
 
   getPDF(id: string) {
-    // this.actionGetPdf.emit(id);
     this.communicationService.envoyerGetPdf(id);
   }
 
   viewPDF(id: string) {
-    // this.actionViewPdf.emit(id);
     this.communicationService.envoyerViewPdf(id);
   }
 }

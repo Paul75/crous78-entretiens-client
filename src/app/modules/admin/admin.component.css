@@ -13,3 +13,7 @@
 .valide {
   background-color: #9b1b7b; /* Couleur pour 'Entretien validé' */
 }
+
+.equal-width-column {
+  width: 50%;
+}

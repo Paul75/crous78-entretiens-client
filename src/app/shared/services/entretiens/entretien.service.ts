@@ -8,6 +8,11 @@ import {
 import { Entretien } from '@shared/models/entretien.model';
 import { environment } from '@environments/environment';
 
+export class EntretienImpl {
+  matricule: any | null = null;
+  entretienPro: Entretien | null = null;
+  entretienForm: Entretien | null = null;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -35,6 +40,16 @@ export class EntretienService {
       .get<Entretien>(url)
       .pipe(
         catchError(this.handleError(`getEntretien id=${id}`, DEFAULT_ENTRETIEN))
+      );
+  }
+
+  getEntretienByMatricule(matricule: string): Observable<EntretienImpl> {
+    const url = `${this.backendUrl}/${URL_ENTRETIENS}/matricule/${matricule}`;
+
+    return this.http
+      .get<EntretienImpl>(url)
+      .pipe(
+        catchError(this.handleError(`getEntretienByMatricule matricule=${matricule}`, new EntretienImpl()))
       );
   }
 

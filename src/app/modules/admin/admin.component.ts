@@ -16,9 +16,9 @@ import { PdfService } from '@shared/services/pdf/pdf.service';
 import { NgxExtendedPdfViewerComponent, NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { AdminListeEntretiensHeaderComponent } from './liste-entretiens/header/header.component';
 import { AdminListeEntretiensContentComponent } from './liste-entretiens/content/content.component';
-import { CommunicationService } from './services/communication.service';
 import { environment } from '@environments/environment';
 import { SeoService } from '@core/services/seo/seo.service';
+import { CommunicationPdfService } from '@shared/services/entretiens/communication-pdf.service';
 
 export class PersonneImpl {
   id!: string;
@@ -52,7 +52,7 @@ export class AdminComponent implements OnInit {
   bootstrap = environment.application.bootstrap;
   fontawesome = environment.application.fontawesome;
 
-  private communicationService = inject(CommunicationService);
+  private communicationService = inject(CommunicationPdfService);
   private personnelService = inject(PersonnelService);
   private pdfService = inject(PdfService);
   public showViewer = false;

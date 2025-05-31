@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class CommunicationService {
+export class CommunicationPdfService {
   private actionGetPdf = new Subject<string>();
   private actionViewPdf = new Subject<string>();
 
