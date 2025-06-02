@@ -7,10 +7,7 @@
     <div class="row align-items-center">
       <div
         class="col lineEntretien"
-        [routerLink]="
-          '/forms/entretien-pro/' +
-          entretien.id
-        "
+        [routerLink]="routeToForm()"
       >
         {{
           entretien.dateEntretien
@@ -19,10 +16,7 @@
       </div>
       <div
         class="col badge text-wrap lineEntretien"
-        [routerLink]="
-          '/forms/entretien-pro/' +
-          entretien.id
-        "
+        [routerLink]="routeToForm()"
         [ngClass]="{
           preparation:
             getEntretienStatut() ===

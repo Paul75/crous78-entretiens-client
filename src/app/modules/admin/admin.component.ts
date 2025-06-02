@@ -19,6 +19,7 @@ import { AdminListeEntretiensContentComponent } from './liste-entretiens/content
 import { environment } from '@environments/environment';
 import { SeoService } from '@core/services/seo/seo.service';
 import { CommunicationPdfService } from '@shared/services/entretiens/communication-pdf.service';
+import { TypeEntretien } from '@shared/enums/type-entretien.enum';
 
 export class PersonneImpl {
   id!: string;
@@ -58,6 +59,8 @@ export class AdminComponent implements OnInit {
   public showViewer = false;
 
   liste!: PersonneImpl[];
+  
+  typeEntretienEnum = TypeEntretien;
 
   @ViewChild(NgxExtendedPdfViewerComponent, {static: false})
   private pdfViewer!: NgxExtendedPdfViewerComponent;
@@ -104,11 +107,6 @@ export class AdminComponent implements OnInit {
         // console.log(entretiens);
         this.liste = entretiens;
       });
-  }
-
-  newEntretien(ligne: PersonneImpl, type: string) {
-    console.log(type);
-    this.router.navigate(['/forms/entretien-pro']);
   }
 
   selectEntretien(ligne: PersonneImpl) {

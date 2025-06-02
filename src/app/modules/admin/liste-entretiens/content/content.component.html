@@ -8,8 +8,8 @@
 >
   <ng-template #header>
     <tr>
-      <th class="text-center">Date d'entretien</th>
-      <th class="text-center" colspan="2">Entretiens</th>
+      <th class="col text-center">Date d'entretien</th>
+      <th class="col text-center" colspan="2">Entretiens</th>
     </tr>
   </ng-template>
   <ng-template #body let-entretien>
@@ -18,25 +18,14 @@
         {{ entretien.dateEntretien | date : "dd/MM/yyyy" }}
       </td>
       <td class="text-center">
-        <app-admin-liste-entretiens-header [entretien]="entretien" />
+        <app-admin-liste-entretiens-header
+          [entretien]="entretien"
+          [buttons]="false"
+          [displayDate]="false"
+        />
       </td>
       <td class="text-center" style="width: 5rem; padding: 0; margin: 0">
-        <p-buttongroup>
-          <ng-container *ngIf="entretien">
-            <p-button
-              icon="pi pi-search"
-              (click)="viewPDF(entretien?.id)"
-              severity="secondary"
-              rounded
-            />
-            <p-button
-              icon="pi pi-download"
-              (click)="getPDF(entretien?.id)"
-              severity="secondary"
-              rounded
-            />
-          </ng-container>
-        </p-buttongroup>
+        <app-admin-liste-entretiens-buttons [entretien]="entretien" />
       </td>
     </tr>
   </ng-template>

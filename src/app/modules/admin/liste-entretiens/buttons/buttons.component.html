@@ -1,0 +1,24 @@
+<p-buttongroup>
+  <ng-container *ngIf="entretien">
+    <p-button
+      icon="pi pi-search"
+      (click)="viewPDF()"
+      severity="secondary"
+      rounded
+      pTooltip="Voir le PDF"
+    />
+
+    <p-button
+      icon="pi pi-download"
+      (click)="getPDF()"
+      severity="secondary"
+      rounded
+    />
+  </ng-container>
+  <p-button
+    icon="pi pi-plus"
+    (click)="newEntretien()"
+    severity="secondary"
+    rounded
+  />
+</p-buttongroup>

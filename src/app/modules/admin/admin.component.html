@@ -16,14 +16,14 @@
         <tr>
           <th class="text-center">Matricule</th>
           <th class="text-center">Personne</th>
-          <th class="text-center equal-width-column" colspan="2">Entretiens pro</th>
-          <th class="text-center equal-width-column" colspan="2">Entretiens formation</th>
+          <th class="text-center equal-width-column">Entretiens pro</th>
+          <th class="text-center equal-width-column">Entretiens formation</th>
         </tr>
       </ng-template>
       <ng-template #body let-liste>
         <tr>
           <td class="text-center">{{ liste.id }}</td>
-          <td class="text-center">
+          <td class="text-center text-nowrap">
             {{ liste.personne?.nom }} {{ liste.personne?.prenom }}
           </td>
 
@@ -43,32 +43,6 @@
 
             <ng-template #noProStatut></ng-template>
           </td>
-          <td class="text-center" style="width: 7rem; padding: 0; margin: 0">
-            <p-buttongroup>
-              <ng-container *ngIf="liste.entretienPro[0]">
-                <p-button
-                  icon="pi pi-search"
-                  (click)="viewPDF(liste.entretienPro[0]?.id)"
-                  severity="secondary"
-                  rounded
-                  pTooltip="Voir le PDF"
-                />
-
-                <p-button
-                  icon="pi pi-download"
-                  (click)="getPDF(liste.entretienPro[0]?.id)"
-                  severity="secondary"
-                  rounded
-                />
-              </ng-container>
-              <p-button
-                icon="pi pi-plus"
-                (click)="newEntretien(liste, 'ENTRETIEN_PRO')"
-                severity="secondary"
-                rounded
-              />
-            </p-buttongroup>
-          </td>
 
           <td class="text-center">
             <ng-container *ngIf="liste.entretienForm[0]?.statut; else noStatut">
@@ -83,32 +57,6 @@
             </ng-container>
 
             <ng-template #noStatut></ng-template>
-          </td>
-          <td class="text-center" style="width: 7rem; padding: 0; margin: 0">
-            <p-buttongroup>
-              <ng-container *ngIf="liste.entretienForm[0]">
-                <p-button
-                  icon="pi pi-search"
-                  (click)="viewPDF(liste.entretienForm[0]?.id)"
-                  severity="secondary"
-                  rounded
-                  pTooltip="Voir le PDF"
-                />
-
-                <p-button
-                  icon="pi pi-download"
-                  (click)="getPDF(liste.entretienForm[0]?.id)"
-                  severity="secondary"
-                  rounded
-                />
-              </ng-container>
-              <p-button
-                icon="pi pi-plus"
-                (click)="newEntretien(liste, 'ENTRETIEN_FORM')"
-                severity="secondary"
-                rounded
-              />
-            </p-buttongroup>
           </td>
         </tr>
       </ng-template>

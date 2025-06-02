@@ -71,8 +71,7 @@ export class HomeComponent implements OnInit {
 
   private communicationService = inject(CommunicationPdfService);
   private entretienService = inject(EntretienService);
-  typeEntretienEnum = TypeEntretien;
-
+  // typeEntretienEnum = TypeEntretien;
   listeEntretien!: EntretienImpl;
 
   constructor(private seoService: SeoService, private pdfService: PdfService) {
@@ -104,62 +103,6 @@ export class HomeComponent implements OnInit {
     this.communicationService.actionView$.subscribe(action => {
       this.viewPDF(action);
     });
-  }
-
-  getEntretienId(typeEntretien: TypeEntretien): string {
-    if (!this.listeEntretien) {
-      return '';
-    }
-    if(typeEntretien == TypeEntretien.ENTRETIEN_PRO) {
-      return this.listeEntretien.entretienPro && this.listeEntretien.entretienPro.id.toString() || '';
-    }
-
-    return this.listeEntretien.entretienForm && this.listeEntretien.entretienForm.id.toString() || '';
-  }
-  
-  getAgentName(typeEntretien: TypeEntretien): string {
-    if (!this.listeEntretien) {
-      return '';
-    }
-    if(typeEntretien == TypeEntretien.ENTRETIEN_PRO) {
-      return this.listeEntretien.entretienPro?.agent.prenom + ' ' + this.listeEntretien.entretienPro?.agent.nom;
-    }
-
-    return this.listeEntretien.entretienForm?.agent.prenom + ' ' + this.listeEntretien.entretienForm?.agent.nom;
-  }
-
-  getDateEntretien(typeEntretien: TypeEntretien): string {
-    if (!this.listeEntretien) {
-      return '';
-    }
-    
-    if(typeEntretien == TypeEntretien.ENTRETIEN_PRO) {
-      return this.listeEntretien.entretienPro?.dateEntretien || '';
-    }
-
-    return this.listeEntretien.entretienForm?.dateEntretien || '';
-  }
-
-  getEntretienStatut(typeEntretien: TypeEntretien): string{
-    if (!this.listeEntretien) {
-      return '';
-    }
-    
-    if(typeEntretien == TypeEntretien.ENTRETIEN_PRO) {
-      return this.listeEntretien.entretienPro?.statut || '';
-    }
-    return this.listeEntretien.entretienForm?.statut || '';
-  }
-
-  getColorStatut(item: StatutDemande): ColorDemande {
-    const colorMap: Record<StatutDemande, ColorDemande> = {
-      [StatutDemande.PREPARE]: ColorDemande.PREPARE,
-      [StatutDemande.RDV]: ColorDemande.RDV,
-      [StatutDemande.ENCOURS]: ColorDemande.ENCOURS,
-      [StatutDemande.VALIDE]: ColorDemande.VALIDE,
-    };
-
-    return colorMap[item] || ColorDemande.PREPARE;
   }
 
   onActivatePdfTab() {

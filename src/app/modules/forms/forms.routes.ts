@@ -7,14 +7,33 @@ export const routes: Routes = [
     path: '',
     component: FormsComponent,
     children: [
-      {
+      /*{
         path: '',
         loadComponent: () =>
           import('./entretien-pro/entretien-pro.component').then(
             (mod) => mod.EntretienProComponent
           ),
-      },
+      },*/
       {
+        path: 'entretien',
+        children: [
+          {
+            path: 'pro/:id',
+            loadComponent: () =>
+              import(`./entretien-pro/entretien-pro.component`).then(
+                (mod) => mod.EntretienProComponent
+              ),
+          },
+          {
+            path: 'formation/:id',
+            loadComponent: () =>
+              import(`./entretien-formation/entretien-formation.component`).then(
+                (mod) => mod.EntretienFormationComponent
+              ),
+          },
+        ]
+      },
+      /*{
         path: 'entretien-pro/:id',
         loadComponent: () =>
           import(`./entretien-pro/entretien-pro.component`).then(
@@ -27,7 +46,7 @@ export const routes: Routes = [
           import(`./entretien-formation/entretien-formation.component`).then(
             (mod) => mod.EntretienFormationComponent
           ),
-      },
+      },*/
       {
         path: 'confirmation',
         loadComponent: () =>

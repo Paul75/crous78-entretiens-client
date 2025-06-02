@@ -36,6 +36,17 @@ export class HomeItemComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  routeToForm() {
+    if (!this.entretien) {
+      return '';
+    }
+    if(this.entretien.type == this.typeEntretienEnum.ENTRETIEN_FORMATION) {
+      return '/forms/entretien-form/' + this.entretien.id;
+    }
+
+    return '/forms/entretien-pro/' + this.entretien.id;
+  }
+
   getAgentName(): string {
     if (!this.entretien) {
       return '';
