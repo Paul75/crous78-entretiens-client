@@ -104,7 +104,7 @@ export class ListeEntretiensComponent implements OnInit {
   }
 
   selectEntretien(ligne: PersonneImpl) {
-    console.log(ligne);
+    // console.log(ligne);
   }
 
   getPDF(id: string) {

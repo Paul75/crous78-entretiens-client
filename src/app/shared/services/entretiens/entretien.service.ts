@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { DEFAULT_ENTRETIEN, URL_ENTRETIENS } from '@shared/constants/entretien.constants';
 import { Entretien } from '@shared/models/entretien.model';
 import { environment } from '@environments/environment';
@@ -74,7 +74,7 @@ export class EntretienService {
     return (error: HttpErrorResponse): Observable<T> => {
       console.error(`${operation} failed: ${error.message}`);
 
-      return of(result);
+      return throwError(() => new Error(error.message));
     };
   }
 }

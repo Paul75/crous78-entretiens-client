@@ -33,7 +33,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
     InputTextModule,
     InputNumberModule,
     InputMask,
-    FormsModule
+    FormsModule,
   ],
   providers: [MessageService, PersonnesService],
   templateUrl: './liste-personnes.component.html',
@@ -49,8 +49,8 @@ export class AdminListePersonnesComponent implements OnInit {
   clonedPersonnes: { [s: string]: Personne } = {};
 
   ngOnInit(): void {
-    this.personnesService.getPersonnes().subscribe((personnes: Personne[]) => {
-      this.personnes = personnes;
+    this.personnesService.getPersonnes().subscribe((items: Personne[]) => {
+      this.personnes = items;
     });
   }
 
@@ -60,16 +60,14 @@ export class AdminListePersonnesComponent implements OnInit {
 
   onRowEditSave(personne: Personne) {
     // console.log(personne);
-    //if (personne.price > 0) {
+    this.personnesService.savePersonne(personne).subscribe((p: Personne) => {
       delete this.clonedPersonnes[personne.id as number];
       this.messageService.add({
         severity: 'success',
         summary: 'Success',
-        detail: 'Product is updated',
+        detail: 'La ligne a été modifiée',
       });
-    //} else {
-      // this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid Price' });
-    //}
+    });
   }
 
   onRowEditCancel(personne: Personne, index: number) {
@@ -78,12 +76,6 @@ export class AdminListePersonnesComponent implements OnInit {
   }
 
   addRow() {
-    /*const newPersonne: Personne = {
-      id: this.generateUniqueId(), // Assurez-vous de générer un ID unique
-      // Remplissez les autres propriétés par défaut ici
-      name: '',
-      // Ajoutez d'autres propriétés nécessaires
-    };*/
     const newPersonne: Personne = DEFAULT_PERSONNE;
 
     newPersonne.id = this.generateUniqueId();
@@ -92,8 +84,20 @@ export class AdminListePersonnesComponent implements OnInit {
   }
 
   delRow(personne: Personne, index: number) {
-    this.personnes[index] = this.clonedPersonnes[personne.id as number];
-    delete this.clonedPersonnes[personne.id as number];
+    this.personnesService.deletePersonne(personne.id).subscribe({
+      next: () => {
+        this.personnes[index] = this.clonedPersonnes[personne.id as number];
+        delete this.clonedPersonnes[personne.id as number];
+      },
+      error: (e) => {
+        console.error('delRow error: ', e);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur',
+          detail: 'Impossible de supprimer la ligne',
+        });
+      },
+    });
   }
 
   onSelectDate(date: Date) {

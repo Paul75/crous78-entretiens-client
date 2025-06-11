@@ -32,7 +32,7 @@ export class AdminListeEntretiensHeaderComponent implements OnInit {
 
   ngOnInit(): void {
     // this.entretiens = [this.entretien];
-    console.log(this.entretien.dateEntretien);
+    // console.log(this.entretien.dateEntretien);
   }
 
   getAgentName(): string {
@@ -48,7 +48,7 @@ export class AdminListeEntretiensHeaderComponent implements OnInit {
       return '';
     }
 
-    console.log(this.entretien.dateEntretien)
+    // console.log(this.entretien.dateEntretien)
 
     return this.entretien.dateEntretien || '';
   }
