@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="row">
+    <div class="col"><h2>Accueil</h2></div>
+    <div class="col text-end">
+      <h1>{{ anneeScolaire.getAnneeScolaireActuelle(currentYear) }}</h1>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col">
+          <h3>Entretien professionnel</h3>
+
+          @if (listeEntretien && listeEntretien.entretienPro) {
+            <app-home-item [entretien]="listeEntretien.entretienPro" />
+          } @else {
+            <div class="alert alert-info" role="alert">PAS D'ENTRETIEN</div>
+          }
+        </div>
+        <div class="col">
+          <h3>Entretien formation</h3>
+
+          @if (listeEntretien && listeEntretien.entretienForm) {
+            <app-home-item [entretien]="listeEntretien.entretienForm" />
+          } @else {
+            <div class="alert alert-info" role="alert">PAS D'ENTRETIEN</div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

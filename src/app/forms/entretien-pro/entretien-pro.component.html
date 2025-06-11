@@ -1,0 +1,208 @@
+<div class="container-fluid py-5">
+  <div class="row">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mb-2">
+      <h1 class="h5">Entretien professionnel</h1>
+    </div>
+  </div>
+
+  <form [formGroup]="entretienForm" (ngSubmit)="onSubmit()" novalidate *ngIf="entretienForm">
+    <div class="container">
+      <input
+        type="text"
+        class="form-control"
+        name="dateTransmission"
+        formControlName="dateTransmission"
+      />
+      <input type="text" class="form-control" name="type" formControlName="id" required />
+      <div class="row row-cols-sm-auto">
+        <div class="mb-3 row">
+          <label for="id" class="col-sm-4 col-form-label">type :</label>
+          <div class="col-sm-8">
+            <input
+              type="text"
+              class="form-control"
+              name="type"
+              formControlName="type"
+              required
+              [class.is-invalid]="
+                entretienForm.get('type')?.invalid &&
+                (entretienForm.get('type')?.touched || entretienForm.get('type')?.dirty)
+              "
+            />
+            <div
+              class="invalid-feedback"
+              *ngIf="entretienForm.get('type')?.invalid && entretienForm.get('type')?.touched"
+            >
+              <ng-container *ngIf="entretienForm.get('type')?.errors?.['required']">
+                TYPE INVALIDE
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            ngbDatepicker
+            #d="ngbDatepicker"
+            formControlName="dateEntretien"
+            [class.is-invalid]="
+              entretienForm.get('dateEntretien')?.invalid &&
+              (entretienForm.get('dateEntretien')?.touched ||
+                entretienForm.get('dateEntretien')?.dirty)
+            "
+          />
+          <button
+            class="btn btn-outline-secondary bi bi-calendar3"
+            (click)="d.toggle()"
+            type="button"
+          ></button>
+
+          <div
+            class="invalid-feedback"
+            *ngIf="
+              entretienForm.get('dateEntretien')?.invalid &&
+              entretienForm.get('dateEntretien')?.touched
+            "
+          >
+            <ng-container *ngIf="entretienForm.get('dateEntretien')?.errors?.['required']">
+              Le date de dateEntretien est requise
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <p-stepper [value]="1" [linear]="true">
+          <p-step-item [value]="1">
+            <p-step>Informations générales</p-step>
+            <p-step-panel>
+              <ng-template #content let-activateCallback="activateCallback">
+                <div class="flex flex-col">
+                  <app-entretien-pro-step1 />
+                </div>
+                <div class="py-6">
+                  <p-button
+                    label="SUIVANT"
+                    (onClick)="activateCallback(2)"
+                    [disabled]="validStep1()"
+                  />
+                </div>
+              </ng-template>
+            </p-step-panel>
+          </p-step-item>
+
+          <p-step-item [value]="2">
+            <p-step>1 - DESCRIPTION DU POSTE OCCUPE PAR L'AGENT</p-step>
+            <p-step-panel>
+              <ng-template #content let-activateCallback="activateCallback">
+                <div class="flex flex-col h-48">
+                  <app-entretien-pro-step2 />
+                </div>
+                <div class="flex py-6 gap-2">
+                  <p-button label="RETOUR" severity="secondary" (onClick)="activateCallback(1)" />
+                  <p-button
+                    label="SUIVANT"
+                    (onClick)="activateCallback(3)"
+                    [disabled]="validStep2()"
+                  />
+                </div>
+              </ng-template>
+            </p-step-panel>
+          </p-step-item>
+
+          <p-step-item [value]="3">
+            <p-step>2 - Evaluation de l'année écoulée</p-step>
+            <p-step-panel>
+              <ng-template #content let-activateCallback="activateCallback">
+                <div class="flex flex-col h-48">
+                  <app-entretien-pro-step3 />
+                </div>
+                <div class="py-6">
+                  <p-button label="RETOUR" severity="secondary" (onClick)="activateCallback(2)" />
+                  <p-button
+                    label="SUIVANT"
+                    (onClick)="activateCallback(4)"
+                    [disabled]="validStep3()"
+                  />
+                </div>
+              </ng-template>
+            </p-step-panel>
+          </p-step-item>
+
+          <p-step-item [value]="4">
+            <p-step>3 - VALEUR PROFESSIONNELLE ET MANIERE DE SERVIR DU FONCTIONNAIRE</p-step>
+            <p-step-panel>
+              <ng-template #content let-activateCallback="activateCallback">
+                <div class="flex flex-col h-48">
+                  <app-entretien-pro-step4 />
+                </div>
+                <div class="py-6">
+                  <p-button label="RETOUR" severity="secondary" (onClick)="activateCallback(3)" />
+                  <p-button
+                    label="SUIVANT"
+                    (onClick)="activateCallback(5)"
+                    [disabled]="validStep4()"
+                  />
+                </div>
+              </ng-template>
+            </p-step-panel>
+          </p-step-item>
+
+          <p-step-item [value]="5">
+            <p-step>4 - ACQUIS DE L’EXPERIENCE PROFESSIONNELLE</p-step>
+            <p-step-panel>
+              <ng-template #content let-activateCallback="activateCallback">
+                <div class="flex flex-col h-48">
+                  <app-entretien-pro-step5 />
+                </div>
+                <div class="py-6">
+                  <p-button label="RETOUR" severity="secondary" (onClick)="activateCallback(4)" />
+                  <p-button
+                    label="SUIVANT"
+                    (onClick)="activateCallback(6)"
+                    [disabled]="validStep5()"
+                  />
+                </div>
+              </ng-template>
+            </p-step-panel>
+          </p-step-item>
+
+          <p-step-item [value]="6">
+            <p-step>5 - OBJECTIFS FIXÉS POUR LA NOUVELLE ANNÉE</p-step>
+            <p-step-panel>
+              <ng-template #content let-activateCallback="activateCallback">
+                <div class="flex flex-col h-48">
+                  <app-entretien-pro-step6 />
+                </div>
+                <div class="py-6">
+                  <p-button label="RETOUR" severity="secondary" (onClick)="activateCallback(5)" />
+                  <p-button
+                    label="SUIVANT"
+                    (onClick)="activateCallback(7)"
+                    [disabled]="validStep6()"
+                  />
+                </div>
+              </ng-template>
+            </p-step-panel>
+          </p-step-item>
+
+          <p-step-item [value]="7">
+            <p-step>6 - PERSPECTIVES D'EVOLUTION PROFESSIONNELLE</p-step>
+            <p-step-panel>
+              <ng-template #content let-activateCallback="activateCallback">
+                <div class="flex flex-col h-48">
+                  <app-entretien-pro-step7 />
+                </div>
+                <div class="py-6">
+                  <p-button label="RETOUR" severity="secondary" (onClick)="activateCallback(6)" />
+                  <p-button label="VALIDER" severity="success" type="submit" />
+                </div>
+              </ng-template>
+            </p-step-panel>
+          </p-step-item>
+        </p-stepper>
+      </div>
+    </div>
+  </form>
+</div>

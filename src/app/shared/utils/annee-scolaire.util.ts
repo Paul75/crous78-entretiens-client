@@ -16,7 +16,7 @@ export class AnneeScolaire {
     const mois = date.getMonth() + 1; // Janvier = 0
     const annee = date.getFullYear();
     // Supposons que l'année scolaire commence en septembre
-    const anneeDebut = (mois >= 9) ? annee : annee - 1;
+    const anneeDebut = mois >= 9 ? annee : annee - 1;
     return new AnneeScolaire(anneeDebut);
   }
 }

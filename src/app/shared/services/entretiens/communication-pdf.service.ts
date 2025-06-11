@@ -2,12 +2,11 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CommunicationPdfService {
   private actionGetPdf = new Subject<string>();
   private actionViewPdf = new Subject<string>();
-
 
   actionGet$ = this.actionGetPdf.asObservable();
   actionView$ = this.actionViewPdf.asObservable();

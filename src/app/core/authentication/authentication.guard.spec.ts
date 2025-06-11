@@ -17,9 +17,12 @@ describe('AuthenticationGuard', () => {
     });
   });
 
-  beforeEach(inject([AuthenticationGuard, AuthenticationService], (_authenticationGuard: AuthenticationGuard) => {
-    authenticationGuard = _authenticationGuard;
-  }));
+  beforeEach(inject(
+    [AuthenticationGuard, AuthenticationService],
+    (_authenticationGuard: AuthenticationGuard) => {
+      authenticationGuard = _authenticationGuard;
+    },
+  ));
 
   it('should have a canActivate method', () => {
     expect(typeof authenticationGuard.canActivate).toBe('function');

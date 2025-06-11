@@ -1,0 +1,107 @@
+import { Component, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { ButtonGroupModule } from 'primeng/buttongroup';
+import { PopoverModule } from 'primeng/popover';
+import { DatePickerModule } from 'primeng/datepicker';
+import { PersonnesService } from '@shared/services/personnes/personnes.service';
+import { Personne } from '@shared/models/personne.model';
+import { InputTextModule } from 'primeng/inputtext';
+import { TagModule } from 'primeng/tag';
+import { SelectModule } from 'primeng/select';
+import { ToastModule } from 'primeng/toast';
+import { InputMask } from 'primeng/inputmask';
+import { MessageService } from 'primeng/api';
+import { FormsModule } from '@angular/forms';
+import { DEFAULT_PERSONNE } from '@shared/constants/personne.constants';
+import { InputNumberModule } from 'primeng/inputnumber';
+
+@Component({
+  selector: 'app-admin-liste-personnes',
+  imports: [
+    CommonModule,
+    TableModule,
+    ButtonModule,
+    ButtonGroupModule,
+    DatePickerModule,
+    PopoverModule,
+    ToastModule,
+    TagModule,
+    SelectModule,
+    InputTextModule,
+    InputNumberModule,
+    InputMask,
+    FormsModule
+  ],
+  providers: [MessageService, PersonnesService],
+  templateUrl: './liste-personnes.component.html',
+  styleUrl: './liste-personnes.component.scss',
+})
+export class AdminListePersonnesComponent implements OnInit {
+  private personnesService = inject(PersonnesService);
+
+  private messageService = inject(MessageService);
+
+  personnes!: Personne[];
+
+  clonedPersonnes: { [s: string]: Personne } = {};
+
+  ngOnInit(): void {
+    this.personnesService.getPersonnes().subscribe((personnes: Personne[]) => {
+      this.personnes = personnes;
+    });
+  }
+
+  onRowEditInit(personne: Personne) {
+    this.clonedPersonnes[personne.id as number] = { ...personne };
+  }
+
+  onRowEditSave(personne: Personne) {
+    // console.log(personne);
+    //if (personne.price > 0) {
+      delete this.clonedPersonnes[personne.id as number];
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Product is updated',
+      });
+    //} else {
+      // this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid Price' });
+    //}
+  }
+
+  onRowEditCancel(personne: Personne, index: number) {
+    this.personnes[index] = this.clonedPersonnes[personne.id as number];
+    delete this.clonedPersonnes[personne.id as number];
+  }
+
+  addRow() {
+    /*const newPersonne: Personne = {
+      id: this.generateUniqueId(), // Assurez-vous de générer un ID unique
+      // Remplissez les autres propriétés par défaut ici
+      name: '',
+      // Ajoutez d'autres propriétés nécessaires
+    };*/
+    const newPersonne: Personne = DEFAULT_PERSONNE;
+
+    newPersonne.id = this.generateUniqueId();
+    this.personnes.unshift(newPersonne); // Ajoute la nouvelle personne au début du tableau
+    this.onRowEditInit(newPersonne); // Active le mode édition pour la nouvelle ligne
+  }
+
+  delRow(personne: Personne, index: number) {
+    this.personnes[index] = this.clonedPersonnes[personne.id as number];
+    delete this.clonedPersonnes[personne.id as number];
+  }
+
+  onSelectDate(date: Date) {
+    // this.dateValue = formatDate(date, 'yyyy-MM-dd', 'fr-FR');
+  }
+
+  private generateUniqueId(): number {
+    // Implémentez une logique pour générer un ID unique
+    return Math.max(...this.personnes.map(p => p.id as number), 0) + 1;
+  }
+}

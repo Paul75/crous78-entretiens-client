@@ -5,4 +5,3 @@ export function areObjectsEqual(obj1: any, obj2: any) {
 
   return keys1.every(key => obj1[key] === obj2[key]);
 }
-

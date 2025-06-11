@@ -11,6 +11,7 @@ export class DateService {
   }
 
   transformDateEn(date: string): string {
+    console.log(date);
     /*const [day, month, year] = date.split('/');
     const dateObj = new Date(Number(year), Number(month) - 1, Number(day));
     return this.datePipe.transform(dateObj, 'yyyy-MM-dd') || '';*/

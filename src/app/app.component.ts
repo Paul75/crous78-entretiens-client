@@ -1,47 +1,42 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule, registerLocaleData } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import {
+  NavigationCancel,
+  NavigationEnd,
+  NavigationError,
+  NavigationStart,
+  Router,
+  RouterOutlet,
+} from '@angular/router';
 
-import { Inject, PLATFORM_ID } from '@angular/core';
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { HeaderComponent } from './shared/components/header/header.component';
-import { FooterComponent } from './shared/components/footer/footer.component';
-
-import localeFR from "@angular/common/locales/fr";
-import localeFRExtra from "@angular/common/locales/extra/fr";
-
-registerLocaleData(localeFR, "fr", localeFRExtra);
+import { FooterComponent } from '@shared/components/footer/footer.component';
+import { HeaderComponent } from '@shared/components/header/header.component';
+import { LoaderService } from '@shared/services/loader.service';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-root',
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    HeaderComponent,
-    FooterComponent
-  ],
+  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent, ProgressSpinnerModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
+  title = 'client';
+  loaderService = inject(LoaderService);
+  loading$ = this.loaderService.isLoading$;
 
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    @Inject(PLATFORM_ID) private platformId: object) {
-  }
-
-  ngOnInit(): void {
-
-    if (isPlatformBrowser(this.platformId)) {
-      const navMain = this.document.getElementById('navbarCollapse');
-      if (navMain) {
-        navMain.onclick = function onClick() {
-          if (navMain) {
-            navMain.classList.remove("show");
-          }
-        }
+  constructor(private router: Router) {
+    /*this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        this.loaderService.showLoader;
       }
-    }
+      if (
+        event instanceof NavigationEnd ||
+        event instanceof NavigationCancel ||
+        event instanceof NavigationError
+      ) {
+        this.loaderService.hideLoader();
+      }
+    });*/
   }
-
 }

@@ -1,7 +1,4 @@
-import {
-  HttpClient,
-  HttpErrorResponse
-} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
 import { catchError, Observable, of } from 'rxjs';
@@ -16,7 +13,7 @@ export class PdfService {
   downloadPdf(entretienId: string): Observable<any> {
     return this.http
       .get(this.backendUrl + '/pdfs/' + entretienId, {
-        responseType: 'blob'
+        responseType: 'blob',
       })
       .pipe(catchError(this.handleError('downloadPdf', {})));
   }

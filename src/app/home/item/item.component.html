@@ -1,0 +1,48 @@
+<p>Utilisateur : {{ getAgentName() }}</p>
+
+<ng-container *ngIf="entretien; else noEntretien">
+  <div class="container text-center">
+    <div class="row align-items-center">
+      <div class="col">
+        {{ entretien.dateEntretien | date: 'dd/MM/yyyy' }}
+      </div>
+      <div
+        class="col badge text-wrap lineEntretien"
+        [ngClass]="{
+          preparation: getEntretienStatut() === 'En préparation',
+          'rendez-vous': getEntretienStatut() === 'Rendez-vous pris',
+          saisie: getEntretienStatut() === 'En cours de saisie',
+          valide: getEntretienStatut() === 'Entretien validé',
+        }"
+      >
+        {{ getEntretienStatut() }}
+      </div>
+      <div class="col">
+        <p-buttongroup>
+          <ng-container *ngIf="entretien">
+            <p-button
+              icon="pi pi-search"
+              (click)="viewPDF(this.entretien.id.toString())"
+              severity="secondary"
+              rounded
+            />
+            <p-button
+              icon="pi pi-download"
+              (click)="getPDF(this.entretien.id.toString())"
+              severity="secondary"
+              rounded
+            />
+            <p-button icon="pi pi-pencil" (click)="goSignature()" severity="secondary" rounded />
+          </ng-container>
+        </p-buttongroup>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #noEntretien>
+  <div class="alert alert-info" role="alert">PAS D'ENTRETIEN</div></ng-template
+>
+
+<app-home-signature-pad #signatureDialog />
+<app-home-dialog-pdf #pdfDialog />

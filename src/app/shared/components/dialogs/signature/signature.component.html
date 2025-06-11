@@ -1,0 +1,52 @@
+<p-toast />
+<p-dialog
+  [header]="'Signature'"
+  [(visible)]="display"
+  [modal]="true"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  [maximizable]="false"
+>
+  <div class="text-center">
+    <div>
+      <h2>Prénom et NOM : {{ agent }}</h2>
+    </div>
+    <canvas #signatureCanvas></canvas>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="buttons">
+      <p-buttongroup>
+        <p-button
+          label="Effacer"
+          severity="secondary"
+          icon="pi pi-trash"
+          (click)="clearSignature()"
+          [rounded]="true"
+          variant="text"
+          [raised]="true"
+        />
+        <p-button
+          label="Annuler"
+          severity="danger"
+          icon="pi pi-times"
+          (click)="closeSignature()"
+          [rounded]="true"
+          variant="text"
+          [raised]="true"
+        />
+        <p-button
+          label="Sauvegarder"
+          severity="success"
+          icon="pi pi-check"
+          (click)="saveSignature()"
+          [rounded]="true"
+          variant="text"
+          [raised]="true"
+        />
+      </p-buttongroup>
+    </div>
+  </ng-template>
+</p-dialog>

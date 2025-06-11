@@ -1,7 +1,7 @@
-export enum AppreciationGeneraleEnum {    
-  A_ACQUERIR = "A_ACQUERIR",
-  A_DEVELOPPER = "A_DEVELOPPER",
-  MAITRISE = "MAITRISE",
-  EXPERT = "EXPERT",
-  NON_EVALUABLE = "NON_EVALUABLE"
+export enum AppreciationGeneraleEnum {
+  A_ACQUERIR = 'A_ACQUERIR',
+  A_DEVELOPPER = 'A_DEVELOPPER',
+  MAITRISE = 'MAITRISE',
+  EXPERT = 'EXPERT',
+  NON_EVALUABLE = 'NON_EVALUABLE',
 }

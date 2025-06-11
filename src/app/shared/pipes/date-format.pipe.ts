@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'dateFormat'
+  name: 'dateFormat',
 })
 export class DateFormatPipe implements PipeTransform {
   transform(value: string | null | undefined): string {
@@ -9,7 +9,8 @@ export class DateFormatPipe implements PipeTransform {
       return '';
     }
 
-    const regex = /^([0-2][0-9]|3[0-1])\/([0][1-9]|1[0-2])\/[0-9]{4} ([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/;
+    const regex =
+      /^([0-2][0-9]|3[0-1])\/([0][1-9]|1[0-2])\/[0-9]{4} ([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/;
     if (regex.test(value)) {
       const [day, month, year] = value.split(/[/ ]/);
 
@@ -25,6 +26,6 @@ export class DateFormatPipe implements PipeTransform {
       return `${day}/${month}/${year}`;
     }
 
-    return ''; 
+    return '';
   }
 }

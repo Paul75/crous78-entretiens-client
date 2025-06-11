@@ -1,0 +1,32 @@
+<p-table
+  showGridlines
+  [value]="entretiens"
+  [paginator]="true"
+  [rows]="5"
+  responsiveLayout="scroll"
+  [rowsPerPageOptions]="[5, 10, 20, 50, 100]"
+>
+  <ng-template #header>
+    <tr>
+      <th class="col text-center">Date d'entretien</th>
+      <th class="col text-center" colspan="2">Entretiens</th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-entretien>
+    <tr>
+      <td class="text-center text-nowrap">
+        {{ entretien.dateEntretien | date: 'dd/MM/yyyy' }}
+      </td>
+      <td class="text-center text-nowrap">
+        <app-admin-liste-entretiens-header
+          [entretien]="entretien"
+          [buttons]="false"
+          [displayDate]="false"
+        />
+      </td>
+      <td class="text-center" style="width: 5rem; padding: 0; margin: 0">
+        <app-admin-liste-entretiens-buttons [entretien]="entretien" />
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

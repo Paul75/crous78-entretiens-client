@@ -1,11 +1,12 @@
 import { TypeEntretien } from '@shared/enums/type-entretien.enum';
-import { AgentModel } from './agent.model';
 import { AppreciationGeneraleEnum } from '@shared/enums/appreciation_generale.enum';
+import { Personne } from './personne.model';
+import { StatutDemandeEnum } from '@shared/enums/statut.deande.enum';
 
 export interface Entretien {
   id: number;
   type: TypeEntretien;
-  statut: string;
+  statut: StatutDemandeEnum;
   dateEntretien: string;
   structure: string;
   intitulePoste: string;
@@ -37,6 +38,7 @@ export interface Entretien {
   demarcheEnvisagee: string;
   evolutionActivites: string;
   evolutionCarriere: string;
-  agent: AgentModel;
-  superieur?: AgentModel;
+  personne: Personne;
+  superieur?: Personne;
+  dateTransmission?: string;
 }

@@ -1,28 +1,30 @@
 import { CommonModule } from '@angular/common';
 import {
-  Component, EventEmitter, Output, forwardRef,
-  ElementRef, Renderer2, ViewChild
+  Component,
+  EventEmitter,
+  Output,
+  forwardRef,
+  ElementRef,
+  Renderer2,
+  ViewChild,
 } from '@angular/core';
 
 import { FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-checkbox',
-  imports: [
-    CommonModule,
-    FormsModule,
-  ],
+  imports: [CommonModule, FormsModule],
   templateUrl: './checkbox.component.html',
-  styleUrls: ['./checkbox.component.css'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => CheckboxComponent),
-    multi: true
-  }]
+  styleUrls: ['./checkbox.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => CheckboxComponent),
+      multi: true,
+    },
+  ],
 })
 export class CheckboxComponent {
-
-
   private innerValueTmp: any = '';
 
   private onTouchedCallback = (): void => {
@@ -40,31 +42,30 @@ export class CheckboxComponent {
   indeterminate: any;
   checked: any;
 
-  constructor(
-    private renderer: Renderer2) {
+  constructor(private renderer: Renderer2) {
     this.valueCheckbox = null;
   }
 
   onSelect() {
     let value = this.checkbox.nativeElement.value;
     switch (value) {
-      case "":
+      case '':
         this.checked = true;
         this.indeterminate = false;
-        value = "true";
+        value = 'true';
         this.valueCheckbox = true;
         break;
-      case "true":
+      case 'true':
         this.checked = false;
         this.indeterminate = true;
-        value = "false";
+        value = 'false';
         this.valueCheckbox = false;
         break;
-      case "false":
+      case 'false':
         this.checked = null;
         this.indeterminate = false;
-        value = "";
-        this.valueCheckbox = "";
+        value = '';
+        this.valueCheckbox = '';
         break;
     }
     this.innerValueTmp = 4;
@@ -79,16 +80,21 @@ export class CheckboxComponent {
     this.buttonclick.emit(value);
   }
 
-
   get valueTmp(): any {
     return this.innerValueTmp;
-  };
+  }
 
   set valueTmp(value: any) {
     if (value !== this.innerValueTmp) {
-      if (this.checked && !this.indeterminate) { value = true; }
-      if (!this.checked && this.indeterminate) { value = false; }
-      if ((this.checked === null) && !this.indeterminate) { value = null; }
+      if (this.checked && !this.indeterminate) {
+        value = true;
+      }
+      if (!this.checked && this.indeterminate) {
+        value = false;
+      }
+      if (this.checked === null && !this.indeterminate) {
+        value = null;
+      }
       this.innerValueTmp = value;
       this.onChangeCallback(value);
     }
@@ -111,5 +117,4 @@ export class CheckboxComponent {
   registerOnTouched(fn: any) {
     this.onTouchedCallback = fn;
   }
-
 }

@@ -1,0 +1,21 @@
+<form [formGroup]="form">
+  <div class="flex-auto flex row">
+    <h3>2.1 - Rappel des objectifs d'activités attendus fixés l'année précédente</h3>
+
+    <div class="mb-3">
+      <textarea class="form-control" rows="6" formControlName="rappelObjectifs"></textarea>
+    </div>
+
+    <br /><br />
+
+    <h3>
+      2.2 - Événements survenus au cours de la période écoulée ayant entraîné un impact sur
+      l'activité
+    </h3>
+    <p>(nouvelles orientations, réorganisations, nouvelles méthodes, nouveaux outils, etc.)</p>
+
+    <div class="mb-3">
+      <textarea class="form-control" rows="6" formControlName="evenementsSurvenus"></textarea>
+    </div>
+  </div>
+</form>

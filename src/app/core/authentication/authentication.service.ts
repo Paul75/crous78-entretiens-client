@@ -41,13 +41,12 @@ const credentialsKey = 'credentialsEntretiens';
 export class AuthenticationService {
   private _credentials!: Credentials | null;
 
-    private backendUrl = environment.backend;
+  private backendUrl = environment.backend;
 
   // tslint:disable-next-line: deprecation
   constructor(private http: HttpClient) {
     const savedCredentials =
-      sessionStorage.getItem(credentialsKey) ||
-      localStorage.getItem(credentialsKey);
+      sessionStorage.getItem(credentialsKey) || localStorage.getItem(credentialsKey);
     if (savedCredentials) {
       this._credentials = JSON.parse(savedCredentials);
     }
@@ -102,9 +101,7 @@ unscoped-affiliation: staff
    */
   loginSSO(): Observable<any> {
     return this.http
-      .get(
-        'https://preprod-gddl-admin.crous-versailles.fr/Shibboleth.sso/Session'
-      )
+      .get('https://preprod-gddl-admin.crous-versailles.fr/Shibboleth.sso/Session')
       .pipe(
         map((res: any) => {
           console.log(res);
@@ -129,7 +126,7 @@ unscoped-affiliation: staff
         catchError(() => {
           // this.router.navigate(['/unauthorized']);
           return of(false);
-        })
+        }),
       );
 
     /*return this.http.post( '/tokens/token', context)

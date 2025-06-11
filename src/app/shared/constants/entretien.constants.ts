@@ -1,7 +1,6 @@
-import { AppreciationGeneraleEnum } from "../enums/appreciation_generale.enum";
-import { TypeEntretien } from "../enums/type-entretien.enum";
-import { AgentModel } from "../models/agent.model";
-// import { getCurrentDate } from "../utils/date-utils";
+import { AppreciationGeneraleEnum } from '../enums/appreciation_generale.enum';
+import { TypeEntretien } from '../enums/type-entretien.enum';
+import { DEFAULT_PERSONNE } from './personne.constants';
 
 export const URL_ENTRETIENS = 'entretien';
 export const NAME_ENTRETIEN = 'Entretien';
@@ -41,7 +40,7 @@ export const DEFAULT_ENTRETIEN = {
   demarcheEnvisagee: '',
   evolutionActivites: '',
   evolutionCarriere: '',
-  agent: new AgentModel(),
-  superieur: new AgentModel(),
-  
+  personne: DEFAULT_PERSONNE,
+  superieur: DEFAULT_PERSONNE,
+  dateTransmission: '',
 };

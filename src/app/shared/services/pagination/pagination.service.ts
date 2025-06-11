@@ -1,15 +1,14 @@
-﻿import { Injectable } from "@angular/core";
+﻿import { Injectable } from '@angular/core';
 import { Pagination } from './pagination';
 
 @Injectable()
 export class PaginationService {
-
   private readonly MAX_PAGES_DISPLAYED = 7;
   private readonly STARTING_PAGE = 1;
 
   range(start: number, end: number): number[] {
     const length = end - start;
-    
+
     return Array.from({ length }, (__, index) => start + index);
   }
 
@@ -35,11 +34,14 @@ export class PaginationService {
       endPage,
       pages,
       pageBrowser: totalPages > 0,
-      useful: totalPages > 1
+      useful: totalPages > 1,
     };
   }
 
-  private calculatePageRange(currentPage: number, totalPages: number): { startPage: number, endPage: number } {
+  private calculatePageRange(
+    currentPage: number,
+    totalPages: number,
+  ): { startPage: number; endPage: number } {
     if (totalPages <= this.MAX_PAGES_DISPLAYED) {
       return { startPage: this.STARTING_PAGE, endPage: totalPages };
     }
@@ -65,8 +67,7 @@ export class PaginationService {
       endPage: this.STARTING_PAGE,
       pages: [],
       pageBrowser: false,
-      useful: false
+      useful: false,
     };
   }
 }
-

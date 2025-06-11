@@ -1,0 +1,347 @@
+<form [formGroup]="form">
+  <div class="flex-auto flex row">
+    <h3>3.1 - Critères d'appréciation :</h3>
+
+    <br />
+
+    <p>
+      L’évaluateur retient, pour apprécier la valeur professionnelle des agents au cours de
+      l'entretien professionnel, les critères annexés à l’arrêté ministériel et qui sont adaptés à
+      la nature des tâches qui leur sont confiées, au niveau de leurs responsabilités et au contexte
+      professionnel.
+    </p>
+    <p>
+      Pour les infirmiers et les médecins seules les parties 2, 3 et 4 doivent être renseignées en
+      tenant compte des limites légales et règlementaires en matière de secret professionnel
+      imposées à ces professionnels
+    </p>
+
+    <ol class="list-group list-group-numbered">
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="me-auto">
+          <div class="fw-bold">Les compétences professionnelles et technicité :</div>
+          <p class="fs-6">
+            (maîtrise technique ou expertise scientifique du domaine d’activité, connaissance de
+            l’environnement professionnel et capacité à s’y situer, qualité d’expression écrite,
+            qualité d’expression orale...)
+          </p>
+          <div class="mb-3">
+            <textarea class="form-control" rows="6" formControlName="caCompetences"></textarea>
+          </div>
+        </div>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="me-auto">
+          <div class="fw-bold">La contribution à l’activité du service</div>
+          <p class="fs-6">
+            (capacité à partager l’information, à transférer les connaissances et à rendre compte,
+            capacité à s’investir dans des projets, sens du service public et conscience
+            professionnelle, capacité à respecter l’organisation collective du travail...)
+          </p>
+          <div class="mb-3">
+            <textarea class="form-control" rows="6" formControlName="caContribution"></textarea>
+          </div>
+        </div>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="me-auto">
+          <div class="fw-bold">Les capacités professionnelles et relationnelles</div>
+          <p class="fs-6">
+            (autonomie, discernement et sens des initiatives dans l’exercice de ses attributions,
+            capacité d’adaptation, capacité à travailler en équipe, etc.)
+          </p>
+          <div class="mb-3">
+            <textarea class="form-control" rows="6" formControlName="caCapacites"></textarea>
+          </div>
+        </div>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="me-auto">
+          <div class="fw-bold">
+            Le cas échéant, aptitude à l’encadrement et/ou à la conduite de projets
+          </div>
+          <p class="fs-6">
+            (capacité d’organisation et de pilotage, aptitude à la conduite de projets, capacité à
+            déléguer, aptitude au dialogue, à la communication et à la négociation, etc.)
+          </p>
+          <div class="mb-3">
+            <textarea class="form-control" rows="6" formControlName="caAptitude"></textarea>
+          </div>
+        </div>
+      </li>
+    </ol>
+
+    <br />
+
+    <h3>
+      3.2 - Appréciation générale sur la valeur professionnelle, la manière de servir et la
+      réalisation des objectifs
+    </h3>
+
+    <br />
+
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col" class="text-center">à acquérir</th>
+          <th scope="col" class="text-center">à développer</th>
+          <th scope="col" class="text-center">Maitrise</th>
+          <th scope="col" class="text-center">Expert</th>
+          <th scope="col" class="text-center">Non évaluable</th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        <tr class="">
+          <th scope="row">Compétences professionnelles et technicité</th>
+          <td class="text-center">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="agCompetences1"
+              name="agCompetences"
+              [value]="appreciationGenerale.A_ACQUERIR"
+              formControlName="agCompetences"
+            />
+          </td>
+          <td class="text-center">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="agCompetences2"
+              name="agCompetences"
+              [value]="appreciationGenerale.A_DEVELOPPER"
+              formControlName="agCompetences"
+            />
+          </td>
+          <td class="text-center">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="agCompetences3"
+              name="agCompetences"
+              [value]="appreciationGenerale.MAITRISE"
+              formControlName="agCompetences"
+            />
+          </td>
+          <td class="text-center">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="agCompetences4"
+              name="agCompetences"
+              [value]="appreciationGenerale.EXPERT"
+              formControlName="agCompetences"
+            />
+          </td>
+          <td class="text-center">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="agCompetences5"
+              name="agCompetences"
+              [value]="appreciationGenerale.NON_EVALUABLE"
+              formControlName="agCompetences"
+            />
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Contribution à l’activité du service</th>
+          <td class="text-center">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="agContribution1"
+              name="agContribution"
+              [value]="appreciationGenerale.A_ACQUERIR"
+              formControlName="agContribution"
+            />
+          </td>
+          <td class="text-center">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="agContribution2"
+              name="agContribution"
+              [value]="appreciationGenerale.A_DEVELOPPER"
+              formControlName="agContribution"
+            />
+          </td>
+          <td class="text-center">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="agContribution3"
+              name="agContribution"
+              [value]="appreciationGenerale.MAITRISE"
+              formControlName="agContribution"
+            />
+          </td>
+          <td class="text-center">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="agContribution4"
+              name="agContribution"
+              [value]="appreciationGenerale.EXPERT"
+              formControlName="agContribution"
+            />
+          </td>
+          <td class="text-center">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="agContribution5"
+              name="agContribution"
+              [value]="appreciationGenerale.NON_EVALUABLE"
+              formControlName="agContribution"
+            />
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Capacités professionnelles et relationnelles</th>
+          <td class="text-center">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="agCapacites1"
+              name="agCapacites"
+              [value]="appreciationGenerale.A_ACQUERIR"
+              formControlName="agCapacites"
+            />
+          </td>
+          <td class="text-center">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="agCapacites2"
+              name="agCapacites"
+              [value]="appreciationGenerale.A_DEVELOPPER"
+              formControlName="agCapacites"
+            />
+          </td>
+          <td class="text-center">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="agCapacites3"
+              name="agCapacites"
+              [value]="appreciationGenerale.MAITRISE"
+              formControlName="agCapacites"
+            />
+          </td>
+          <td class="text-center">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="agCapacites4"
+              name="agCapacites"
+              [value]="appreciationGenerale.EXPERT"
+              formControlName="agCapacites"
+            />
+          </td>
+          <td class="text-center">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="agCapacites5"
+              name="agCapacites"
+              [value]="appreciationGenerale.NON_EVALUABLE"
+              formControlName="agCapacites"
+            />
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">
+            Aptitude à l’encadrement et/ou à la conduite de projets (le cas échéant)
+          </th>
+          <td class="text-center">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="agAptitude1"
+              name="agAptitude"
+              [value]="appreciationGenerale.A_ACQUERIR"
+              formControlName="agAptitude"
+            />
+          </td>
+          <td class="text-center">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="agAptitude2"
+              name="agAptitude"
+              [value]="appreciationGenerale.A_DEVELOPPER"
+              formControlName="agAptitude"
+            />
+          </td>
+          <td class="text-center">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="agAptitude3"
+              name="agAptitude"
+              [value]="appreciationGenerale.MAITRISE"
+              formControlName="agAptitude"
+            />
+          </td>
+          <td class="text-center">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="agAptitude4"
+              name="agAptitude"
+              [value]="appreciationGenerale.EXPERT"
+              formControlName="agAptitude"
+            />
+          </td>
+          <td class="text-center">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="agAptitude5"
+              name="agAptitude"
+              [value]="appreciationGenerale.NON_EVALUABLE"
+              formControlName="agAptitude"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <br /><br />
+
+    <div class="card">
+      <div class="card-header">
+        <h5>Réalisation des objectifs de l'année écoulée (cf. paragraphe 2.1)</h5>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <textarea class="form-control" rows="6" formControlName="realisationObjectifs"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <br /><br />
+
+    <div class="card">
+      <div class="card-header">
+        <h5>Appréciation littérale<sup>*</sup></h5>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <textarea
+            class="form-control"
+            rows="6"
+            formControlName="appreciationLitterale"
+          ></textarea>
+        </div>
+      </div>
+      <div class="card-footer">
+        <sup>*</sup> Merci d’apporter un soin particulier à cette appréciation qui constitue un
+        critère pour l’avancement de grade des agents et pourra être repris dans les rapports liés à
+        la promotion de grade.
+      </div>
+    </div>
+  </div>
+</form>

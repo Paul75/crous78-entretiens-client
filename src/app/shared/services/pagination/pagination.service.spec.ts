@@ -14,7 +14,7 @@ describe('PaginationService', () => {
 
     // Act
     const pagination: Pagination = service.initializePagination(perPage);
-    
+
     // Assert
     expect(pagination).toEqual({
       totalItems: 0,
@@ -25,7 +25,7 @@ describe('PaginationService', () => {
       endPage: 1,
       pages: [],
       pageBrowser: false,
-      useful: false
+      useful: false,
     });
   });
 
@@ -40,7 +40,7 @@ describe('PaginationService', () => {
       endPage: 2,
       pages: [1, 2],
       pageBrowser: true,
-      useful: true
+      useful: true,
     };
 
     // Act
@@ -62,7 +62,7 @@ describe('PaginationService', () => {
       endPage: 5,
       pages: [1, 2, 3, 4, 5],
       pageBrowser: true,
-      useful: true
+      useful: true,
     };
 
     // Act
@@ -85,7 +85,7 @@ describe('PaginationService', () => {
       endPage: 7,
       pages: [1, 2, 3, 4, 5, 6, 7],
       pageBrowser: true,
-      useful: true
+      useful: true,
     };
 
     // Act
@@ -108,7 +108,7 @@ describe('PaginationService', () => {
       endPage: 20,
       pages: [14, 15, 16, 17, 18, 19, 20],
       pageBrowser: true,
-      useful: true
+      useful: true,
     };
 
     // Act
@@ -131,7 +131,7 @@ describe('PaginationService', () => {
       endPage: 14,
       pages: [8, 9, 10, 11, 12, 13, 14],
       pageBrowser: true,
-      useful: true
+      useful: true,
     };
 
     // Act
