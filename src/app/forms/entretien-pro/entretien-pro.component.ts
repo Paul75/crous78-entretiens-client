@@ -163,7 +163,7 @@ export class EntretienProComponent extends FormProvider implements OnChanges {
       // 6
 
       evolutionActivites: [DEFAULT_ENTRETIEN.evolutionActivites, [Validators.required]],
-      evolutionCarriere: [DEFAULT_ENTRETIEN.evolutionCarriere, [Validators.required]],
+      evolutionCarriere: [DEFAULT_ENTRETIEN.evolutionCarriere, [Validators.required]]
     });
 
     /*this.entretienForm.patchValue({
@@ -213,7 +213,7 @@ export class EntretienProComponent extends FormProvider implements OnChanges {
     return this.entretienForm;
   }
   setForm(form: FormGroup, entretien: Entretien) {
-    form.setValue(entretien);
+    form.patchValue(entretien);
   }
 
   ngOnChanges(changes: SimpleChanges) {

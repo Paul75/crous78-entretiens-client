@@ -13,5 +13,5 @@ export const DEFAULT_PERSONNE = {
   fonction: '',
   structure: '',
   adresse: '',
-  ville: '',
+  ville: ''
 };

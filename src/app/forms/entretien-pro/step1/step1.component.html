@@ -4,7 +4,7 @@
       <h5 class="text-center">AGENT</h5>
       <hr class="border-bottom border-dark border-2" />
 
-      <div formGroupName="agent">
+      <div formGroupName="personne">
         <div class="mb-3 row">
           <label for="id" class="col-sm-4 col-form-label">ID :</label>
           <div class="col-sm-8">
@@ -15,19 +15,19 @@
               formControlName="id"
               required
               [class.is-invalid]="
-                registerFormControl['agent'].get('id')?.invalid &&
-                (registerFormControl['agent'].get('id')?.touched ||
-                  registerFormControl['agent'].get('id')?.dirty)
+                registerFormControl['personne'].get('id')?.invalid &&
+                (registerFormControl['personne'].get('id')?.touched ||
+                  registerFormControl['personne'].get('id')?.dirty)
               "
             />
             <div
               class="invalid-feedback"
               *ngIf="
-                registerFormControl['agent'].get('id')?.invalid &&
-                registerFormControl['agent'].get('id')?.touched
+                registerFormControl['personne'].get('id')?.invalid &&
+                registerFormControl['personne'].get('id')?.touched
               "
             >
-              <ng-container *ngIf="registerFormControl['agent'].get('id')?.errors?.['required']">
+              <ng-container *ngIf="registerFormControl['personne'].get('id')?.errors?.['required']">
                 ID INVALIDE
               </ng-container>
             </div>
@@ -44,20 +44,20 @@
               formControlName="matricule"
               required
               [class.is-invalid]="
-                registerFormControl['agent'].get('matricule')?.invalid &&
-                (registerFormControl['agent'].get('matricule')?.touched ||
-                  registerFormControl['agent'].get('matricule')?.dirty)
+                registerFormControl['personne'].get('matricule')?.invalid &&
+                (registerFormControl['personne'].get('matricule')?.touched ||
+                  registerFormControl['personne'].get('matricule')?.dirty)
               "
             />
             <div
               class="invalid-feedback"
               *ngIf="
-                registerFormControl['agent'].get('matricule')?.invalid &&
-                registerFormControl['agent'].get('matricule')?.touched
+                registerFormControl['personne'].get('matricule')?.invalid &&
+                registerFormControl['personne'].get('matricule')?.touched
               "
             >
               <ng-container
-                *ngIf="registerFormControl['agent'].get('matricule')?.errors?.['required']"
+                *ngIf="registerFormControl['personne'].get('matricule')?.errors?.['required']"
               >
                 matricule INVALIDE
               </ng-container>
@@ -74,30 +74,30 @@
               name="nomUsage"
               formControlName="nomUsage"
               [class.is-invalid]="
-                registerFormControl['agent'].get('nomUsage')?.invalid &&
-                (registerFormControl['agent'].get('nomUsage')?.touched ||
-                  registerFormControl['agent'].get('nomUsage')?.dirty)
+                registerFormControl['personne'].get('nomUsage')?.invalid &&
+                (registerFormControl['personne'].get('nomUsage')?.touched ||
+                  registerFormControl['personne'].get('nomUsage')?.dirty)
               "
             />
             <div
               class="invalid-feedback"
               *ngIf="
-                registerFormControl['agent'].get('nomUsage')?.invalid &&
-                registerFormControl['agent'].get('nomUsage')?.touched
+                registerFormControl['personne'].get('nomUsage')?.invalid &&
+                registerFormControl['personne'].get('nomUsage')?.touched
               "
             >
               <ng-container
-                *ngIf="registerFormControl['agent'].get('nomUsage')?.errors?.['required']"
+                *ngIf="registerFormControl['personne'].get('nomUsage')?.errors?.['required']"
               >
                 Le nom d'usage est requis
               </ng-container>
               <ng-container
-                *ngIf="registerFormControl['agent'].get('nomUsage')?.errors?.['minlength']"
+                *ngIf="registerFormControl['personne'].get('nomUsage')?.errors?.['minlength']"
               >
                 Minimum 2 charactères
               </ng-container>
               <ng-container
-                *ngIf="registerFormControl['agent'].get('nomUsage')?.errors?.['maxlength']"
+                *ngIf="registerFormControl['personne'].get('nomUsage')?.errors?.['maxlength']"
               >
                 Maximum de charactères atteint
               </ng-container>
@@ -113,26 +113,26 @@
               class="form-control"
               formControlName="nom"
               [class.is-invalid]="
-                registerFormControl['agent'].get('nom')?.invalid &&
-                (registerFormControl['agent'].get('nom')?.touched ||
-                  registerFormControl['agent'].get('nom')?.dirty)
+                registerFormControl['personne'].get('nom')?.invalid &&
+                (registerFormControl['personne'].get('nom')?.touched ||
+                  registerFormControl['personne'].get('nom')?.dirty)
               "
             />
 
             <div
               class="invalid-feedback"
               *ngIf="
-                registerFormControl['agent'].get('nom')?.invalid &&
-                registerFormControl['agent'].get('nom')?.touched
+                registerFormControl['personne'].get('nom')?.invalid &&
+                registerFormControl['personne'].get('nom')?.touched
               "
             >
-              <ng-container *ngIf="registerFormControl['agent'].get('nom')?.errors?.['required']">
+              <ng-container *ngIf="registerFormControl['personne'].get('nom')?.errors?.['required']">
                 Le nom est requis
               </ng-container>
-              <ng-container *ngIf="registerFormControl['agent'].get('nom')?.errors?.['minlength']">
+              <ng-container *ngIf="registerFormControl['personne'].get('nom')?.errors?.['minlength']">
                 Minimum 2 charactères
               </ng-container>
-              <ng-container *ngIf="registerFormControl['agent'].get('nom')?.errors?.['maxlength']">
+              <ng-container *ngIf="registerFormControl['personne'].get('nom')?.errors?.['maxlength']">
                 Maximum de charactères atteint
               </ng-container>
             </div>
@@ -147,31 +147,31 @@
               class="form-control"
               formControlName="prenom"
               [class.is-invalid]="
-                registerFormControl['agent'].get('prenom')?.invalid &&
-                (registerFormControl['agent'].get('prenom')?.touched ||
-                  registerFormControl['agent'].get('prenom')?.dirty)
+                registerFormControl['personne'].get('prenom')?.invalid &&
+                (registerFormControl['personne'].get('prenom')?.touched ||
+                  registerFormControl['personne'].get('prenom')?.dirty)
               "
             />
 
             <div
               class="invalid-feedback"
               *ngIf="
-                registerFormControl['agent'].get('prenom')?.invalid &&
-                registerFormControl['agent'].get('prenom')?.touched
+                registerFormControl['personne'].get('prenom')?.invalid &&
+                registerFormControl['personne'].get('prenom')?.touched
               "
             >
               <ng-container
-                *ngIf="registerFormControl['agent'].get('prenom')?.errors?.['required']"
+                *ngIf="registerFormControl['personne'].get('prenom')?.errors?.['required']"
               >
                 Le nom est requis
               </ng-container>
               <ng-container
-                *ngIf="registerFormControl['agent'].get('prenom')?.errors?.['minlength']"
+                *ngIf="registerFormControl['personne'].get('prenom')?.errors?.['minlength']"
               >
                 Minimum 2 charactères
               </ng-container>
               <ng-container
-                *ngIf="registerFormControl['agent'].get('prenom')?.errors?.['maxlength']"
+                *ngIf="registerFormControl['personne'].get('prenom')?.errors?.['maxlength']"
               >
                 Maximum de charactères atteint
               </ng-container>
@@ -191,9 +191,9 @@
                   #d="ngbDatepicker"
                   formControlName="dateNaissance"
                   [class.is-invalid]="
-                    registerFormControl['agent'].get('dateNaissance')?.invalid &&
-                    (registerFormControl['agent'].get('dateNaissance')?.touched ||
-                      registerFormControl['agent'].get('dateNaissance')?.dirty)
+                    registerFormControl['personne'].get('dateNaissance')?.invalid &&
+                    (registerFormControl['personne'].get('dateNaissance')?.touched ||
+                      registerFormControl['personne'].get('dateNaissance')?.dirty)
                   "
                 />
                 <button
@@ -205,12 +205,12 @@
                 <div
                   class="invalid-feedback"
                   *ngIf="
-                    registerFormControl['agent'].get('dateNaissance')?.invalid &&
-                    registerFormControl['agent'].get('dateNaissance')?.touched
+                    registerFormControl['personne'].get('dateNaissance')?.invalid &&
+                    registerFormControl['personne'].get('dateNaissance')?.touched
                   "
                 >
                   <ng-container
-                    *ngIf="registerFormControl['agent'].get('dateNaissance')?.errors?.['required']"
+                    *ngIf="registerFormControl['personne'].get('dateNaissance')?.errors?.['required']"
                   >
                     Le date de naissance est requise
                   </ng-container>
@@ -228,31 +228,31 @@
               class="form-control"
               formControlName="corpsGrade"
               [class.is-invalid]="
-                registerFormControl['agent'].get('corpsGrade')?.invalid &&
-                (registerFormControl['agent'].get('corpsGrade')?.touched ||
-                  registerFormControl['agent'].get('corpsGrade')?.dirty)
+                registerFormControl['personne'].get('corpsGrade')?.invalid &&
+                (registerFormControl['personne'].get('corpsGrade')?.touched ||
+                  registerFormControl['personne'].get('corpsGrade')?.dirty)
               "
             />
 
             <div
               class="invalid-feedback"
               *ngIf="
-                registerFormControl['agent'].get('corpsGrade')?.invalid &&
-                registerFormControl['agent'].get('corpsGrade')?.touched
+                registerFormControl['personne'].get('corpsGrade')?.invalid &&
+                registerFormControl['personne'].get('corpsGrade')?.touched
               "
             >
               <ng-container
-                *ngIf="registerFormControl['agent'].get('corpsGrade')?.errors?.['required']"
+                *ngIf="registerFormControl['personne'].get('corpsGrade')?.errors?.['required']"
               >
                 Le corps-grade est requis
               </ng-container>
               <ng-container
-                *ngIf="registerFormControl['agent'].get('corpsGrade')?.errors?.['minlength']"
+                *ngIf="registerFormControl['personne'].get('corpsGrade')?.errors?.['minlength']"
               >
                 Minimum 2 charactères
               </ng-container>
               <ng-container
-                *ngIf="registerFormControl['agent'].get('corpsGrade')?.errors?.['maxlength']"
+                *ngIf="registerFormControl['personne'].get('corpsGrade')?.errors?.['maxlength']"
               >
                 Maximum de charactères atteint
               </ng-container>
@@ -269,31 +269,31 @@
               id="inputPassword"
               formControlName="echelon"
               [class.is-invalid]="
-                registerFormControl['agent'].get('echelon')?.invalid &&
-                (registerFormControl['agent'].get('echelon')?.touched ||
-                  registerFormControl['agent'].get('echelon')?.dirty)
+                registerFormControl['personne'].get('echelon')?.invalid &&
+                (registerFormControl['personne'].get('echelon')?.touched ||
+                  registerFormControl['personne'].get('echelon')?.dirty)
               "
             />
 
             <div
               class="invalid-feedback"
               *ngIf="
-                registerFormControl['agent'].get('echelon')?.invalid &&
-                registerFormControl['agent'].get('echelon')?.touched
+                registerFormControl['personne'].get('echelon')?.invalid &&
+                registerFormControl['personne'].get('echelon')?.touched
               "
             >
               <ng-container
-                *ngIf="registerFormControl['agent'].get('echelon')?.errors?.['required']"
+                *ngIf="registerFormControl['personne'].get('echelon')?.errors?.['required']"
               >
                 L'échelon est requis
               </ng-container>
               <ng-container
-                *ngIf="registerFormControl['agent'].get('echelon')?.errors?.['minlength']"
+                *ngIf="registerFormControl['personne'].get('echelon')?.errors?.['minlength']"
               >
                 Minimum 2 charactères
               </ng-container>
               <ng-container
-                *ngIf="registerFormControl['agent'].get('echelon')?.errors?.['maxlength']"
+                *ngIf="registerFormControl['personne'].get('echelon')?.errors?.['maxlength']"
               >
                 Maximum de charactères atteint
               </ng-container>
@@ -324,13 +324,13 @@
                 <!-- <div
                   class="invalid-feedback"
                   *ngIf="
-                    registerFormControl['agent'].get('datePromotion')
+                    registerFormControl['personne'].get('datePromotion')
                       ?.invalid &&
-                    registerFormControl['agent'].get('datePromotion')?.touched
+                    registerFormControl['personne'].get('datePromotion')?.touched
                   "
                 >
                   <ng-container
-                    *ngIf="registerFormControl['agent'].get('datePromotion')?.errors?.['required']"
+                    *ngIf="registerFormControl['personne'].get('datePromotion')?.errors?.['required']"
                   >
                     La date de promotion dans l'échelon est requise
                   </ng-container>

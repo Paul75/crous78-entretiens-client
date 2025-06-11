@@ -6,15 +6,27 @@ export const routes: Routes = [
   {
     path: '',
     component: AdminComponent,
-    children: [],
-  },
-
-  {
-    path: 'personnes',
-    loadComponent: () =>
-      import(`./liste-personnes/liste-personnes.component`).then(
-        mod => mod.AdminListePersonnesComponent,
-      ),
+    children: [
+      {
+        path: '', // Chemin vide pour la redirection par défaut
+        redirectTo: 'entretiens', // Redirige vers 'entretiens'
+        pathMatch: 'full',
+      },
+      {
+        path: 'entretiens',
+        loadComponent: () =>
+          import(`./liste-entretiens/liste-entretiens.component`).then(
+            mod => mod.ListeEntretiensComponent,
+          ),
+      },
+      {
+        path: 'personnes',
+        loadComponent: () =>
+          import(`./liste-personnes/liste-personnes.component`).then(
+            mod => mod.AdminListePersonnesComponent,
+          ),
+      },
+    ],
   },
 
   {
