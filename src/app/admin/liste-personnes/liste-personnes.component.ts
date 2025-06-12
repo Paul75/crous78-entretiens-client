@@ -44,13 +44,29 @@ export class AdminListePersonnesComponent implements OnInit {
 
   private messageService = inject(MessageService);
 
+  loading: boolean = true;
+
   personnes!: Personne[];
 
   clonedPersonnes: { [s: string]: Personne } = {};
 
   ngOnInit(): void {
-    this.personnesService.getPersonnes().subscribe((items: Personne[]) => {
-      this.personnes = items;
+    this.loading = true;
+    this.personnesService.getPersonnes().subscribe({
+      next: (items: Personne[]) => {
+        this.personnes = items;
+      },
+      error: e => {
+        this.loading = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur',
+          detail: 'Impossible de modifier la ligne',
+        });
+      },
+      complete: () => {
+        this.loading = false;
+      },
     });
   }
 
@@ -59,14 +75,27 @@ export class AdminListePersonnesComponent implements OnInit {
   }
 
   onRowEditSave(personne: Personne) {
+    this.loading = true;
     // console.log(personne);
-    this.personnesService.savePersonne(personne).subscribe((p: Personne) => {
-      delete this.clonedPersonnes[personne.id as number];
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: 'La ligne a été modifiée',
-      });
+    this.personnesService.savePersonne(personne).subscribe({
+      next: (p: Personne) => {
+        delete this.clonedPersonnes[personne.id as number];
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'La ligne a été modifiée',
+        });
+      },
+      error: e => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur',
+          detail: 'Impossible de modifier la ligne',
+        });
+      },
+      complete: () => {
+        this.loading = false;
+      },
     });
   }
 
@@ -84,18 +113,21 @@ export class AdminListePersonnesComponent implements OnInit {
   }
 
   delRow(personne: Personne, index: number) {
+    this.loading = true;
     this.personnesService.deletePersonne(personne.id).subscribe({
       next: () => {
         this.personnes[index] = this.clonedPersonnes[personne.id as number];
         delete this.clonedPersonnes[personne.id as number];
       },
-      error: (e) => {
-        console.error('delRow error: ', e);
+      error: e => {
         this.messageService.add({
           severity: 'error',
           summary: 'Erreur',
           detail: 'Impossible de supprimer la ligne',
         });
+      },
+      complete: () => {
+        this.loading = false;
       },
     });
   }

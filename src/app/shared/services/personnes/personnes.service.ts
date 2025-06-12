@@ -19,7 +19,7 @@ export class PersonnesService {
       .get<Personne[]>(url)
       .pipe(catchError(this.handleError<Personne[]>('getPersonnes')));
   }
-  
+
   savePersonne(personne: Personne): Observable<Personne> {
     const url = `${this.backendUrl}/${URL_PERSONNES}`;
 
@@ -27,7 +27,7 @@ export class PersonnesService {
       .put<Personne>(url + '/' + personne.id, personne)
       .pipe(catchError(this.handleError<Personne>('savePersonne')));
   }
-  
+
   deletePersonne(idPersonne: number): Observable<Personne> {
     const url = `${this.backendUrl}/${URL_PERSONNES}`;
 

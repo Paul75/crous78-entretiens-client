@@ -1,6 +1,6 @@
-<div class="container">
-  <p-toast/>
-  <h1>Liste des personnes</h1>
+<div class="container-fluid">
+  <p-toast />
+  <h2>Liste des personnes</h2>
 
   <p-table
     #dt
@@ -9,6 +9,7 @@
     stripedRows
     dataKey="id"
     editMode="row"
+    [loading]="loading"
     [scrollable]="true"
     [paginator]="true"
     [rows]="5"
@@ -57,7 +58,12 @@
         <td pFrozenColumn alignFrozen="left" class="text-nowrap">
           <p-cellEditor>
             <ng-template #input>
-              <p-inputnumber [(ngModel)]="personne.matricule" mode="decimal" inputId="withoutgrouping" [useGrouping]="false" />
+              <p-inputnumber
+                [(ngModel)]="personne.matricule"
+                mode="decimal"
+                inputId="withoutgrouping"
+                [useGrouping]="false"
+              />
             </ng-template>
             <ng-template #output>
               {{ personne.matricule }}

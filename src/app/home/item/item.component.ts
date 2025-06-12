@@ -8,6 +8,7 @@ import { Entretien } from '@shared/models/entretien.model';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { SignatureComponent } from '@shared/components/dialogs/signature/signature.component';
 import { ViewPdfComponent } from '@shared/components/dialogs/pdf/view-pdf.component';
+import { StatutDemandeEnum } from '@shared/enums/statut.deande.enum';
 
 @Component({
   selector: 'app-home-item',
@@ -20,7 +21,7 @@ import { ViewPdfComponent } from '@shared/components/dialogs/pdf/view-pdf.compon
     ViewPdfComponent,
   ],
   templateUrl: './item.component.html',
-  styleUrl: './item.component.css',
+  styleUrl: './item.component.scss',
 })
 export class HomeItemComponent implements OnInit {
   @Input()
@@ -44,6 +45,18 @@ export class HomeItemComponent implements OnInit {
     this.communicationService.actionView$.subscribe(action => {
       this.viewPDF(action);
     });
+  }
+
+  getStatutClasses() {
+    const statut: StatutDemandeEnum = this.entretien!.statut;
+    return {
+      preparation: statut === StatutDemandeEnum.PREPARE,
+      'rendez-vous': statut === StatutDemandeEnum.RDV,
+      saisie: statut === StatutDemandeEnum.ENCOURS,
+      'signe-personne': statut === StatutDemandeEnum.AGENTSIGN,
+      'signe-chef': statut === StatutDemandeEnum.CHEFSIGN,
+      valide: statut === StatutDemandeEnum.VALIDE,
+    };
   }
 
   getAgentName(): string {

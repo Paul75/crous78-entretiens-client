@@ -126,13 +126,19 @@
                 registerFormControl['personne'].get('nom')?.touched
               "
             >
-              <ng-container *ngIf="registerFormControl['personne'].get('nom')?.errors?.['required']">
+              <ng-container
+                *ngIf="registerFormControl['personne'].get('nom')?.errors?.['required']"
+              >
                 Le nom est requis
               </ng-container>
-              <ng-container *ngIf="registerFormControl['personne'].get('nom')?.errors?.['minlength']">
+              <ng-container
+                *ngIf="registerFormControl['personne'].get('nom')?.errors?.['minlength']"
+              >
                 Minimum 2 charactères
               </ng-container>
-              <ng-container *ngIf="registerFormControl['personne'].get('nom')?.errors?.['maxlength']">
+              <ng-container
+                *ngIf="registerFormControl['personne'].get('nom')?.errors?.['maxlength']"
+              >
                 Maximum de charactères atteint
               </ng-container>
             </div>
@@ -210,7 +216,9 @@
                   "
                 >
                   <ng-container
-                    *ngIf="registerFormControl['personne'].get('dateNaissance')?.errors?.['required']"
+                    *ngIf="
+                      registerFormControl['personne'].get('dateNaissance')?.errors?.['required']
+                    "
                   >
                     Le date de naissance est requise
                   </ng-container>

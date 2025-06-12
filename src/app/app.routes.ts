@@ -4,8 +4,15 @@ import { AuthenticationGuard } from '@core/authentication/authentication.guard';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-
+  {
+    path: '', // Chemin vide pour la redirection par défaut
+    redirectTo: 'home', // Redirige vers 'entretiens'
+    pathMatch: 'full',
+  },
+  {
+    path: 'home',
+    component: HomeComponent,
+  },
   {
     path: 'forms',
     data: { page: 'form' },

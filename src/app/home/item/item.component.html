@@ -6,15 +6,7 @@
       <div class="col">
         {{ entretien.dateEntretien | date: 'dd/MM/yyyy' }}
       </div>
-      <div
-        class="col badge text-wrap lineEntretien"
-        [ngClass]="{
-          preparation: getEntretienStatut() === 'En préparation',
-          'rendez-vous': getEntretienStatut() === 'Rendez-vous pris',
-          saisie: getEntretienStatut() === 'En cours de saisie',
-          valide: getEntretienStatut() === 'Entretien validé',
-        }"
-      >
+      <div class="col badge text-wrap lineEntretien" [ngClass]="getStatutClasses()">
         {{ getEntretienStatut() }}
       </div>
       <div class="col">

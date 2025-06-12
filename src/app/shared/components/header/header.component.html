@@ -23,20 +23,14 @@
     </button>
 
     <div class="navbar-collapse" [class.collapse]="collapsed" id="navbarContent">
-			<ul class="navbar-nav me-auto">
+      <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link nga-nav-link" routerLink="/" routerLinkActive="active">
-            Accueil
-          </a>
+          <a class="nav-link active" routerLink="/home" routerLinkActive="active-link">Accueil</a>
         </li>
-				<li class="nav-item" ngbDropdown display="dynamic">
-					<a class="nav-link nga-nav-link" tabindex="0" ngbDropdownToggle id="navbarAdmin" role="button" routerLinkActive="active">Administration</a>
-					<div ngbDropdownMenu aria-labelledby="navbarAdmin" class="dropdown-menu">
-						<a ngbDropdownItem href="javascript:void(0)" routerLink="/admin/personnes" routerLinkActive="active">Liste des personnes</a>
-						<a ngbDropdownItem href="javascript:void(0)" routerLink="/admin" routerLinkActive="active">Liste des entretiens</a>
-					</div>
-				</li>
-			</ul>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/admin" routerLinkActive="active-link">Administration</a>
+        </li>
+      </ul>
       <!-- <form class="d-flex">
         <button type="button" class="btn btn-sm nga-btn-navbar me-2" routerLink="/signup">
           <i class="fas fa-user-plus me-2"></i>S'inscrire

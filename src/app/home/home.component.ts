@@ -5,13 +5,7 @@ import { EntretienImpl, EntretienService } from '@shared/services/entretiens/ent
 import { environment } from '@environments/environment';
 import { SeoService } from '@core/services/seo/seo.service';
 import { HomeItemComponent } from './item/item.component';
-
-export enum StatutDemande {
-  PREPARE = 'En préparation',
-  RDV = 'Rendez-vous pris',
-  ENCOURS = 'En cours de saisie',
-  VALIDE = 'Entretien validé',
-}
+import { StatutDemandeEnum } from '@shared/enums/statut.deande.enum';
 
 export enum ColorDemande {
   PREPARE = '#ffd966',
@@ -38,7 +32,7 @@ export class HomeComponent implements OnInit {
   currentEntretien = '1';
   currentUser = '1043637';
 
-  statutDemande = StatutDemande;
+  statutDemande = StatutDemandeEnum;
 
   private entretienService = inject(EntretienService);
   // typeEntretienEnum = TypeEntretien;

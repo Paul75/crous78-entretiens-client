@@ -20,6 +20,8 @@ import { RouterModule } from '@angular/router';
 import { AdminListeEntretiensHeaderComponent } from './header/header.component';
 import { AdminListeEntretiensContentComponent } from './content/content.component';
 import { PersonnelService } from '@admin/services/personnel.service';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 export class PersonneImpl {
   id!: string;
@@ -40,11 +42,13 @@ export class PersonneImpl {
     IconFieldModule,
     InputIconModule,
     DialogModule,
+    ToastModule,
     TooltipModule,
     PanelModule,
     AdminListeEntretiensHeaderComponent,
     AdminListeEntretiensContentComponent,
   ],
+  providers: [MessageService, PersonnelService],
   templateUrl: './liste-entretiens.component.html',
   styleUrl: './liste-entretiens.component.scss',
 })
@@ -54,10 +58,13 @@ export class ListeEntretiensComponent implements OnInit {
   bootstrap = environment.application.bootstrap;
   fontawesome = environment.application.fontawesome;
 
+  private messageService = inject(MessageService);
   private communicationService = inject(CommunicationPdfService);
   private personnelService = inject(PersonnelService);
   private pdfService = inject(PdfService);
   public showViewer = false;
+
+  loading: boolean = true;
 
   liste!: PersonneImpl[];
 
@@ -97,9 +104,22 @@ export class ListeEntretiensComponent implements OnInit {
   listeDesPersonnes() {
     // const employeNumber = 1043637;
     const employeNumber = 1072989;
-    this.personnelService.getPersonnels(employeNumber).subscribe((entretiens: PersonneImpl[]) => {
-      // console.log(entretiens);
-      this.liste = entretiens;
+
+    this.personnelService.getPersonnels(employeNumber).subscribe({
+      next: (entretiens: PersonneImpl[]) => {
+        // console.log(entretiens);
+        this.liste = entretiens;
+      },
+      error: e => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur',
+          detail: 'Impossible de modifier la ligne',
+        });
+      },
+      complete: () => {
+        this.loading = false;
+      },
     });
   }
 
@@ -108,6 +128,7 @@ export class ListeEntretiensComponent implements OnInit {
   }
 
   getPDF(id: string) {
+    this.loading = true;
     this.pdfService.downloadPdf(id).subscribe({
       next: (data: Blob) => {
         const a = document.createElement('a');
@@ -119,10 +140,14 @@ export class ListeEntretiensComponent implements OnInit {
         a.remove();
       },
       error: e => console.error('downloadPdf error: ', e),
+      complete: () => {
+        this.loading = false;
+      },
     });
   }
 
   viewPDF(id: string) {
+    this.loading = true;
     this.pdfService.downloadPdf(id).subscribe({
       next: (data: Blob) => {
         this.src = data;
@@ -130,6 +155,9 @@ export class ListeEntretiensComponent implements OnInit {
         this.visibleDetailPdf = true;
       },
       error: e => console.error('viewPDF error: ', e),
+      complete: () => {
+        this.loading = false;
+      },
     });
   }
 

@@ -80,18 +80,20 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
   }
 
   newEntretien() {
-    this.entretienService.changeStatut(this.statutDemandeEnum.ENCOURS, this.entretien.id).subscribe({
-      next: response => {
-        if (this.entretien.type == this.typeEntretienEnum.ENTRETIEN_FORMATION) {
-          this.router.navigate(['/forms/entretien/form/', this.entretien.id]);
-        } else {
-          this.router.navigate(['/forms/entretien/pro/', this.entretien.id]);
-        }
-      },
-      error: err => {
-        console.error('Error saving date:', err);
-      },
-    });
+    this.entretienService
+      .changeStatut(this.statutDemandeEnum.ENCOURS, this.entretien.id)
+      .subscribe({
+        next: response => {
+          if (this.entretien.type == this.typeEntretienEnum.ENTRETIEN_FORMATION) {
+            this.router.navigate(['/forms/entretien/form/', this.entretien.id]);
+          } else {
+            this.router.navigate(['/forms/entretien/pro/', this.entretien.id]);
+          }
+        },
+        error: err => {
+          console.error('Error saving date:', err);
+        },
+      });
   }
 
   getPDF() {

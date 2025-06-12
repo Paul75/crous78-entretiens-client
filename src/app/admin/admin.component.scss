@@ -1,19 +1,72 @@
-.preparation {
-  background-color: #addd2a; /* Couleur pour 'En préparation' */
+.app-container {
+  display: flex;
+  min-height: 100vh; // Utilise toute la hauteur de la fenêtre
 }
 
-.rendez-vous {
-  background-color: #4e9e0c; /* Couleur pour 'Rendez-vous pris' */
+.sidebar {
+  width: 300px; // Largeur fixe pour la barre de navigation
+  background-color: #f8f9fa;
+  position: fixed; // Position fixe
+  height: 100vh;
+  border-right: 1px solid #dee2e6;
+  overflow-y: auto; // Permet le défilement si le contenu dépasse la hauteur
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  box-shadow: 4px 0 6px rgba(0, 0, 0, 0.1);
+
+  .nav-link {
+    text-align: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid #dee2e6;
+    text-decoration: none;
+    color: inherit;
+    z-index: 1000;
+
+    border-radius: var(--border-radius);
+    margin: 0.5rem 0;
+    transition: all 0.3s;
+
+    i {
+      margin-right: 8px;
+    }
+
+    &.active-link {
+      border-top: 2px solid #007bff;
+      border-bottom: 2px solid #007bff;
+      font-weight: bold;
+    }
+
+    &:hover:not(.active-link) {
+      background-color: #e9ecef;
+    }
+  }
+
+  img {
+    &.logo {
+      margin-bottom: 2rem;
+      max-height: 200px;
+    }
+  }
 }
 
-.saisie {
-  background-color: #4c1594; /* Couleur pour 'En cours de saisie' */
+.main-content {
+  margin-left: 300px; // Même largeur que la barre de navigation
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto; // Permet le défilement du contenu principal
 }
 
-.valide {
-  background-color: #9b1b7b; /* Couleur pour 'Entretien validé' */
-}
+@media (max-width: 992px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    margin-left: 0;
+  }
 
-.equal-width-column {
-  width: 50%;
+  .main-content {
+    margin-left: 0;
+    padding: 1rem;
+  }
 }

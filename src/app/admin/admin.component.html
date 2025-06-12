@@ -1,1 +1,62 @@
-<router-outlet></router-outlet>
+<!-- <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2 bg-light p-0">
+      <div class="text-center">
+        <img
+          [src]="'images/' + appInfo.logo + '.png'"
+          [srcset]="'images/' + appInfo.logo + '.png, images/' + appInfo.logo + '@2x.png 2x'"
+          [alt]="appInfo.name + ' Logo'"
+          class="logo img-fluid"
+          style="max-height: 200px"
+        />
+      </div>
+      <nav class="nav flex-column">
+        <a class="nav-link active" routerLink="/admin/entretiens" routerLinkActive="active-link" >Liste des entretiens</a>
+        <a class="nav-link" routerLink="/admin/personnes" routerLinkActive="active-link">Liste des personnes</a>
+      </nav>
+    </div>
+
+    <div class="col-md-10 p-4">
+      <router-outlet />
+    </div>
+  </div>
+</div>
+
+-->
+<div class="app-container">
+  <div class="sidebar">
+    <div class="text-center p-3">
+      <img
+        [src]="'images/' + appInfo.logo + '.png'"
+        [srcset]="'images/' + appInfo.logo + '.png, images/' + appInfo.logo + '@2x.png 2x'"
+        [alt]="appInfo.name + ' Logo'"
+        class="logo img-fluid"
+      />
+    </div>
+    <nav class="nav flex-column">
+      <a class="nav-link active" routerLink="/admin/entretiens" routerLinkActive="active-link">
+        <i
+          class="pi"
+          [ngClass]="{
+            'pi-home': !isActive(router.url, '/admin/entretiens'),
+            'pi-check': isActive(router.url, '/admin/entretiens'),
+          }"
+        ></i
+        >Liste des entretiens
+      </a>
+      <a class="nav-link" routerLink="/admin/personnes" routerLinkActive="active-link">
+        <i
+          class="pi"
+          [ngClass]="{
+            'pi-file': !isActive(router.url, '/admin/personnes'),
+            'pi-check': isActive(router.url, '/admin/personnes'),
+          }"
+        ></i>
+        Liste des personnes</a
+      >
+    </nav>
+  </div>
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

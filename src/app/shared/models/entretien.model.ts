@@ -10,7 +10,7 @@ export interface Entretien {
   dateEntretien: string;
   structure: string;
   intitulePoste: string;
-  dateAffectation: string|null;
+  dateAffectation: string | null;
   emploiType: string;
   positionPoste: string;
   quotiteAffectation: string;

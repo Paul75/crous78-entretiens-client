@@ -5,6 +5,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ButtonGroupModule } from 'primeng/buttongroup';
 import { AdminListeEntretiensButtonsComponent } from '../buttons/buttons.component';
+import { StatutDemandeEnum } from '@shared/enums/statut.deande.enum';
 
 @Component({
   selector: 'app-admin-liste-entretiens-header',
@@ -33,6 +34,18 @@ export class AdminListeEntretiensHeaderComponent implements OnInit {
   ngOnInit(): void {
     // this.entretiens = [this.entretien];
     // console.log(this.entretien.dateEntretien);
+  }
+
+  getStatutClasses() {
+    const statut: StatutDemandeEnum = this.entretien!.statut;
+    return {
+      preparation: statut === StatutDemandeEnum.PREPARE,
+      'rendez-vous': statut === StatutDemandeEnum.RDV,
+      saisie: statut === StatutDemandeEnum.ENCOURS,
+      'signe-personne': statut === StatutDemandeEnum.AGENTSIGN,
+      'signe-chef': statut === StatutDemandeEnum.CHEFSIGN,
+      valide: statut === StatutDemandeEnum.VALIDE,
+    };
   }
 
   getAgentName(): string {

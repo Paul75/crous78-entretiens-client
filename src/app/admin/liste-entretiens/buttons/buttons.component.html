@@ -1,7 +1,7 @@
 <p-buttongroup>
   <ng-container *ngIf="entretien">
     <p-button
-     *ngIf="displayButtonsViewDownload"
+      *ngIf="displayButtonsViewDownload"
       icon="pi pi-search"
       (click)="viewPDF()"
       severity="secondary"
@@ -9,7 +9,13 @@
       pTooltip="Voir le PDF"
     />
 
-    <p-button icon="pi pi-download" *ngIf="displayButtonsViewDownload" (click)="getPDF()" severity="secondary" rounded />
+    <p-button
+      icon="pi pi-download"
+      *ngIf="displayButtonsViewDownload"
+      (click)="getPDF()"
+      severity="secondary"
+      rounded
+    />
 
     <p-button
       icon="pi pi-calendar"
@@ -29,7 +35,13 @@
       >
       </p-datePicker>
     </p-popover>
-    
-    <p-button *ngIf="displayButtonPlus" icon="pi pi-plus" (click)="newEntretien()" styleClass="btn-plus-form" rounded />
+
+    <p-button
+      *ngIf="displayButtonPlus"
+      icon="pi pi-plus"
+      (click)="newEntretien()"
+      styleClass="btn-plus-form"
+      rounded
+    />
   </ng-container>
 </p-buttongroup>
