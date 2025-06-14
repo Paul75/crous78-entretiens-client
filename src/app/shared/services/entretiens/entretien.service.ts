@@ -55,10 +55,10 @@ export class EntretienService {
       .pipe(catchError(this.handleError('newEntretien', DEFAULT_ENTRETIEN)));
   }
 
-  updateEntretien(entretienId: number, datas: Entretien): Observable<any> {
+  updateEntretien(entretienId: number, datas: Entretien): Observable<Entretien> {
     return this.http
-      .put(`${this.backendUrl}/entretien/${entretienId}`, datas)
-      .pipe(catchError(this.handleError('updateEntretien', DEFAULT_ENTRETIEN)));
+      .put<Entretien>(`${this.backendUrl}/entretien/${entretienId}`, datas)
+      .pipe(catchError(this.handleError<Entretien>('updateEntretien')));
   }
 
   changeStatut(statut: StatutDemandeEnum, entretienId: number): Observable<any> {
