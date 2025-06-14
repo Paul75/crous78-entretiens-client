@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid card">
   <p-toast />
   <h2>Liste des entretiens</h2>
 
@@ -11,8 +11,20 @@
     [paginator]="true"
     [rows]="10"
     [rowsPerPageOptions]="[5, 10, 20, 50, 100]"
-    [globalFilterFields]="['personne.id']"
+    [globalFilterFields]="['id', 'personne.nom']"
   >
+    <ng-template #caption>
+      <div class="flex">
+        <p-iconfield>
+          <input
+            pInputText
+            type="text"
+            (input)="applyFilterGlobal($event, dt1)"
+            placeholder="Rechercher..."
+          />
+        </p-iconfield>
+      </div>
+    </ng-template>
     <ng-template #header>
       <tr>
         <th class="text-center">Matricule</th>
@@ -20,11 +32,11 @@
         <th class="text-center equal-width-column">Entretiens pro</th>
         <th class="text-center equal-width-column">Entretiens formation</th>
       </tr>
-      <tr>
+      <!-- <tr>
         <th>
           <p-columnFilter
             type="text"
-            field="liste.personne.id"
+            field="id"
             placeholder="Recherche par matricule"
             ariaLabel="Matricule filtre"
           ></p-columnFilter>
@@ -32,30 +44,30 @@
         <th>
           <p-columnFilter
             type="text"
-            field="liste.personne.nom"
+            field="personne.nom"
             placeholder="Recherche par personne"
             ariaLabel="personne filtre"
           ></p-columnFilter>
         </th>
         <th></th>
         <th></th>
-      </tr>
+      </tr>-->
     </ng-template>
-    <ng-template #body let-liste>
+    <ng-template #body let-item>
       <tr>
-        <td class="text-center">{{ liste.id }}</td>
+        <td class="text-center">{{ item.id }}</td>
         <td class="text-center text-nowrap">
-          {{ liste.personne?.nom }} {{ liste.personne?.prenom }}
+          {{ item.personne?.nom }} {{ item.personne?.prenom }}
         </td>
 
         <td class="text-center">
-          <ng-container *ngIf="liste.entretienPro[0]?.statut; else noProStatut">
+          <ng-container *ngIf="item.entretienPro[0]?.statut; else noProStatut">
             <p-panel [toggleable]="true" [collapsed]="true">
               <ng-template #header>
-                <app-admin-liste-entretiens-header [entretien]="liste.entretienPro[0]" />
+                <app-admin-liste-entretiens-header [entretien]="item.entretienPro[0]" />
               </ng-template>
               <p class="m-0">
-                <app-admin-liste-entretiens-content [entretiens]="liste.entretienPro" />
+                <app-admin-liste-entretiens-content [entretiens]="item.entretienPro" />
               </p>
             </p-panel>
           </ng-container>
@@ -64,13 +76,13 @@
         </td>
 
         <td class="text-center">
-          <ng-container *ngIf="liste.entretienForm[0]?.statut; else noStatut">
+          <ng-container *ngIf="item.entretienForm[0]?.statut; else noStatut">
             <p-panel [toggleable]="true" [collapsed]="true">
               <ng-template #header>
-                <app-admin-liste-entretiens-header [entretien]="liste.entretienForm[0]" />
+                <app-admin-liste-entretiens-header [entretien]="item.entretienForm[0]" />
               </ng-template>
               <p class="m-0">
-                <app-admin-liste-entretiens-content [entretiens]="liste.entretienForm" />
+                <app-admin-liste-entretiens-content [entretiens]="item.entretienForm" />
               </p>
             </p-panel>
           </ng-container>

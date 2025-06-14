@@ -13,18 +13,26 @@
         <p-buttongroup>
           <ng-container *ngIf="entretien">
             <p-button
+              *ngIf="displayButtonsViewDownload"
               icon="pi pi-search"
-              (click)="viewPDF(this.entretien.id.toString())"
+              (click)="viewPDF(this.entretien.id)"
               severity="secondary"
               rounded
             />
             <p-button
+              *ngIf="displayButtonsViewDownload"
               icon="pi pi-download"
-              (click)="getPDF(this.entretien.id.toString())"
+              (click)="getPDF(this.entretien.id)"
               severity="secondary"
               rounded
             />
-            <p-button icon="pi pi-pencil" (click)="goSignature()" severity="secondary" rounded />
+            <p-button
+              *ngIf="displayButtonSign"
+              icon="pi pi-pencil"
+              (click)="goSignature()"
+              severity="secondary"
+              rounded
+            />
           </ng-container>
         </p-buttongroup>
       </div>
@@ -36,5 +44,5 @@
   <div class="alert alert-info" role="alert">PAS D'ENTRETIEN</div></ng-template
 >
 
-<app-home-signature-pad #signatureDialog />
+<app-signature-pad #signatureDialog />
 <app-home-dialog-pdf #pdfDialog />

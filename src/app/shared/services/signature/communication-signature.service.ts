@@ -1,15 +1,20 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { shareReplay, Subject } from 'rxjs';
+
+export interface SaveSign {
+  entretienId: number;
+  signature: string;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommunicationSignatureService {
-  private actionSaveSign = new Subject<string>();
+  private actionSaveSign = new Subject<SaveSign>();
 
-  actionSaveSign$ = this.actionSaveSign.asObservable();
+  actionSaveSign$ = this.actionSaveSign.asObservable().pipe(shareReplay(1));
 
-  saveSignature(action: string) {
+  saveSignature(action: SaveSign) {
     this.actionSaveSign.next(action);
   }
 }

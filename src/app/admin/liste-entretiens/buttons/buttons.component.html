@@ -18,11 +18,11 @@
     />
 
     <p-button
+      *ngIf="displayButtonRdv"
       icon="pi pi-calendar"
       (onClick)="op.toggle($event)"
       severity="secondary"
       rounded
-      *ngIf="entretien.statut == statutDemandeEnum.PREPARE"
     />
 
     <p-popover #op>
@@ -37,6 +37,14 @@
     </p-popover>
 
     <p-button
+      *ngIf="displayButtonSign"
+      icon="pi pi-pencil"
+      (click)="goSignature()"
+      severity="secondary"
+      rounded
+    />
+
+    <p-button
       *ngIf="displayButtonPlus"
       icon="pi pi-plus"
       (click)="newEntretien()"
@@ -45,3 +53,5 @@
     />
   </ng-container>
 </p-buttongroup>
+
+<app-signature-pad #signatureDialog />

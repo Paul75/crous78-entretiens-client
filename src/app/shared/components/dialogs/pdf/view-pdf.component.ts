@@ -35,7 +35,7 @@ export class ViewPdfComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {}
 
-  getPDF(id: string) {
+  getPDF(id: number) {
     if (!id) return;
     this.pdfService.downloadPdf(id).subscribe({
       next: (data: Blob) => {
@@ -51,7 +51,7 @@ export class ViewPdfComponent implements AfterViewInit {
     });
   }
 
-  viewPDF(id: string) {
+  viewPDF(id: number) {
     if (!id) return;
     this.pdfService.downloadPdf(id).subscribe({
       next: (data: Blob) => {

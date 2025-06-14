@@ -34,6 +34,7 @@ import { DEFAULT_ENTRETIEN } from '@shared/constants/entretien.constants';
 import { EntretienService } from '@shared/services/entretiens/entretien.service';
 import { DateService } from '@shared/services/date.service';
 import { environment } from '@environments/environment';
+import { PdfService } from '@shared/services/pdf/pdf.service';
 
 @Component({
   selector: 'app-entretien-pro',
@@ -61,12 +62,14 @@ import { environment } from '@environments/environment';
 })
 export class EntretienProComponent extends FormProvider implements OnChanges {
   id: string | undefined;
-  entretien: Entretien | undefined;
+  entretien!: Entretien;
 
   name = environment.application.name;
   angular = environment.application.angular;
   bootstrap = environment.application.bootstrap;
   fontawesome = environment.application.fontawesome;
+
+  private pdfService = inject(PdfService);
 
   private router = inject(Router);
 
@@ -302,16 +305,33 @@ export class EntretienProComponent extends FormProvider implements OnChanges {
     // console.log('Your form data:', this.entretienForm.value);
 
     // also recommended
-    this.entretienService.newEntretien(this.entretienForm.value).subscribe({
+    this.entretienService
+      .updateEntretien(this.entretienForm.value.id, this.entretienForm.value)
+      .subscribe({
+        next: (v: any) => {
+          this.entretienForm.reset();
+          this.createForm();
+
+          // vide cache PDF
+          this.pdfService.resetCache(this.entretien.id);
+
+          this.router.navigate(['/forms/confirmation']);
+        },
+        error: e => console.error(e),
+        complete: () => console.info('complete'),
+      });
+    /*this.entretienService.newEntretien(this.entretienForm.value).subscribe({
       next: (v: any) => {
         this.entretienForm.reset();
         this.createForm();
+
+        // 
 
         this.router.navigate(['/forms/confirmation']);
       },
       error: e => console.error(e),
       complete: () => console.info('complete'),
-    });
+    });*/
   }
 
   private transformDatesToDisplay(datas: FormGroup) {

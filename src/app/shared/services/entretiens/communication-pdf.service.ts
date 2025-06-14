@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { shareReplay, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommunicationPdfService {
-  private actionGetPdf = new Subject<string>();
-  private actionViewPdf = new Subject<string>();
+  private actionGetPdf = new Subject<number>();
+  private actionViewPdf = new Subject<number>();
 
-  actionGet$ = this.actionGetPdf.asObservable();
-  actionView$ = this.actionViewPdf.asObservable();
+  actionGet$ = this.actionGetPdf.asObservable().pipe(shareReplay(1));
+  actionView$ = this.actionViewPdf.asObservable().pipe(shareReplay(1));
 
-  envoyerGetPdf(action: string) {
+  envoyerGetPdf(action: number) {
     this.actionGetPdf.next(action);
   }
 
-  envoyerViewPdf(action: string) {
+  envoyerViewPdf(action: number) {
     this.actionViewPdf.next(action);
   }
 }

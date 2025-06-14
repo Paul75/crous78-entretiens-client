@@ -5,6 +5,8 @@ import { DEFAULT_ENTRETIEN, URL_ENTRETIENS } from '@shared/constants/entretien.c
 import { Entretien } from '@shared/models/entretien.model';
 import { environment } from '@environments/environment';
 import { StatutDemandeEnum } from '@shared/enums/statut.deande.enum';
+import { TypesSignatureEnum } from '@shared/enums/types.signature.enum';
+import { formatDate } from '@angular/common';
 
 export class EntretienImpl {
   matricule: any | null = null;
@@ -53,6 +55,12 @@ export class EntretienService {
       .pipe(catchError(this.handleError('newEntretien', DEFAULT_ENTRETIEN)));
   }
 
+  updateEntretien(entretienId: number, datas: Entretien): Observable<any> {
+    return this.http
+      .put(`${this.backendUrl}/entretien/${entretienId}`, datas)
+      .pipe(catchError(this.handleError('updateEntretien', DEFAULT_ENTRETIEN)));
+  }
+
   changeStatut(statut: StatutDemandeEnum, entretienId: number): Observable<any> {
     return this.http
       .put(`${this.backendUrl}/entretien/${entretienId}`, {
@@ -67,6 +75,41 @@ export class EntretienService {
         dateEntretien,
         statut: StatutDemandeEnum.RDV,
       })
+      .pipe(catchError(this.handleError('saveDateEntretien', DEFAULT_ENTRETIEN)));
+  }
+
+  saveSignature(
+    entretienId: number,
+    signature: string,
+    typesSignature: TypesSignatureEnum,
+  ): Observable<any> {
+    // Définir les configurations possibles pour chaque type de signature
+    const signatureConfig = {
+      [TypesSignatureEnum.PERSONNE]: {
+        dateSignKey: 'dateSignAgent',
+        signatureKey: 'signatureAgent',
+        statut: StatutDemandeEnum.CHEFSIGN,
+      },
+      [TypesSignatureEnum.SUPERIEUR]: {
+        dateSignKey: 'dateSignChef',
+        signatureKey: 'signatureChef',
+        statut: StatutDemandeEnum.VALIDE,
+      },
+    };
+
+    // Obtenir la configuration appropriée en fonction du type de signature
+    const config = signatureConfig[typesSignature];
+
+    // Créer l'objet datas en utilisant la configuration
+    const datas = {
+      entretienId: entretienId,
+      [config.dateSignKey]: formatDate(new Date(), 'yyyy-MM-dd', 'fr-FR'),
+      [config.signatureKey]: signature,
+      statut: config.statut,
+    };
+
+    return this.http
+      .put(`${this.backendUrl}/entretien/${entretienId}`, datas)
       .pipe(catchError(this.handleError('saveDateEntretien', DEFAULT_ENTRETIEN)));
   }
 

@@ -13,7 +13,8 @@ import { Popover, PopoverModule } from 'primeng/popover';
 import { DatePickerModule } from 'primeng/datepicker';
 import { StatutDemandeEnum } from '@shared/enums/statut.deande.enum';
 import { EntretienService } from '@shared/services/entretiens/entretien.service';
-import { DateService } from '@shared/services/date.service';
+import { SignatureComponent } from '@shared/components/dialogs/signature/signature.component';
+import { TypesSignatureEnum } from '@shared/enums/types.signature.enum';
 
 @Component({
   selector: 'app-admin-liste-entretiens-buttons',
@@ -25,6 +26,7 @@ import { DateService } from '@shared/services/date.service';
     DatePickerModule,
     PopoverModule,
     FormsModule,
+    SignatureComponent,
   ],
   providers: [],
   templateUrl: './buttons.component.html',
@@ -43,7 +45,23 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
   private entretienService = inject(EntretienService);
   private communicationService = inject(CommunicationPdfService);
 
+  private readonly displayBtnViewDownload = [
+    this.statutDemandeEnum.ENCOURS,
+    this.statutDemandeEnum.AGENTSIGN,
+    this.statutDemandeEnum.CHEFSIGN,
+    this.statutDemandeEnum.VALIDE,
+  ];
+
+  private readonly displayBtnRdv = [this.statutDemandeEnum.PREPARE];
+
+  private readonly displayBtnSign = [this.statutDemandeEnum.CHEFSIGN];
+
+  private readonly displayBtnPlus = [this.statutDemandeEnum.RDV, this.statutDemandeEnum.ENCOURS];
+
   @ViewChild('op') op!: Popover;
+
+  // Signature
+  @ViewChild('signatureDialog') signatureDialog!: SignatureComponent;
 
   ngOnInit(): void {
     // this.entretien!.dateEntretien = '';
@@ -68,17 +86,6 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
     });
   }
 
-  get displayButtonsViewDownload(): boolean {
-    // Utilisation de l'opérateur 'includes' pour simplifier la vérification sur plusieurs statuts
-    return [this.statutDemandeEnum.ENCOURS, this.statutDemandeEnum.VALIDE].includes(
-      this.entretien.statut,
-    );
-  }
-
-  get displayButtonPlus(): boolean {
-    return this.entretien.statut != this.statutDemandeEnum.VALIDE;
-  }
-
   newEntretien() {
     this.entretienService
       .changeStatut(this.statutDemandeEnum.ENCOURS, this.entretien.id)
@@ -98,11 +105,39 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
 
   getPDF() {
     if (!this.entretien) return;
-    this.communicationService.envoyerGetPdf(this.entretien.id.toString());
+    this.communicationService.envoyerGetPdf(this.entretien.id);
   }
 
   viewPDF() {
     if (!this.entretien) return;
-    this.communicationService.envoyerViewPdf(this.entretien.id.toString());
+    this.communicationService.envoyerViewPdf(this.entretien.id);
+  }
+
+  goSignature() {
+    if (!this.entretien) {
+      return;
+    }
+    const sendName = this.entretien.superieur
+      ? this.entretien.superieur?.prenom + ' ' + this.entretien.superieur?.nom
+      : '';
+    this.signatureDialog.openDialog(this.entretien.id, sendName, TypesSignatureEnum.SUPERIEUR);
+  }
+
+  // Gestion affichage des boutons
+
+  get displayButtonsViewDownload(): boolean {
+    return this.displayBtnViewDownload.includes(this.entretien.statut);
+  }
+
+  get displayButtonRdv(): boolean {
+    return this.displayBtnRdv.includes(this.entretien.statut);
+  }
+
+  get displayButtonSign(): boolean {
+    return this.displayBtnSign.includes(this.entretien.statut);
+  }
+
+  get displayButtonPlus(): boolean {
+    return this.displayBtnPlus.includes(this.entretien.statut);
   }
 }

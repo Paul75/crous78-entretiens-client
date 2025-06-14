@@ -9,6 +9,7 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { SignatureComponent } from '@shared/components/dialogs/signature/signature.component';
 import { ViewPdfComponent } from '@shared/components/dialogs/pdf/view-pdf.component';
 import { StatutDemandeEnum } from '@shared/enums/statut.deande.enum';
+import { TypesSignatureEnum } from '@shared/enums/types.signature.enum';
 
 @Component({
   selector: 'app-home-item',
@@ -25,7 +26,7 @@ import { StatutDemandeEnum } from '@shared/enums/statut.deande.enum';
 })
 export class HomeItemComponent implements OnInit {
   @Input()
-  entretien!: Entretien | null;
+  entretien!: Entretien;
 
   // Signature
   @ViewChild('signatureDialog') signatureDialog!: SignatureComponent;
@@ -34,8 +35,18 @@ export class HomeItemComponent implements OnInit {
   @ViewChild('pdfDialog') pdfDialog!: ViewPdfComponent;
 
   typeEntretienEnum = TypeEntretien;
+  statutDemandeEnum = StatutDemandeEnum;
 
   private communicationService = inject(CommunicationPdfService);
+
+  private readonly displayBtnViewDownload = [
+    this.statutDemandeEnum.ENCOURS,
+    this.statutDemandeEnum.AGENTSIGN,
+    this.statutDemandeEnum.CHEFSIGN,
+    this.statutDemandeEnum.VALIDE,
+  ];
+
+  private readonly displayBtnSign = [this.statutDemandeEnum.AGENTSIGN];
 
   ngOnInit(): void {
     this.communicationService.actionGet$.subscribe(action => {
@@ -82,12 +93,12 @@ export class HomeItemComponent implements OnInit {
     return this.entretien.statut || '';
   }
 
-  getPDF(id: string) {
+  getPDF(id: number) {
     if (!id) return;
     this.pdfDialog.getPDF(id);
   }
 
-  viewPDF(id: string) {
+  viewPDF(id: number) {
     if (!id) return;
     this.pdfDialog.viewPDF(id);
   }
@@ -97,6 +108,16 @@ export class HomeItemComponent implements OnInit {
       return;
     }
     const sendName = this.entretien.personne.prenom + ' ' + this.entretien.personne.nom;
-    this.signatureDialog.openDialog(sendName);
+    this.signatureDialog.openDialog(this.entretien.id, sendName, TypesSignatureEnum.PERSONNE);
+  }
+
+  // Gestion affichage des boutons
+
+  get displayButtonsViewDownload(): boolean {
+    return this.displayBtnViewDownload.includes(this.entretien.statut);
+  }
+
+  get displayButtonSign(): boolean {
+    return this.displayBtnSign.includes(this.entretien.statut);
   }
 }

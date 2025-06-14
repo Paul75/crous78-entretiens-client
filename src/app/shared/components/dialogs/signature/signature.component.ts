@@ -6,9 +6,13 @@ import { ButtonGroupModule } from 'primeng/buttongroup';
 import SignaturePad, { Options } from 'signature_pad';
 import { DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
+import { TypesSignatureEnum } from '@shared/enums/types.signature.enum';
+import { EntretienService } from '@shared/services/entretiens/entretien.service';
+import { Entretien } from '@shared/models/entretien.model';
+import { PdfService } from '@shared/services/pdf/pdf.service';
 
 @Component({
-  selector: 'app-home-signature-pad',
+  selector: 'app-signature-pad',
   imports: [CommonModule, DialogModule, ButtonModule, ButtonGroupModule, ToastModule],
   templateUrl: './signature.component.html',
   styleUrl: './signature.component.scss',
@@ -21,8 +25,12 @@ export class SignatureComponent implements AfterViewInit {
   signaturePad!: SignaturePad;
 
   private messageService = inject(MessageService);
+  private entretienService = inject(EntretienService);
+  private pdfService = inject(PdfService);
 
+  entretienId!: number;
   agent = '';
+  typeSignature: TypesSignatureEnum = TypesSignatureEnum.PERSONNE;
 
   private configSignaturePad: Options = {
     minWidth: 2,
@@ -41,8 +49,10 @@ export class SignatureComponent implements AfterViewInit {
     this.signaturePad.clear();
   }
 
-  openDialog(text: string) {
+  openDialog(entretienId: number, text: string, typesSignature: TypesSignatureEnum) {
+    this.entretienId = entretienId;
     this.agent = text;
+    this.typeSignature = typesSignature;
     this.display = true;
   }
 
@@ -72,9 +82,25 @@ export class SignatureComponent implements AfterViewInit {
       });
     } else {
       const signatureData = this.signaturePad.toDataURL();
-      console.log(signatureData); // Vous pouvez utiliser cette URL pour sauvegarder l'image de la signature
-      this.signaturePad.clear();
-      this.display = false;
+      // console.log(signatureData); // Vous pouvez utiliser cette URL pour sauvegarder l'image de la signature
+
+      // enregistrement en BDD
+      this.entretienService
+        .saveSignature(this.entretienId, signatureData, this.typeSignature)
+        .subscribe({
+          next: _ => {
+            this.signaturePad.clear();
+
+            this.pdfService.resetCache(this.entretienId);
+          },
+          error: e => console.error('getEntretienByMatricule error: ', e),
+          complete: () => (this.display = false),
+        });
+
+      /*this.communicationSignatureService.saveSignature({
+        entretienId: this.entretienId,
+        signature: signatureData
+      });*/
     }
   }
 }

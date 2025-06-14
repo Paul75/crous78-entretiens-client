@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ButtonGroupModule } from 'primeng/buttongroup';
 import { IconFieldModule } from 'primeng/iconfield';
@@ -67,6 +67,7 @@ export class ListeEntretiensComponent implements OnInit {
   loading: boolean = true;
 
   liste!: PersonneImpl[];
+  filteredListe!: PersonneImpl[];
 
   typeEntretienEnum = TypeEntretien;
 
@@ -87,10 +88,6 @@ export class ListeEntretiensComponent implements OnInit {
 
     this.seoService.setMetaDescription(content);
     this.seoService.setMetaTitle(title);
-  }
-
-  ngOnInit(): void {
-    this.listeDesPersonnes();
 
     this.communicationService.actionGet$.subscribe(action => {
       this.getPDF(action);
@@ -101,6 +98,10 @@ export class ListeEntretiensComponent implements OnInit {
     });
   }
 
+  ngOnInit(): void {
+    this.listeDesPersonnes();
+  }
+
   listeDesPersonnes() {
     // const employeNumber = 1043637;
     const employeNumber = 1072989;
@@ -109,6 +110,8 @@ export class ListeEntretiensComponent implements OnInit {
       next: (entretiens: PersonneImpl[]) => {
         // console.log(entretiens);
         this.liste = entretiens;
+
+        this.filteredListe = [...this.liste];
       },
       error: e => {
         this.messageService.add({
@@ -127,7 +130,7 @@ export class ListeEntretiensComponent implements OnInit {
     // console.log(ligne);
   }
 
-  getPDF(id: string) {
+  getPDF(id: number) {
     this.loading = true;
     this.pdfService.downloadPdf(id).subscribe({
       next: (data: Blob) => {
@@ -141,12 +144,13 @@ export class ListeEntretiensComponent implements OnInit {
       },
       error: e => console.error('downloadPdf error: ', e),
       complete: () => {
+        this.pdfService.resetCache(id);
         this.loading = false;
       },
     });
   }
 
-  viewPDF(id: string) {
+  viewPDF(id: number) {
     this.loading = true;
     this.pdfService.downloadPdf(id).subscribe({
       next: (data: Blob) => {
@@ -156,6 +160,7 @@ export class ListeEntretiensComponent implements OnInit {
       },
       error: e => console.error('viewPDF error: ', e),
       complete: () => {
+        this.pdfService.resetCache(id);
         this.loading = false;
       },
     });
@@ -168,5 +173,22 @@ export class ListeEntretiensComponent implements OnInit {
   onDialogHide() {
     this.showViewer = false;
     this.pdfViewer.ngOnDestroy();
+  }
+
+  applyFilterGlobal(event: Event, table: Table): void {
+    const value = (event.target as HTMLInputElement).value;
+    table.filterGlobal(value, 'contains');
+  }
+
+  filterById(event: any) {
+    const value = event.target.value;
+
+    //console.log(value);
+    if (value === '') {
+      this.filteredListe = [...this.liste];
+    } else {
+      const id = parseInt(value, 10);
+      this.filteredListe = this.liste.filter(item => item.personne?.id === id);
+    }
   }
 }
