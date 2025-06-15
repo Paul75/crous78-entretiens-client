@@ -11,6 +11,7 @@ export class DateService {
   }
 
   transformDateEn(date: string): string {
+    if (!date) return '';
     // console.log(date);
     /*const [day, month, year] = date.split('/');
     const dateObj = new Date(Number(year), Number(month) - 1, Number(day));
@@ -24,6 +25,6 @@ export class DateService {
   }
 
   formatDateOrEmpty(date: string): string {
-    return date ? formatDate(date, 'dd/MM/yyyy', 'fr') : '';
+    return date ? formatDate(date, 'dd/MM/yyyy', 'fr-FR') : '';
   }
 }

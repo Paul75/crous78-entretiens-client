@@ -42,5 +42,4 @@ export const DEFAULT_ENTRETIEN = {
   evolutionCarriere: '',
   personne: DEFAULT_PERSONNE,
   superieur: DEFAULT_PERSONNE,
-  dateTransmission: '',
 };

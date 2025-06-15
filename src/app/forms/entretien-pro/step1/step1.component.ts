@@ -7,6 +7,7 @@ import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { FormProvider } from '../../providers/form.provider';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-entretien-pro-step1',
@@ -16,7 +17,8 @@ import { FormProvider } from '../../providers/form.provider';
     ReactiveFormsModule,
     NgbDatepickerModule,
     ButtonModule,
-    StepperModule /*, RouterLink*/,
+    StepperModule,
+    DatePickerModule,
   ],
   templateUrl: './step1.component.html',
   styleUrl: './step1.component.scss',

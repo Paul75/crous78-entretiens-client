@@ -78,13 +78,14 @@
             </div>
           </div>
           <div class="row">
-            <div class="mb-3 row">
+            <div class="mb-3 row row-cols-sm-auto">
               <label for="" class="col-sm-2 col-form-label">date d'affectation :</label>
               <div class="col-sm-10">
                 <input
                   type="text"
                   class="form-control"
-                  id=""
+                  ngbDatepicker
+                  #dAffectation="ngbDatepicker"
                   formControlName="dateAffectation"
                   [class.is-invalid]="
                     registerFormControl['dateAffectation'].invalid &&
@@ -92,6 +93,11 @@
                       registerFormControl['dateAffectation'].dirty)
                   "
                 />
+                <button
+                  class="btn btn-outline-secondary bi bi-calendar3"
+                  (click)="dAffectation.toggle()"
+                  type="button"
+                ></button>
 
                 <div
                   class="invalid-feedback"

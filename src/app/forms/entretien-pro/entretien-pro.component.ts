@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -16,7 +17,7 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
@@ -34,7 +35,7 @@ import { DEFAULT_ENTRETIEN } from '@shared/constants/entretien.constants';
 import { EntretienService } from '@shared/services/entretiens/entretien.service';
 import { DateService } from '@shared/services/date.service';
 import { environment } from '@environments/environment';
-import { PdfService } from '@shared/services/pdf/pdf.service';
+import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
 
 @Component({
   selector: 'app-entretien-pro',
@@ -60,119 +61,114 @@ import { PdfService } from '@shared/services/pdf/pdf.service';
   styleUrl: './entretien-pro.component.scss',
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class EntretienProComponent extends FormProvider implements OnChanges {
-  id: string | undefined;
-  entretien!: Entretien;
+export class EntretienProComponent extends FormProvider implements OnChanges, AfterViewInit {
+  // id: string | undefined;
+  // entretien!: Entretien;
 
   name = environment.application.name;
   angular = environment.application.angular;
   bootstrap = environment.application.bootstrap;
   fontawesome = environment.application.fontawesome;
 
-  private pdfService = inject(PdfService);
-
   private router = inject(Router);
+
+  displayId = false;
+
+  today = new Date();
+  minDate: NgbDateStruct = {
+    year: this.today.getFullYear(),
+    month: this.today.getMonth() + 1, // Note: months are 1-indexed in NgbDateStruct
+    day: this.today.getDate(),
+  };
 
   typeForm = 'professionnel';
 
-  entretienForm!: FormGroup;
+  entretienForm: FormGroup = new FormBuilder().group({
+    id: [DEFAULT_ENTRETIEN.id, [Validators.required]],
+    type: [DEFAULT_ENTRETIEN.type, [Validators.required]],
+    statut: [DEFAULT_ENTRETIEN.statut],
+    dateEntretien: [DEFAULT_ENTRETIEN.dateEntretien, [Validators.required]],
+    personne: new FormBuilder().group({
+      id: [DEFAULT_ENTRETIEN.personne.id, [Validators.required]],
+      matricule: [DEFAULT_ENTRETIEN.personne.matricule],
+      nomUsage: [DEFAULT_ENTRETIEN.personne.nomUsage],
+      nom: [DEFAULT_ENTRETIEN.personne.nom, [Validators.minLength(2), Validators.maxLength(100)]],
+      prenom: [
+        DEFAULT_ENTRETIEN.personne.prenom,
+        [Validators.minLength(2), Validators.maxLength(100)],
+      ],
+      dateNaissance: [DEFAULT_ENTRETIEN.personne.dateNaissance],
+      corpsGrade: [DEFAULT_ENTRETIEN.personne.corpsGrade],
+      echelon: [DEFAULT_ENTRETIEN.personne.echelon],
+      datePromotion: [DEFAULT_ENTRETIEN.personne.datePromotion],
+      fonction: [DEFAULT_ENTRETIEN.personne.fonction],
+      structure: [DEFAULT_ENTRETIEN.personne.structure],
+      adresse: [DEFAULT_ENTRETIEN.personne.adresse],
+    }),
+    superieur: new FormBuilder().group({
+      id: [DEFAULT_ENTRETIEN.superieur.id],
+      matricule: [DEFAULT_ENTRETIEN.superieur.matricule],
+      nomUsage: [DEFAULT_ENTRETIEN.superieur.nomUsage],
+      nom: [DEFAULT_ENTRETIEN.superieur.nom],
+      prenom: [DEFAULT_ENTRETIEN.superieur.prenom],
+      dateNaissance: [DEFAULT_ENTRETIEN.superieur.dateNaissance],
+      corpsGrade: [DEFAULT_ENTRETIEN.superieur.corpsGrade],
+      echelon: [DEFAULT_ENTRETIEN.superieur.echelon],
+      datePromotion: [DEFAULT_ENTRETIEN.superieur.datePromotion],
+      fonction: [DEFAULT_ENTRETIEN.superieur.fonction],
+      structure: [DEFAULT_ENTRETIEN.superieur.structure],
+      adresse: [DEFAULT_ENTRETIEN.superieur.adresse],
+    }),
 
-  private createForm() {
-    this.entretienForm = new FormBuilder().group({
-      id: [DEFAULT_ENTRETIEN.id, [Validators.required]],
-      type: [DEFAULT_ENTRETIEN.type, [Validators.required]],
-      dateTransmission: [DEFAULT_ENTRETIEN.dateTransmission],
-      statut: [DEFAULT_ENTRETIEN.statut],
-      dateEntretien: [DEFAULT_ENTRETIEN.dateEntretien, [Validators.required]],
-      personne: new FormBuilder().group({
-        id: [DEFAULT_ENTRETIEN.personne.id, [Validators.required]],
-        matricule: [DEFAULT_ENTRETIEN.personne.matricule],
-        nomUsage: [DEFAULT_ENTRETIEN.personne.nomUsage],
-        nom: [
-          DEFAULT_ENTRETIEN.personne.nom,
-          [Validators.required, Validators.minLength(2), Validators.maxLength(100)],
-        ],
-        prenom: [
-          DEFAULT_ENTRETIEN.personne.prenom,
-          [Validators.required, Validators.minLength(2), Validators.maxLength(100)],
-        ],
-        dateNaissance: [DEFAULT_ENTRETIEN.personne.dateNaissance, [Validators.required]],
-        corpsGrade: [DEFAULT_ENTRETIEN.personne.corpsGrade, [Validators.required]],
-        echelon: [DEFAULT_ENTRETIEN.personne.echelon, [Validators.required]],
-        datePromotion: [DEFAULT_ENTRETIEN.personne.datePromotion],
-        fonction: [DEFAULT_ENTRETIEN.personne.fonction],
-        structure: [DEFAULT_ENTRETIEN.personne.structure],
-        adresse: [DEFAULT_ENTRETIEN.personne.adresse],
-      }),
-      superieur: new FormBuilder().group({
-        id: [DEFAULT_ENTRETIEN.superieur.id],
-        matricule: [DEFAULT_ENTRETIEN.superieur.matricule],
-        nomUsage: [DEFAULT_ENTRETIEN.superieur.nomUsage],
-        nom: [DEFAULT_ENTRETIEN.superieur.nom],
-        prenom: [DEFAULT_ENTRETIEN.superieur.prenom],
-        dateNaissance: [DEFAULT_ENTRETIEN.superieur.dateNaissance],
-        corpsGrade: [DEFAULT_ENTRETIEN.superieur.corpsGrade],
-        echelon: [DEFAULT_ENTRETIEN.superieur.echelon],
-        datePromotion: [DEFAULT_ENTRETIEN.superieur.datePromotion],
-        fonction: [DEFAULT_ENTRETIEN.superieur.fonction],
-        structure: [DEFAULT_ENTRETIEN.superieur.structure],
-        adresse: [DEFAULT_ENTRETIEN.superieur.adresse],
-      }),
+    // 1 POSTE
+    structure: [DEFAULT_ENTRETIEN.structure],
+    intitulePoste: [DEFAULT_ENTRETIEN.intitulePoste],
+    dateAffectation: [DEFAULT_ENTRETIEN.dateAffectation],
+    emploiType: [DEFAULT_ENTRETIEN.emploiType],
+    positionPoste: [DEFAULT_ENTRETIEN.positionPoste],
+    quotiteAffectation: [DEFAULT_ENTRETIEN.quotiteAffectation],
 
-      // 1 POSTE
-      structure: [DEFAULT_ENTRETIEN.structure, [Validators.required]],
-      intitulePoste: [DEFAULT_ENTRETIEN.intitulePoste, [Validators.required]],
-      dateAffectation: [DEFAULT_ENTRETIEN.dateAffectation, [Validators.required]],
-      emploiType: [DEFAULT_ENTRETIEN.emploiType, [Validators.required]],
-      positionPoste: [DEFAULT_ENTRETIEN.positionPoste, [Validators.required]],
-      quotiteAffectation: [DEFAULT_ENTRETIEN.quotiteAffectation, [Validators.required]],
+    missions: [DEFAULT_ENTRETIEN.missions],
 
-      missions: [DEFAULT_ENTRETIEN.missions, [Validators.required]],
+    conduiteProjet: [DEFAULT_ENTRETIEN.conduiteProjet],
+    encadrement: [DEFAULT_ENTRETIEN.encadrement],
+    cpeNbAgent: [DEFAULT_ENTRETIEN.cpeNbAgent],
+    cpeCategA: [DEFAULT_ENTRETIEN.cpeCategA],
+    cpeCategB: [DEFAULT_ENTRETIEN.cpeCategB],
+    cpeCategC: [DEFAULT_ENTRETIEN.cpeCategC],
 
-      conduiteProjet: [DEFAULT_ENTRETIEN.conduiteProjet, [Validators.required]],
-      encadrement: [DEFAULT_ENTRETIEN.encadrement, [Validators.required]],
-      cpeNbAgent: [DEFAULT_ENTRETIEN.cpeNbAgent, [Validators.required]],
-      cpeCategA: [DEFAULT_ENTRETIEN.cpeCategA, [Validators.required]],
-      cpeCategB: [DEFAULT_ENTRETIEN.cpeCategB, [Validators.required]],
-      cpeCategC: [DEFAULT_ENTRETIEN.cpeCategC, [Validators.required]],
+    // 2
+    rappelObjectifs: [DEFAULT_ENTRETIEN.rappelObjectifs],
+    evenementsSurvenus: [DEFAULT_ENTRETIEN.evenementsSurvenus],
 
-      // 2
-      rappelObjectifs: [DEFAULT_ENTRETIEN.rappelObjectifs, [Validators.required]],
-      evenementsSurvenus: [DEFAULT_ENTRETIEN.evenementsSurvenus, [Validators.required]],
+    // 3
+    // 3.1
+    caCompetences: [DEFAULT_ENTRETIEN.caCompetences],
+    caContribution: [DEFAULT_ENTRETIEN.caContribution],
+    caCapacites: [DEFAULT_ENTRETIEN.caCapacites],
+    caAptitude: [DEFAULT_ENTRETIEN.caAptitude],
 
-      // 3
-      // 3.1
-      caCompetences: [DEFAULT_ENTRETIEN.caCompetences, [Validators.required]],
-      caContribution: [DEFAULT_ENTRETIEN.caContribution, [Validators.required]],
-      caCapacites: [DEFAULT_ENTRETIEN.caCapacites, [Validators.required]],
-      caAptitude: [DEFAULT_ENTRETIEN.caAptitude, [Validators.required]],
+    // 3.2
+    agCompetences: [DEFAULT_ENTRETIEN.agCompetences],
+    agContribution: [DEFAULT_ENTRETIEN.agContribution],
+    agCapacites: [DEFAULT_ENTRETIEN.agCapacites],
+    agAptitude: [DEFAULT_ENTRETIEN.agAptitude],
 
-      // 3.2
-      agCompetences: [DEFAULT_ENTRETIEN.agCompetences, [Validators.required]],
-      agContribution: [DEFAULT_ENTRETIEN.agContribution, [Validators.required]],
-      agCapacites: [DEFAULT_ENTRETIEN.agCapacites, [Validators.required]],
-      agAptitude: [DEFAULT_ENTRETIEN.agAptitude, [Validators.required]],
+    realisationObjectifs: [DEFAULT_ENTRETIEN.realisationObjectifs],
+    appreciationLitterale: [DEFAULT_ENTRETIEN.appreciationLitterale],
 
-      realisationObjectifs: [DEFAULT_ENTRETIEN.realisationObjectifs, [Validators.required]],
-      appreciationLitterale: [DEFAULT_ENTRETIEN.appreciationLitterale, [Validators.required]],
+    // 4
+    acquisExperiencePro: [DEFAULT_ENTRETIEN.acquisExperiencePro],
 
-      // 4
-      acquisExperiencePro: [DEFAULT_ENTRETIEN.acquisExperiencePro, [Validators.required]],
+    // 5
+    objectifsActivites: [DEFAULT_ENTRETIEN.objectifsActivites],
+    demarcheEnvisagee: [DEFAULT_ENTRETIEN.demarcheEnvisagee],
 
-      // 5
-      objectifsActivites: [DEFAULT_ENTRETIEN.objectifsActivites, [Validators.required]],
-      demarcheEnvisagee: [DEFAULT_ENTRETIEN.demarcheEnvisagee, [Validators.required]],
+    // 6
 
-      // 6
-
-      evolutionActivites: [DEFAULT_ENTRETIEN.evolutionActivites, [Validators.required]],
-      evolutionCarriere: [DEFAULT_ENTRETIEN.evolutionCarriere, [Validators.required]],
-    });
-
-    /*this.entretienForm.patchValue({
-      dateEntretien: this.dateService.getCurrentDate()
-    });*/
-  }
+    evolutionActivites: [DEFAULT_ENTRETIEN.evolutionActivites],
+    evolutionCarriere: [DEFAULT_ENTRETIEN.evolutionCarriere],
+  });
 
   constructor(
     private cdref: ChangeDetectorRef,
@@ -181,17 +177,16 @@ export class EntretienProComponent extends FormProvider implements OnChanges {
     private route: ActivatedRoute,
   ) {
     super();
+  }
 
-    this.createForm();
-
+  ngAfterViewInit(): void {
     this.getEntretienById();
   }
 
-  ngOnInit() {
-    this.id = this.route.snapshot.params['id'];
-  }
+  ngOnInit() {}
 
   getEntretienById() {
+    console.log('getEntretienById');
     this.route.params.subscribe(params => {
       const id = params['id'];
       if (id !== undefined) {
@@ -203,20 +198,20 @@ export class EntretienProComponent extends FormProvider implements OnChanges {
   getEntretien(id: number): void {
     if (id !== 0) {
       this.entretienService.getEntretien(id).subscribe((item: Entretien) => {
-        this.entretien = item;
-
-        this.setForm(this.entretienForm, item);
+        this.setForm(item);
         this.cdref.detectChanges();
       });
     }
   }
 
-  getForm() {
-    this.transformDatesToDisplay(this.entretienForm);
+  getForm(): FormGroup {
+    // console.log(this.entretienForm.value);
     return this.entretienForm;
   }
-  setForm(form: FormGroup, entretien: Entretien) {
-    form.patchValue(entretien);
+
+  setForm(entretien: Entretien) {
+    this.entretienForm.patchValue(entretien);
+    this.transformDatesToDisplay();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -228,7 +223,7 @@ export class EntretienProComponent extends FormProvider implements OnChanges {
   }
 
   getAgent() {
-    return this.getForm().get('agent') as FormGroup;
+    return this.getForm().get('personne') as FormGroup;
   }
   getSuperieur() {
     return this.getForm().get('superieur') as FormGroup;
@@ -304,60 +299,46 @@ export class EntretienProComponent extends FormProvider implements OnChanges {
 
     // console.log('Your form data:', this.entretienForm.value);
 
+    this.entretienForm.value.statut = StatutDemandeEnum.AGENTSIGN;
+
     // also recommended
     this.entretienService
       .updateEntretien(this.entretienForm.value.id, this.entretienForm.value)
       .subscribe({
         next: (v: any) => {
-          this.entretienForm.reset();
-          this.createForm();
-
-          // vide cache PDF
-          this.pdfService.resetCache(this.entretien.id);
-
           this.router.navigate(['/forms/confirmation']);
         },
         error: e => console.error(e),
         complete: () => console.info('complete'),
       });
-    /*this.entretienService.newEntretien(this.entretienForm.value).subscribe({
-      next: (v: any) => {
-        this.entretienForm.reset();
-        this.createForm();
-
-        // 
-
-        this.router.navigate(['/forms/confirmation']);
-      },
-      error: e => console.error(e),
-      complete: () => console.info('complete'),
-    });*/
   }
 
-  private transformDatesToDisplay(datas: FormGroup) {
+  private transformDatesToDisplay(): void {
     try {
-      datas.patchValue({
-        dateEntretien: this.dateService.formatDateOrEmpty(datas.get('dateEntretien')?.value),
-        dateAffectation: this.dateService.formatDateOrEmpty(datas.get('dateAffectation')?.value),
-        agent: {
+      this.entretienForm.patchValue({
+        dateEntretien: this.dateService.formatDateOrEmpty(
+          this.entretienForm.get('dateEntretien')?.value,
+        ),
+        dateAffectation: this.dateService.formatDateOrEmpty(
+          this.entretienForm.get('dateAffectation')?.value,
+        ),
+        personne: {
           dateNaissance: this.dateService.formatDateOrEmpty(
-            datas.get('agent.dateNaissance')?.value,
+            this.entretienForm.get('personne.dateNaissance')?.value,
           ),
           datePromotion: this.dateService.formatDateOrEmpty(
-            datas.get('agent.datePromotion')?.value,
+            this.entretienForm.get('personne.datePromotion')?.value,
           ),
         },
         superieur: {
           dateNaissance: this.dateService.formatDateOrEmpty(
-            datas.get('superieur.dateNaissance')?.value,
+            this.entretienForm.get('superieur.dateNaissance')?.value,
           ),
           datePromotion: this.dateService.formatDateOrEmpty(
-            datas.get('superieur.datePromotion')?.value,
+            this.entretienForm.get('superieur.datePromotion')?.value,
           ),
         },
       });
     } catch (error) {}
-
-    return datas;
   }
 }

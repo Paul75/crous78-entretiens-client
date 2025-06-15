@@ -4,7 +4,7 @@ export interface Personne {
   nomUsage: string;
   nom: string;
   prenom: string;
-  dateNaissance: string | null;
+  dateNaissance: string;
   corpsGrade: string;
   echelon: string;
   datePromotion: string | null;

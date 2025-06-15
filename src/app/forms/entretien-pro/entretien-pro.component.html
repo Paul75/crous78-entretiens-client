@@ -7,15 +7,7 @@
 
   <form [formGroup]="entretienForm" (ngSubmit)="onSubmit()" novalidate *ngIf="entretienForm">
     <div class="container">
-      <input
-        type="text"
-        class="form-control"
-        name="dateTransmission"
-        formControlName="dateTransmission"
-      />
-      <input type="text" class="form-control" name="type" formControlName="id" required />
-      <div class="row row-cols-sm-auto">
-        <div class="mb-3 row">
+      <!-- <div class="mb-3 row" *ngIf="displayId">
           <label for="id" class="col-sm-4 col-form-label">type :</label>
           <div class="col-sm-8">
             <input
@@ -38,13 +30,16 @@
               </ng-container>
             </div>
           </div>
-        </div>
+        </div>-->
 
+      <div class="row row-cols-sm-auto">
         <div class="input-group">
+          <label for="dateEntretien" class="col-sm-4 col-form-label">Date de l'entretien :</label>
           <input
             type="text"
             class="form-control"
             ngbDatepicker
+            [minDate]="minDate"
             #d="ngbDatepicker"
             formControlName="dateEntretien"
             [class.is-invalid]="
@@ -72,6 +67,7 @@
           </div>
         </div>
       </div>
+      <br />
       <div class="card">
         <p-stepper [value]="1" [linear]="true">
           <p-step-item [value]="1">

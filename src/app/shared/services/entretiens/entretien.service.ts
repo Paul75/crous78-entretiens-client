@@ -60,7 +60,8 @@ export class EntretienService {
   updateEntretien(entretienId: number, datas: Entretien): Observable<Entretien> {
     return this.http
       .put<Entretien>(`${this.backendUrl}/entretien/${entretienId}`, datas)
-      .pipe(catchError(this.handleError<Entretien>('updateEntretien')));
+      .pipe(catchError(this.handleError<Entretien>('updateEntretien')))
+      .pipe(tap(() => this.pdfService.resetCache(entretienId)));
   }
 
   changeStatut(statut: StatutDemandeEnum, entretienId: number): Observable<any> {

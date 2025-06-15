@@ -6,7 +6,7 @@ export const DEFAULT_PERSONNE = {
   nomUsage: '',
   nom: '',
   prenom: '',
-  dateNaissance: null,
+  dateNaissance: '',
   corpsGrade: '',
   echelon: '',
   datePromotion: null,

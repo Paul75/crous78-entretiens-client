@@ -24,6 +24,7 @@ import localeFRExtra from '@angular/common/locales/extra/fr';
 import { LoaderInterceptor } from '@shared/interceptor/loader.interceptor';
 
 registerLocaleData(localeFr, 'fr-FR', localeFRExtra);
+import { fr } from 'primelocale/fr.json';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -45,17 +46,7 @@ export const appConfig: ApplicationConfig = {
       theme: {
         preset: Aura,
       },
-      translation: {
-        accept: 'Aceptar',
-        reject: 'Rechazar',
-        startsWith: 'Commence par',
-        contains: 'Contient',
-        notContains: 'Ne contient pas',
-        endsWith: 'Se termine par',
-        equals: 'Égal à',
-        notEquals: 'Différent de',
-        noFilter: 'Pas de filtre',
-      },
+      translation: fr,
     }),
     { provide: LOCALE_ID, useValue: 'fr-FR' },
     I18n,
