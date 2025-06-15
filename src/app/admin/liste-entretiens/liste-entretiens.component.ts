@@ -67,7 +67,6 @@ export class ListeEntretiensComponent implements OnInit {
   loading: boolean = true;
 
   liste!: PersonneImpl[];
-  filteredListe!: PersonneImpl[];
 
   typeEntretienEnum = TypeEntretien;
 
@@ -108,10 +107,7 @@ export class ListeEntretiensComponent implements OnInit {
 
     this.personnelService.getPersonnels(employeNumber).subscribe({
       next: (entretiens: PersonneImpl[]) => {
-        // console.log(entretiens);
         this.liste = entretiens;
-
-        this.filteredListe = [...this.liste];
       },
       error: e => {
         this.messageService.add({
@@ -178,17 +174,5 @@ export class ListeEntretiensComponent implements OnInit {
   applyFilterGlobal(event: Event, table: Table): void {
     const value = (event.target as HTMLInputElement).value;
     table.filterGlobal(value, 'contains');
-  }
-
-  filterById(event: any) {
-    const value = event.target.value;
-
-    //console.log(value);
-    if (value === '') {
-      this.filteredListe = [...this.liste];
-    } else {
-      const id = parseInt(value, 10);
-      this.filteredListe = this.liste.filter(item => item.personne?.id === id);
-    }
   }
 }
