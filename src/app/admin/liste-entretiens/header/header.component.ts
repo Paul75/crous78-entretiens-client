@@ -5,7 +5,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ButtonGroupModule } from 'primeng/buttongroup';
 import { AdminListeEntretiensButtonsComponent } from '../buttons/buttons.component';
-import { StatutDemandeEnum } from '@shared/enums/statut.deande.enum';
+import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
 
 @Component({
   selector: 'app-admin-liste-entretiens-header',

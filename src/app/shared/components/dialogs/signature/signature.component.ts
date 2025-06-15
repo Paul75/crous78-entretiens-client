@@ -8,8 +8,7 @@ import { DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
 import { TypesSignatureEnum } from '@shared/enums/types.signature.enum';
 import { EntretienService } from '@shared/services/entretiens/entretien.service';
-import { Entretien } from '@shared/models/entretien.model';
-import { PdfService } from '@shared/services/pdf/pdf.service';
+import { CommunicationSignatureService } from '@shared/services/signature/communication-signature.service';
 
 @Component({
   selector: 'app-signature-pad',
@@ -26,7 +25,7 @@ export class SignatureComponent implements AfterViewInit {
 
   private messageService = inject(MessageService);
   private entretienService = inject(EntretienService);
-  private pdfService = inject(PdfService);
+  private communicationSignatureService = inject(CommunicationSignatureService);
 
   entretienId!: number;
   agent = '';
@@ -82,25 +81,21 @@ export class SignatureComponent implements AfterViewInit {
       });
     } else {
       const signatureData = this.signaturePad.toDataURL();
-      // console.log(signatureData); // Vous pouvez utiliser cette URL pour sauvegarder l'image de la signature
-
       // enregistrement en BDD
       this.entretienService
         .saveSignature(this.entretienId, signatureData, this.typeSignature)
         .subscribe({
           next: _ => {
             this.signaturePad.clear();
-
-            this.pdfService.resetCache(this.entretienId);
           },
           error: e => console.error('getEntretienByMatricule error: ', e),
-          complete: () => (this.display = false),
-        });
+          complete: () => {
+            this.display = false;
 
-      /*this.communicationSignatureService.saveSignature({
-        entretienId: this.entretienId,
-        signature: signatureData
-      });*/
+            // Envoi la validation de la signature au composant appelant
+            this.communicationSignatureService.saveSignature(this.entretienId);
+          },
+        });
     }
   }
 }

@@ -11,10 +11,11 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Popover, PopoverModule } from 'primeng/popover';
 import { DatePickerModule } from 'primeng/datepicker';
-import { StatutDemandeEnum } from '@shared/enums/statut.deande.enum';
+import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
 import { EntretienService } from '@shared/services/entretiens/entretien.service';
 import { SignatureComponent } from '@shared/components/dialogs/signature/signature.component';
 import { TypesSignatureEnum } from '@shared/enums/types.signature.enum';
+import { CommunicationSignatureService } from '@shared/services/signature/communication-signature.service';
 
 @Component({
   selector: 'app-admin-liste-entretiens-buttons',
@@ -36,6 +37,8 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
   @Input()
   entretien!: Entretien;
 
+  minDate: Date = new Date();
+
   typeEntretienEnum = TypeEntretien;
   statutDemandeEnum = StatutDemandeEnum;
   dateValue = '';
@@ -44,6 +47,7 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
 
   private entretienService = inject(EntretienService);
   private communicationService = inject(CommunicationPdfService);
+  private communicationSignatureService = inject(CommunicationSignatureService);
 
   private readonly displayBtnViewDownload = [
     this.statutDemandeEnum.ENCOURS,
@@ -66,14 +70,25 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
   ngOnInit(): void {
     // this.entretien!.dateEntretien = '';
     this.dateValue = '';
+
+    this.communicationSignatureService.actionSaveSign$.subscribe(action => {
+      if (this.entretien.id === action) this.afterSign(action);
+    });
+  }
+
+  afterSign(entretienId: number) {
+    this.entretien.statut = StatutDemandeEnum.VALIDE;
   }
 
   onDateSelect(event: any) {
     // console.log(formatDate(this.entretien.dateEntretien, 'yyyy-MM-dd', 'fr-FR'));
     this.dateValue = formatDate(this.dateValue, 'yyyy-MM-dd', 'fr-FR');
     return this.entretienService.saveDateEntretien(this.dateValue, this.entretien.id).subscribe({
-      next: response => {
-        console.log('Date saved successfully!', response);
+      next: _ => {
+        // console.log('Date saved successfully!', response);
+
+        this.entretien.dateEntretien = this.dateValue;
+        this.entretien.statut = StatutDemandeEnum.RDV;
 
         this.op.hide();
       },
@@ -90,7 +105,7 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
     this.entretienService
       .changeStatut(this.statutDemandeEnum.ENCOURS, this.entretien.id)
       .subscribe({
-        next: response => {
+        next: _ => {
           if (this.entretien.type == this.typeEntretienEnum.ENTRETIEN_FORMATION) {
             this.router.navigate(['/forms/entretien/form/', this.entretien.id]);
           } else {

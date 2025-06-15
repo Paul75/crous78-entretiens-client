@@ -8,8 +8,8 @@ export class CommunicationPdfService {
   private actionGetPdf = new Subject<number>();
   private actionViewPdf = new Subject<number>();
 
-  actionGet$ = this.actionGetPdf.asObservable().pipe(shareReplay(1));
-  actionView$ = this.actionViewPdf.asObservable().pipe(shareReplay(1));
+  actionGet$ = this.actionGetPdf.asObservable();
+  actionView$ = this.actionViewPdf.asObservable();
 
   envoyerGetPdf(action: number) {
     this.actionGetPdf.next(action);

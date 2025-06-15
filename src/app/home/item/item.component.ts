@@ -8,8 +8,9 @@ import { Entretien } from '@shared/models/entretien.model';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { SignatureComponent } from '@shared/components/dialogs/signature/signature.component';
 import { ViewPdfComponent } from '@shared/components/dialogs/pdf/view-pdf.component';
-import { StatutDemandeEnum } from '@shared/enums/statut.deande.enum';
+import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
 import { TypesSignatureEnum } from '@shared/enums/types.signature.enum';
+import { CommunicationSignatureService } from '@shared/services/signature/communication-signature.service';
 
 @Component({
   selector: 'app-home-item',
@@ -37,7 +38,8 @@ export class HomeItemComponent implements OnInit {
   typeEntretienEnum = TypeEntretien;
   statutDemandeEnum = StatutDemandeEnum;
 
-  private communicationService = inject(CommunicationPdfService);
+  private communicationPdfService = inject(CommunicationPdfService);
+  private communicationSignatureService = inject(CommunicationSignatureService);
 
   private readonly displayBtnViewDownload = [
     this.statutDemandeEnum.ENCOURS,
@@ -49,12 +51,16 @@ export class HomeItemComponent implements OnInit {
   private readonly displayBtnSign = [this.statutDemandeEnum.AGENTSIGN];
 
   ngOnInit(): void {
-    this.communicationService.actionGet$.subscribe(action => {
+    this.communicationPdfService.actionGet$.subscribe(action => {
       this.getPDF(action);
     });
 
-    this.communicationService.actionView$.subscribe(action => {
+    this.communicationPdfService.actionView$.subscribe(action => {
       this.viewPDF(action);
+    });
+
+    this.communicationSignatureService.actionSaveSign$.subscribe(action => {
+      this.entretien.statut = StatutDemandeEnum.CHEFSIGN;
     });
   }
 

@@ -99,10 +99,10 @@ export class ListeEntretiensComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.listeDesPersonnes();
+    this.refreshDatas();
   }
 
-  listeDesPersonnes() {
+  refreshDatas() {
     // const employeNumber = 1043637;
     const employeNumber = 1072989;
 

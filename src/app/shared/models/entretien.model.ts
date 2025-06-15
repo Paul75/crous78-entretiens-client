@@ -1,7 +1,7 @@
 import { TypeEntretien } from '@shared/enums/type-entretien.enum';
 import { AppreciationGeneraleEnum } from '@shared/enums/appreciation_generale.enum';
 import { Personne } from './personne.model';
-import { StatutDemandeEnum } from '@shared/enums/statut.deande.enum';
+import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
 
 export interface Entretien {
   id: number;

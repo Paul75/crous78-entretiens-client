@@ -1,12 +1,13 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 import { DEFAULT_ENTRETIEN, URL_ENTRETIENS } from '@shared/constants/entretien.constants';
 import { Entretien } from '@shared/models/entretien.model';
 import { environment } from '@environments/environment';
-import { StatutDemandeEnum } from '@shared/enums/statut.deande.enum';
+import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
 import { TypesSignatureEnum } from '@shared/enums/types.signature.enum';
 import { formatDate } from '@angular/common';
+import { PdfService } from '../pdf/pdf.service';
 
 export class EntretienImpl {
   matricule: any | null = null;
@@ -20,6 +21,7 @@ export class EntretienImpl {
 export class EntretienService {
   private http = inject(HttpClient);
   private backendUrl = environment.backend;
+  private pdfService = inject(PdfService);
 
   getEntretiens(): Observable<Entretien[]> {
     const url = `${this.backendUrl}/${URL_ENTRETIENS}`;
@@ -110,7 +112,8 @@ export class EntretienService {
 
     return this.http
       .put(`${this.backendUrl}/entretien/${entretienId}`, datas)
-      .pipe(catchError(this.handleError('saveDateEntretien', DEFAULT_ENTRETIEN)));
+      .pipe(catchError(this.handleError('saveDateEntretien', DEFAULT_ENTRETIEN)))
+      .pipe(tap(() => this.pdfService.resetCache(entretienId)));
   }
 
   private handleError<T>(operation = 'operation', result: T = {} as T) {

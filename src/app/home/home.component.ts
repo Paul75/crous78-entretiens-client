@@ -5,7 +5,7 @@ import { EntretienImpl, EntretienService } from '@shared/services/entretiens/ent
 import { environment } from '@environments/environment';
 import { SeoService } from '@core/services/seo/seo.service';
 import { HomeItemComponent } from './item/item.component';
-import { StatutDemandeEnum } from '@shared/enums/statut.deande.enum';
+import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
 
 export enum ColorDemande {
   PREPARE = '#ffd966',
