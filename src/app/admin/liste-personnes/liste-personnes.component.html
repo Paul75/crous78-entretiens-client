@@ -15,11 +15,23 @@
     [rows]="5"
     [tableStyle]="{ 'min-width': '50rem' }"
     [rowsPerPageOptions]="[5, 10, 15, 20, 50, 100]"
+    [globalFilterFields]="['nom', 'prenom']"
   >
     <ng-template #caption>
-      <div class="text-end pb-4">
-        <p-button icon="pi pi-plus" (click)="addRow()" rounded raised />
+      <div class="d-flex align-items-center justify-content-between">
+        <p class="me-3">
+          <input
+            pInputText
+            type="text"
+            (input)="dt.filterGlobal($any($event.target)?.value || '', 'contains')"
+            placeholder="Rechercher..."
+          />
+        </p>
+        <span class="text-xl font-bold mx-auto mb-0 text-center flex-grow-1"> </span>
+
+        <p-button class="ms-3" icon="pi pi-plus" (click)="addRow()" rounded raised />
       </div>
+      <div class="text-end pb-4"></div>
     </ng-template>
     <ng-template #header>
       <tr>

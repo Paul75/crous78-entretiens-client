@@ -14,6 +14,7 @@ import { SelectModule } from 'primeng/select';
 import { ToastModule } from 'primeng/toast';
 import { InputMask } from 'primeng/inputmask';
 import { MessageService } from 'primeng/api';
+import { InputIconModule } from 'primeng/inputicon';
 import { FormsModule } from '@angular/forms';
 import { DEFAULT_PERSONNE } from '@shared/constants/personne.constants';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -32,6 +33,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
     SelectModule,
     InputTextModule,
     InputNumberModule,
+    InputIconModule,
     InputMask,
     FormsModule,
   ],
