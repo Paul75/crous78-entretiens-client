@@ -6,24 +6,26 @@ import { FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 import { FormProvider } from '../../providers/form.provider';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
-  selector: 'app-entretien-pro-step2',
+  selector: 'app-entretien-form-step1',
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     NgbDatepickerModule,
-    StepperModule,
     ButtonModule,
     StepperModule,
+    DatePickerModule,
+    ToggleButtonModule,
   ],
-  providers: [],
-  templateUrl: './step2.component.html',
-  styleUrl: './step2.component.scss',
+  templateUrl: './step1.component.html',
+  styleUrl: './step1.component.scss',
 })
-export class EntretienProStep2Component {
+export class EntretienFormStep1Component {
   form: FormGroup;
 
   constructor(private formProvider: FormProvider) {

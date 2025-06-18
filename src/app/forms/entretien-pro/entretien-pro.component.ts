@@ -185,6 +185,14 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
 
   ngOnInit() {}
 
+  ngOnChanges(changes: SimpleChanges) {
+    this.cdref.detectChanges();
+  }
+
+  ngAfterContentChecked() {
+    this.cdref.detectChanges();
+  }
+
   getEntretienById() {
     console.log('getEntretienById');
     this.route.params.subscribe(params => {
@@ -212,14 +220,6 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
   setForm(entretien: Entretien) {
     this.entretienForm.patchValue(entretien);
     this.transformDatesToDisplay();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    this.cdref.detectChanges();
-  }
-
-  ngAfterContentChecked() {
-    this.cdref.detectChanges();
   }
 
   getAgent() {

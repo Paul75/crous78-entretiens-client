@@ -1,0 +1,53 @@
+<form [formGroup]="form">
+  <div class="flex-auto flex row">
+    <h4>Sessions réalisées du 1er septembre 2023 au 31 août 2024</h4>
+
+    <p-table [value]="formationsRealisees.controls">
+      <ng-template pTemplate="caption">
+        <div class="d-flex align-items-center justify-content-between">
+          <span class="text-xl font-bold mx-auto mb-0 text-center flex-grow-1"></span>
+          <p-button
+            class="ms-3"
+            size="small"
+            icon="pi pi-plus"
+            (click)="addFormationRealisees()"
+            rounded
+            raised
+          />
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th *ngFor="let column of columns">{{ columnLabels[column] }}</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-formation let-rowIndex="rowIndex">
+        <tr [formGroup]="formation">
+          <td *ngFor="let column of columns">
+            <input
+              type="text"
+              class="form-control"
+              pInputText
+              [formControlName]="column"
+              [placeholder]=""
+            />
+          </td>
+          <td>
+            <p-button
+              icon="pi pi-trash"
+              (click)="removeFormation(rowIndex)"
+              severity="danger"
+              size="small"
+              rounded
+              raised
+              [disabled]="rowIndex === 0"
+            />
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <br /><br />
+  </div>
+</form>

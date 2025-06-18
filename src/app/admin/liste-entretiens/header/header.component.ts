@@ -42,6 +42,7 @@ export class AdminListeEntretiensHeaderComponent implements OnInit {
       preparation: statut === StatutDemandeEnum.PREPARE,
       'rendez-vous': statut === StatutDemandeEnum.RDV,
       saisie: statut === StatutDemandeEnum.ENCOURS,
+      'commentaires-personne': statut === StatutDemandeEnum.AGENTCOMMENTAIRE,
       'signe-personne': statut === StatutDemandeEnum.AGENTSIGN,
       'signe-chef': statut === StatutDemandeEnum.CHEFSIGN,
       valide: statut === StatutDemandeEnum.VALIDE,

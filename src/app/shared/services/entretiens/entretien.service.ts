@@ -57,7 +57,7 @@ export class EntretienService {
       .pipe(catchError(this.handleError('newEntretien', DEFAULT_ENTRETIEN)));
   }
 
-  updateEntretien(entretienId: number, datas: Entretien): Observable<Entretien> {
+  updateEntretien(entretienId: number, datas: Partial<Entretien>): Observable<Entretien> {
     return this.http
       .put<Entretien>(`${this.backendUrl}/entretien/${entretienId}`, datas)
       .pipe(catchError(this.handleError<Entretien>('updateEntretien')))

@@ -8,7 +8,7 @@ import { DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
 import { TypesSignatureEnum } from '@shared/enums/types.signature.enum';
 import { EntretienService } from '@shared/services/entretiens/entretien.service';
-import { CommunicationSignatureService } from '@shared/services/signature/communication-signature.service';
+import { CommunicationSignatureService } from '@shared/services/communications/communication-signature.service';
 
 @Component({
   selector: 'app-signature-pad',

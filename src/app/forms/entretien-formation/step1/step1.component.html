@@ -6,37 +6,6 @@
 
       <div formGroupName="personne">
         <div class="mb-3 row">
-          <label for="matricule" class="col-sm-4 col-form-label">matricule :</label>
-          <div class="col-sm-8">
-            <input
-              type="text"
-              class="form-control"
-              name="matricule"
-              formControlName="matricule"
-              required
-              [class.is-invalid]="
-                registerFormControl['personne'].get('matricule')?.invalid &&
-                (registerFormControl['personne'].get('matricule')?.touched ||
-                  registerFormControl['personne'].get('matricule')?.dirty)
-              "
-            />
-            <div
-              class="invalid-feedback"
-              *ngIf="
-                registerFormControl['personne'].get('matricule')?.invalid &&
-                registerFormControl['personne'].get('matricule')?.touched
-              "
-            >
-              <ng-container
-                *ngIf="registerFormControl['personne'].get('matricule')?.errors?.['required']"
-              >
-                matricule INVALIDE
-              </ng-container>
-            </div>
-          </div>
-        </div>
-
-        <div class="mb-3 row">
           <label for="nomUsage" class="col-sm-4 col-form-label">Nom d'usage :</label>
           <div class="col-sm-8">
             <input
@@ -238,71 +207,6 @@
             </div>
           </div>
         </div>
-
-        <div class="mb-3 row">
-          <label for="" class="col-sm-4 col-form-label">Echelon :</label>
-          <div class="col-sm-8">
-            <input
-              type="text"
-              class="form-control"
-              id="inputPassword"
-              formControlName="echelon"
-              [class.is-invalid]="
-                registerFormControl['personne'].get('echelon')?.invalid &&
-                (registerFormControl['personne'].get('echelon')?.touched ||
-                  registerFormControl['personne'].get('echelon')?.dirty)
-              "
-            />
-
-            <div
-              class="invalid-feedback"
-              *ngIf="
-                registerFormControl['personne'].get('echelon')?.invalid &&
-                registerFormControl['personne'].get('echelon')?.touched
-              "
-            >
-              <ng-container
-                *ngIf="registerFormControl['personne'].get('echelon')?.errors?.['required']"
-              >
-                L'échelon est requis
-              </ng-container>
-              <ng-container
-                *ngIf="registerFormControl['personne'].get('echelon')?.errors?.['minlength']"
-              >
-                Minimum 2 charactères
-              </ng-container>
-              <ng-container
-                *ngIf="registerFormControl['personne'].get('echelon')?.errors?.['maxlength']"
-              >
-                Maximum de charactères atteint
-              </ng-container>
-            </div>
-          </div>
-        </div>
-
-        <div class="mb-3 row">
-          <label for="staticEmail" class="col-sm-4 col-form-label"
-            >Date de promotion dans l'échelon :</label
-          >
-          <div class="col-sm-8">
-            <div class="row row-cols-sm-auto">
-              <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  ngbDatepicker
-                  #dPromotion="ngbDatepicker"
-                  formControlName="datePromotion"
-                />
-                <button
-                  class="btn btn-outline-secondary bi bi-calendar3"
-                  (click)="dPromotion.toggle()"
-                  type="button"
-                ></button>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -311,36 +215,6 @@
       <hr class="border-bottom border-dark border-2" />
 
       <div formGroupName="superieur">
-        <div class="mb-3 row">
-          <label for="matricule" class="col-sm-4 col-form-label">matricule :</label>
-          <div class="col-sm-8">
-            <input
-              type="text"
-              class="form-control-plaintext"
-              name="matricule"
-              formControlName="matricule"
-              [class.is-invalid]="
-                registerFormControl['superieur'].get('matricule')?.invalid &&
-                (registerFormControl['superieur'].get('matricule')?.touched ||
-                  registerFormControl['superieur'].get('matricule')?.dirty)
-              "
-            />
-            <div
-              class="invalid-feedback"
-              *ngIf="
-                registerFormControl['superieur'].get('matricule')?.invalid &&
-                registerFormControl['superieur'].get('matricule')?.touched
-              "
-            >
-              <ng-container
-                *ngIf="registerFormControl['superieur'].get('matricule')?.errors?.['required']"
-              >
-                matricule INVALIDE
-              </ng-container>
-            </div>
-          </div>
-        </div>
-
         <div class="mb-3 row">
           <label for="staticEmail" class="col-sm-3 col-form-label">Nom :</label>
           <div class="col-sm-9">
@@ -585,4 +459,100 @@
       </div>
     </div>
   </div>
+  <div class="row">
+    <table class="table-responsive table-bordered">
+      <tr>
+        <th>Date de l'entretien de formation :</th>
+        <td>
+          <input
+            type="text"
+            ngbDatepicker
+            #dateEntretien="ngbDatepicker"
+            formControlName="dateEntretien"
+            [class.is-invalid]="
+              form.get('dateEntretien')?.invalid &&
+              (form.get('dateEntretien')?.touched || form.get('dateEntretien')?.dirty)
+            "
+          />
+          <button
+            class="btn btn-outline-secondary bi bi-calendar3"
+            (click)="dateEntretien.toggle()"
+            type="button"
+          ></button>
+
+          <div
+            class="invalid-feedback"
+            *ngIf="form.get('dateEntretien')?.invalid && form.get('dateEntretien')?.touched"
+          >
+            <ng-container *ngIf="form.get('dateEntretien')?.errors?.['required']">
+              Le date de dateEntretien est requise
+            </ng-container>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th>Date du précédent entretien de formation :</th>
+        <td>
+          <input
+            type="text"
+            ngbDatepicker
+            #dateEntretienPrecedent="ngbDatepicker"
+            formControlName="dateEntretienPrecedent"
+            [class.is-invalid]="
+              form.get('dateEntretienPrecedent')?.invalid &&
+              (form.get('dateEntretienPrecedent')?.touched ||
+                form.get('dateEntretienPrecedent')?.dirty)
+            "
+          />
+          <button
+            class="btn btn-outline-secondary bi bi-calendar3"
+            (click)="dateEntretienPrecedent.toggle()"
+            type="button"
+          ></button>
+
+          <div
+            class="invalid-feedback"
+            *ngIf="
+              form.get('dateEntretienPrecedent')?.invalid &&
+              form.get('dateEntretienPrecedent')?.touched
+            "
+          >
+            <ng-container *ngIf="form.get('dateEntretienPrecedent')?.errors?.['required']">
+              Le date de dateEntretienPrecedent est requise
+            </ng-container>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th>Solde des droits CPF au 1<sup>er</sup> janvier :</th>
+        <td>
+          <input
+            type="text"
+            name="soldeCPF"
+            formControlName="soldeCPF"
+            [class.is-invalid]="
+              form.get('soldeCPF')?.invalid &&
+              (form.get('soldeCPF')?.touched || form.get('soldeCPF')?.dirty)
+            "
+          />
+          <div
+            class="invalid-feedback"
+            *ngIf="form.get('soldeCPF')?.invalid && form.get('soldeCPF')?.touched"
+          >
+            <ng-container *ngIf="form.get('soldeCPF')?.errors?.['required']">
+              Le solde CPF est requis
+            </ng-container>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th>L'agent envisage-t-il de mobiliser son CPF cette année ?</th>
+        <td>
+          <p-togglebutton formControlName="utiliserCPF" onLabel="Oui" offLabel="Non" />
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <br />
 </form>

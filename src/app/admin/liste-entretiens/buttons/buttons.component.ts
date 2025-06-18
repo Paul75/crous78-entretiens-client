@@ -5,7 +5,7 @@ import { Entretien } from '@shared/models/entretien.model';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ButtonGroupModule } from 'primeng/buttongroup';
-import { CommunicationPdfService } from '@shared/services/entretiens/communication-pdf.service';
+import { CommunicationPdfService } from '@shared/services/communications/communication-pdf.service';
 import { TypeEntretien } from '@shared/enums/type-entretien.enum';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -15,7 +15,7 @@ import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
 import { EntretienService } from '@shared/services/entretiens/entretien.service';
 import { SignatureComponent } from '@shared/components/dialogs/signature/signature.component';
 import { TypesSignatureEnum } from '@shared/enums/types.signature.enum';
-import { CommunicationSignatureService } from '@shared/services/signature/communication-signature.service';
+import { CommunicationSignatureService } from '@shared/services/communications/communication-signature.service';
 
 @Component({
   selector: 'app-admin-liste-entretiens-buttons',

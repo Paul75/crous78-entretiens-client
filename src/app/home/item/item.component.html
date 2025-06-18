@@ -27,6 +27,13 @@
               rounded
             />
             <p-button
+              *ngIf="displayButtonAgentCommentaire"
+              icon="pi pi-comments"
+              (click)="goAgentCommentaire()"
+              severity="secondary"
+              rounded
+            />
+            <p-button
               *ngIf="displayButtonSign"
               icon="pi pi-pencil"
               (click)="goSignature()"
@@ -45,4 +52,5 @@
 >
 
 <app-signature-pad #signatureDialog />
+<app-agent-commentaire #agentCommentaireDialog />
 <app-home-dialog-pdf #pdfDialog />

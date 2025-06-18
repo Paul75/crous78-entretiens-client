@@ -13,7 +13,7 @@ import { PdfService } from '@shared/services/pdf/pdf.service';
 import { NgxExtendedPdfViewerComponent, NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { environment } from '@environments/environment';
 import { SeoService } from '@core/services/seo/seo.service';
-import { CommunicationPdfService } from '@shared/services/entretiens/communication-pdf.service';
+import { CommunicationPdfService } from '@shared/services/communications/communication-pdf.service';
 import { TypeEntretien } from '@shared/enums/type-entretien.enum';
 import { Personne } from '@shared/models/personne.model';
 import { RouterModule } from '@angular/router';

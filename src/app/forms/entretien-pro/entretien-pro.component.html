@@ -7,31 +7,6 @@
 
   <form [formGroup]="entretienForm" (ngSubmit)="onSubmit()" novalidate *ngIf="entretienForm">
     <div class="container">
-      <!-- <div class="mb-3 row" *ngIf="displayId">
-          <label for="id" class="col-sm-4 col-form-label">type :</label>
-          <div class="col-sm-8">
-            <input
-              type="text"
-              class="form-control"
-              name="type"
-              formControlName="type"
-              required
-              [class.is-invalid]="
-                entretienForm.get('type')?.invalid &&
-                (entretienForm.get('type')?.touched || entretienForm.get('type')?.dirty)
-              "
-            />
-            <div
-              class="invalid-feedback"
-              *ngIf="entretienForm.get('type')?.invalid && entretienForm.get('type')?.touched"
-            >
-              <ng-container *ngIf="entretienForm.get('type')?.errors?.['required']">
-                TYPE INVALIDE
-              </ng-container>
-            </div>
-          </div>
-        </div>-->
-
       <div class="row row-cols-sm-auto">
         <div class="input-group">
           <label for="dateEntretien" class="col-sm-4 col-form-label">Date de l'entretien :</label>

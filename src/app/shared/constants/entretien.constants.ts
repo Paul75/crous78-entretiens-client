@@ -42,4 +42,16 @@ export const DEFAULT_ENTRETIEN = {
   evolutionCarriere: '',
   personne: DEFAULT_PERSONNE,
   superieur: DEFAULT_PERSONNE,
+  commentairesEvaluation: '',
+  commentairesEvaluationPerspectives: '',
+
+  // ajout pour form entretien formation
+  dateEntretienPrecedent: '',
+  soldeCPF: 0,
+  utiliserCPF: false,
+
+  competenceTransferFormateur: '',
+  competenceTransferTuteur: '',
+  competenceTransferPresident: '',
+  competenceTransferMembre: '',
 };

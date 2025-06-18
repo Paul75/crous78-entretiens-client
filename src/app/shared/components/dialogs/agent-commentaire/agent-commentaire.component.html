@@ -1,0 +1,64 @@
+<p-toast />
+<p-dialog
+  [header]="'OBSERVATIONS DE l\'AGENT SUR SON EVALUATION'"
+  [(visible)]="display"
+  [modal]="true"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  [maximizable]="false"
+>
+  <div class="text-center">
+    <div class="row">
+      <div class="col">
+        <p>Sur l'entretien :</p>
+        <p>
+          <textarea
+            rows="10"
+            pTextarea
+            style="width: 100%"
+            [(ngModel)]="commentairesEvaluation"
+          ></textarea>
+        </p>
+      </div>
+      <div class="col">
+        <p>Sur les perspectives de carrière et de mobilité :</p>
+        <p>
+          <textarea
+            rows="10"
+            pTextarea
+            style="width: 100%"
+            [(ngModel)]="commentairesEvaluationPerspectives"
+          ></textarea>
+        </p>
+      </div>
+    </div>
+    <p class="text-danger" *ngIf="isError">Au moins un champ doit être renseignée</p>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="buttons">
+      <p-buttongroup>
+        <p-button
+          label="Annuler"
+          severity="danger"
+          icon="pi pi-times"
+          (click)="closeSignature()"
+          [rounded]="true"
+          variant="text"
+          [raised]="true"
+        />
+        <p-button
+          label="Sauvegarder"
+          severity="success"
+          icon="pi pi-check"
+          (click)="saveCommentaire()"
+          [rounded]="true"
+          variant="text"
+          [raised]="true"
+        />
+      </p-buttongroup>
+    </div>
+  </ng-template>
+</p-dialog>

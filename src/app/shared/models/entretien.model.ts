@@ -41,4 +41,6 @@ export interface Entretien {
   personne: Personne;
   superieur?: Personne;
   dateTransmission?: string;
+  commentairesEvaluation?: string;
+  commentairesEvaluationPerspectives?: string;
 }

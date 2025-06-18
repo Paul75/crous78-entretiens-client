@@ -1,91 +1,181 @@
-<div class="container-fluid">
+<div class="container-fluid py-5">
   <div class="row">
     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mb-2">
-      <h1 class="h5">Entretien de formation</h1>
+      <h1 class="h5">ENTRETIEN DE FORMATION</h1>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-header">
-      <h5>Informations générales</h5>
-    </div>
-    <div class="card-body">
-      <div class="card-text">
-        <div class="row">
-          <div class="col">
-            <h5 class="text-center">AGENT</h5>
-            <hr class="border-bottom border-dark border-2" />
+  <form [formGroup]="entretienForm" (ngSubmit)="onSubmit()" novalidate *ngIf="entretienForm">
+    <div class="container">
+      <div class="row row-cols-sm-auto">
+        <div class="input-group">
+          <label for="dateEntretien" class="col-sm-4 col-form-label">Date de l'entretien :</label>
+          <input
+            type="text"
+            class="form-control"
+            ngbDatepicker
+            [minDate]="minDate"
+            #d="ngbDatepicker"
+            formControlName="dateEntretien"
+            [class.is-invalid]="
+              entretienForm.get('dateEntretien')?.invalid &&
+              (entretienForm.get('dateEntretien')?.touched ||
+                entretienForm.get('dateEntretien')?.dirty)
+            "
+          />
+          <button
+            class="btn btn-outline-secondary bi bi-calendar3"
+            (click)="d.toggle()"
+            type="button"
+          ></button>
 
-            <p><span class="infos_title">Nom d'usage :</span></p>
-            <p><span class="infos_title">Nom de famille :</span></p>
-            <p><span class="infos_title">Prénom :</span></p>
-            <p><span class="infos_title">Date de naissance :</span></p>
-            <p><span class="infos_title">Corps-grade :</span></p>
-            <p><span class="infos_title">Echelon :</span></p>
-            <p><span class="infos_title">Date de promotion dans l'échelon :</span></p>
+          <div
+            class="invalid-feedback"
+            *ngIf="
+              entretienForm.get('dateEntretien')?.invalid &&
+              entretienForm.get('dateEntretien')?.touched
+            "
+          >
+            <ng-container *ngIf="entretienForm.get('dateEntretien')?.errors?.['required']">
+              Le date de dateEntretien est requise
+            </ng-container>
           </div>
-
-          <div class="col">
-            <h5 class="text-center">SUPERIEUR HIERARCHIQUE DIRECT</h5>
-            <hr class="border-bottom border-dark border-2" />
-
-            <p><span class="infos_title">Nom :</span></p>
-            <p><span class="infos_title">Prénom :</span></p>
-            <p><span class="infos_title">Corps-grade :</span></p>
-            <p><span class="infos_title">Intitulé de la fonction :</span></p>
-            <p><span class="infos_title">Structure :</span></p>
-            <p><span class="infos_title">Adresse / ville :</span></p>
-            <p><span class="infos_title">Date de l'entretien prof. :</span></p>
-          </div>
         </div>
       </div>
-    </div>
-  </div>
+      <br />
+      <div class="card">
+        <p-stepper [value]="1" [linear]="true">
+          <p-step-item [value]="1">
+            <p-step>Informations générales</p-step>
+            <p-step-panel>
+              <ng-template #content let-activateCallback="activateCallback">
+                <div class="flex flex-col">
+                  <app-entretien-form-step1 />
+                </div>
+                <div class="py-6">
+                  <p-button
+                    label="SUIVANT"
+                    (onClick)="activateCallback(2)"
+                    [disabled]="validStep1()"
+                  />
+                </div>
+              </ng-template>
+            </p-step-panel>
+          </p-step-item>
 
-  <br /><br />
+          <p-step-item [value]="2">
+            <p-step>1 - DESCRIPTION DU POSTE OCCUPE PAR L'AGENT</p-step>
+            <p-step-panel>
+              <ng-template #content let-activateCallback="activateCallback">
+                <div class="flex flex-col h-48">
+                  <app-entretien-form-step2 />
+                </div>
+                <div class="flex py-6 gap-2">
+                  <p-button label="RETOUR" severity="secondary" (onClick)="activateCallback(1)" />
+                  <p-button
+                    label="SUIVANT"
+                    (onClick)="activateCallback(3)"
+                    [disabled]="validStep2()"
+                  />
+                </div>
+              </ng-template>
+            </p-step-panel>
+          </p-step-item>
 
-  <h2 class="text-uppercase">1 - DESCRIPTION DU POSTE OCCUPE PAR L'AGENT</h2>
+          <p-step-item [value]="3">
+            <p-step>2 - BILAN DES FORMATIONS ET BESOINS DE FORMATION</p-step>
+            <p-step-panel>
+              <ng-template #content let-activateCallback="activateCallback">
+                <div class="flex flex-col h-48">
+                  <app-entretien-form-step3 />
+                </div>
+                <div class="py-6">
+                  <p-button label="RETOUR" severity="secondary" (onClick)="activateCallback(2)" />
+                  <p-button
+                    label="SUIVANT"
+                    (onClick)="activateCallback(4)"
+                    [disabled]="validStep3()"
+                  />
+                </div>
+              </ng-template>
+            </p-step-panel>
+          </p-step-item>
 
-  <br />
+          <p-step-item [value]="4">
+            <p-step>3. FORMATIONS DEMANDEES SUR LA PERIODE ECOULEE ET NON SUIVIES</p-step>
+            <p-step-panel>
+              <ng-template #content let-activateCallback="activateCallback">
+                <div class="flex flex-col h-48">
+                  <app-entretien-form-step4 />
+                </div>
+                <div class="py-6">
+                  <p-button label="RETOUR" severity="secondary" (onClick)="activateCallback(3)" />
+                  <p-button
+                    label="SUIVANT"
+                    (onClick)="activateCallback(5)"
+                    [disabled]="validStep4()"
+                  />
+                </div>
+              </ng-template>
+            </p-step-panel>
+          </p-step-item>
 
-  <div class="card">
-    <div class="card-body">
-      <div class="card-text">
-        <div class="row"><span class="infos_title">structure :</span></div>
-        <div class="row"><span class="infos_title">intitulé du poste :</span></div>
-        <div class="row"><span class="infos_title">date d'affectation :</span></div>
-        <div class="row"><span class="infos_title">emploi type (cf REME ou REFERENS) :</span></div>
-        <div class="row">
-          <span class="infos_title">poisitionnement du poste dans la structure :</span>
-        </div>
-        <div class="row"><span class="infos_title">quotité d'affectation :</span></div>
+          <p-step-item [value]="5">
+            <p-step>FORMATIONS DEMANDEES POUR LA NOUVELLE PERIODE</p-step>
+            <p-step-panel>
+              <ng-template #content let-activateCallback="activateCallback">
+                <div class="flex flex-col h-48">
+                  <app-entretien-form-step5 />
+                </div>
+                <div class="py-6">
+                  <p-button label="RETOUR" severity="secondary" (onClick)="activateCallback(4)" />
+                  <p-button
+                    label="SUIVANT"
+                    (onClick)="activateCallback(6)"
+                    [disabled]="validStep5()"
+                  />
+                </div>
+              </ng-template>
+            </p-step-panel>
+          </p-step-item>
+
+          <p-step-item [value]="6">
+            <p-step>5 - FORMATION DE PREPARATION A UN CONCOURS OU EXAMEN PROFESSIONNEL</p-step>
+            <p-step-panel>
+              <ng-template #content let-activateCallback="activateCallback">
+                <div class="flex flex-col h-48">
+                  <app-entretien-form-step6 />
+                </div>
+                <div class="py-6">
+                  <p-button label="RETOUR" severity="secondary" (onClick)="activateCallback(5)" />
+                  <p-button
+                    label="SUIVANT"
+                    (onClick)="activateCallback(7)"
+                    [disabled]="validStep6()"
+                  />
+                </div>
+              </ng-template>
+            </p-step-panel>
+          </p-step-item>
+
+          <p-step-item [value]="7">
+            <p-step
+              >6 - FORMATIONS POUR CONSTRUIRE UN PROJET PERSONNEL A CARACTERE PROFESSIONNEL</p-step
+            >
+            <p-step-panel>
+              <ng-template #content let-activateCallback="activateCallback">
+                <div class="flex flex-col h-48">
+                  <app-entretien-form-step7 />
+                </div>
+                <div class="py-6">
+                  <p-button label="RETOUR" severity="secondary" (onClick)="activateCallback(6)" />
+                  <p-button label="VALIDER" severity="success" type="submit" />
+                </div>
+              </ng-template>
+            </p-step-panel>
+          </p-step-item>
+        </p-stepper>
       </div>
     </div>
-  </div>
-
-  <br />
-
-  <h4>Missions du poste :</h4>
-
-  <div class="card">
-    <div class="card-header">
-      <h5>le cas échéant, fonctions d'encadrement ou de conduite de projet :</h5>
-    </div>
-    <div class="card-body">
-      <div class="card-text">
-        <div class="row">L'agent assume-t-il des fonctions de conduite de projet ?</div>
-        <div class="row">L'agent assume-t-il des fonctions d'encadrement ?</div>
-        <div class="row">
-          Si oui, précider le nombre d'agents : ____ et leur répartition par catégorie : _ A - _ B -
-          _ C
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <br /><br />
-
-  <h2 class="text-uppercase">2 - Evaluation de l'année écoulée</h2>
-
-  <br />
+  </form>
 </div>
