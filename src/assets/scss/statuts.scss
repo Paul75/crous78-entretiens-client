@@ -1,23 +1,29 @@
 .preparation {
-  background-color: #d3ff33; /* Couleur pour 'En préparation' */
+  background-color: #cabf1d; /* Couleur pour 'En préparation' */
+  color: black;
 }
 
 .rendez-vous {
   background-color: #f8683c; /* Couleur pour 'Rendez-vous pris' */
+  color: black;
 }
 
 .saisie {
   background-color: #87e431; /* Couleur pour 'En cours de saisie' */
+  color: black;
 }
 
 .signe-personne {
   background-color: #009ad6; /* Couleur pour 'A signer (agent)' */
+  color: black;
 }
 
 .signe-chef {
   background-color: #8f02b9; /* Couleur pour 'A signer (chef)' */
+  color: black;
 }
 
 .valide {
   background-color: #b90019; /* Couleur pour 'Entretien validé' */
+  color: black;
 }
