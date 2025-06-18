@@ -6,5 +6,5 @@ export const environment = {
     ...applicationBase,
     angular: `${applicationBase.angular} PROD`,
   },
-  backend: 'http://localhost:3000/api',
+  backend: 'https://entretiens.crous-versailles.fr/api',
 };
