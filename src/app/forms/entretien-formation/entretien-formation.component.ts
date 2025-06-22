@@ -179,30 +179,37 @@ export class EntretienFormationComponent extends FormProvider implements OnChang
   }
 
   ngAfterViewInit(): void {
-    // Surveillez les changements des composants enfants
-    this.step2ChildComponents.changes.subscribe(() => {
-      if (this.step2ChildComponents.length > 0 && this.entretienData) {
-        this.initializeStep2ChildForm(this.step2ChildComponents.first);
-      }
-    });
-    this.step3ChildComponents.changes.subscribe(() => {
-      if (this.step3ChildComponents.length > 0 && this.entretienData) {
-        this.initializeStep3ChildForm(this.step3ChildComponents.first);
-      }
-    });
-    this.step4ChildComponents.changes.subscribe(() => {
-      if (this.step4ChildComponents.length > 0 && this.entretienData) {
-        this.initializeStep4ChildForm(this.step4ChildComponents.first);
-      }
-    });
-    this.step5ChildComponents.changes.subscribe(() => {
-      if (this.step5ChildComponents.length > 0 && this.entretienData) {
-        this.initializeStep5ChildForm(this.step5ChildComponents.first);
-      }
-    });
-
     this.getEntretienById();
     this.cdref.detectChanges();
+
+    // Liste des composants enfants et leurs méthodes d'initialisation
+    const childComponents = [
+      {
+        components: this.step2ChildComponents,
+        initMethod: (child: any) => this.initializeStep2ChildForm(child),
+      },
+      {
+        components: this.step3ChildComponents,
+        initMethod: (child: any) => this.initializeStep3ChildForm(child),
+      },
+      {
+        components: this.step4ChildComponents,
+        initMethod: (child: any) => this.initializeStep4ChildForm(child),
+      },
+      {
+        components: this.step5ChildComponents,
+        initMethod: (child: any) => this.initializeStep5ChildForm(child),
+      },
+    ];
+
+    // Souscrire aux changements pour chaque composant enfant
+    childComponents.forEach(({ components, initMethod }) => {
+      components.changes.subscribe(() => {
+        if (components.length > 0 && this.entretienData) {
+          initMethod(components.first);
+        }
+      });
+    });
   }
 
   ngOnInit() {}
@@ -238,24 +245,35 @@ export class EntretienFormationComponent extends FormProvider implements OnChang
   }
 
   setForm(entretien: Entretien) {
-    this.entretienData = entretien; // Stocker les données
+    this.entretienData = entretien;
     this.entretienForm.patchValue(entretien);
-
     this.transformDatesToDisplay();
 
-    // Initialisez immédiatement si l'enfant est déjà disponible
-    if (this.step2ChildComponents.length > 0) {
-      this.initializeStep2ChildForm(this.step2ChildComponents.first);
-    }
-    if (this.step3ChildComponents.length > 0) {
-      this.initializeStep3ChildForm(this.step3ChildComponents.first);
-    }
-    if (this.step4ChildComponents.length > 0) {
-      this.initializeStep4ChildForm(this.step4ChildComponents.first);
-    }
-    if (this.step5ChildComponents.length > 0) {
-      this.initializeStep5ChildForm(this.step5ChildComponents.first);
-    }
+    // Initialiser immédiatement si l'enfant est déjà disponible
+    const childComponents = [
+      {
+        components: this.step2ChildComponents,
+        initMethod: (child: any) => this.initializeStep2ChildForm(child),
+      },
+      {
+        components: this.step3ChildComponents,
+        initMethod: (child: any) => this.initializeStep3ChildForm(child),
+      },
+      {
+        components: this.step4ChildComponents,
+        initMethod: (child: any) => this.initializeStep4ChildForm(child),
+      },
+      {
+        components: this.step5ChildComponents,
+        initMethod: (child: any) => this.initializeStep5ChildForm(child),
+      },
+    ];
+
+    childComponents.forEach(({ components, initMethod }) => {
+      if (components.length > 0) {
+        initMethod(components.first);
+      }
+    });
   }
 
   private initializeStep2ChildForm(child: EntretienFormStep2Component) {
