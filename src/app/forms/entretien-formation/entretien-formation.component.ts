@@ -4,7 +4,9 @@ import {
   ChangeDetectorRef,
   Component,
   OnChanges,
+  QueryList,
   SimpleChanges,
+  ViewChildren,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { environment } from '@environments/environment';
@@ -32,6 +34,7 @@ import { EntretienFormStep4Component } from './step4/step4.component';
 import { EntretienFormStep5Component } from './step5/step5.component';
 import { EntretienFormStep6Component } from './step6/step6.component';
 import { EntretienFormStep7Component } from './step7/step7.component';
+import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
 
 @Component({
   selector: 'app-entretien-formation',
@@ -71,19 +74,34 @@ export class EntretienFormationComponent extends FormProvider implements OnChang
 
   typeForm = 'formation';
 
+  private entretienData?: Entretien;
+
+  // Utilisez ViewChildren au lieu de ViewChild
+  @ViewChildren(EntretienFormStep2Component)
+  step2ChildComponents!: QueryList<EntretienFormStep2Component>;
+
+  @ViewChildren(EntretienFormStep3Component)
+  step3ChildComponents!: QueryList<EntretienFormStep3Component>;
+
+  @ViewChildren(EntretienFormStep4Component)
+  step4ChildComponents!: QueryList<EntretienFormStep4Component>;
+
+  @ViewChildren(EntretienFormStep5Component)
+  step5ChildComponents!: QueryList<EntretienFormStep5Component>;
+
   entretienForm: FormGroup = new FormBuilder().group({
     id: [DEFAULT_ENTRETIEN.id, [Validators.required]],
     type: [DEFAULT_ENTRETIEN.type, [Validators.required]],
     statut: [DEFAULT_ENTRETIEN.statut],
     dateEntretien: [DEFAULT_ENTRETIEN.dateEntretien, [Validators.required]],
+
+    // Etape 1 (step1)
+
     personne: new FormBuilder().group({
       id: [DEFAULT_ENTRETIEN.personne.id, [Validators.required]],
       nomUsage: [DEFAULT_ENTRETIEN.personne.nomUsage],
-      nom: [DEFAULT_ENTRETIEN.personne.nom, [Validators.minLength(2), Validators.maxLength(100)]],
-      prenom: [
-        DEFAULT_ENTRETIEN.personne.prenom,
-        [Validators.minLength(2), Validators.maxLength(100)],
-      ],
+      nom: [DEFAULT_ENTRETIEN.personne.nom],
+      prenom: [DEFAULT_ENTRETIEN.personne.prenom],
       dateNaissance: [DEFAULT_ENTRETIEN.personne.dateNaissance],
       corpsGrade: [DEFAULT_ENTRETIEN.personne.corpsGrade],
     }),
@@ -102,7 +120,7 @@ export class EntretienFormationComponent extends FormProvider implements OnChang
     soldeCPF: [DEFAULT_ENTRETIEN.soldeCPF],
     utiliserCPF: [DEFAULT_ENTRETIEN.utiliserCPF],
 
-    // 1 POSTE
+    // Etape 2 (step2)
     structure: [DEFAULT_ENTRETIEN.structure],
     intitulePoste: [DEFAULT_ENTRETIEN.intitulePoste],
     dateAffectation: [DEFAULT_ENTRETIEN.dateAffectation],
@@ -119,24 +137,72 @@ export class EntretienFormationComponent extends FormProvider implements OnChang
     cpeCategB: [DEFAULT_ENTRETIEN.cpeCategB],
     cpeCategC: [DEFAULT_ENTRETIEN.cpeCategC],
 
-    // 2
     competenceTransferFormateur: [DEFAULT_ENTRETIEN.competenceTransferFormateur],
     competenceTransferTuteur: [DEFAULT_ENTRETIEN.competenceTransferTuteur],
     competenceTransferPresident: [DEFAULT_ENTRETIEN.competenceTransferPresident],
     competenceTransferMembre: [DEFAULT_ENTRETIEN.competenceTransferMembre],
+
+    formationsDispensees: new FormBuilder().array([]),
+
+    // Etape 3 (step3)
+
+    formationsRealisees: new FormBuilder().array([]),
+
+    // Etape 4 (step4)
+    formationsDemandees: new FormBuilder().array([]),
+
+    // Etape 5 (step5)
+    formationsContinue: new FormBuilder().array([]),
+    actionsFormationsDemandees: new FormBuilder().array([]),
+
+    // Etape 6 (step6)
+    formationsPreparationConcours: [DEFAULT_ENTRETIEN.formationsPreparationConcours],
+
+    // Etape 7 (step7)
+    formationsConstruireProjet: [DEFAULT_ENTRETIEN.formationsConstruireProjet],
   });
+
+  /**
+   *  CODE GENERAL
+   */
 
   constructor(
     private cdref: ChangeDetectorRef,
+    private fb: FormBuilder,
     private entretienService: EntretienService,
     private dateService: DateService,
     private route: ActivatedRoute,
   ) {
     super();
+
+    //this.initialize_formationsDispensees();
   }
 
   ngAfterViewInit(): void {
+    // Surveillez les changements des composants enfants
+    this.step2ChildComponents.changes.subscribe(() => {
+      if (this.step2ChildComponents.length > 0 && this.entretienData) {
+        this.initializeStep2ChildForm(this.step2ChildComponents.first);
+      }
+    });
+    this.step3ChildComponents.changes.subscribe(() => {
+      if (this.step3ChildComponents.length > 0 && this.entretienData) {
+        this.initializeStep3ChildForm(this.step3ChildComponents.first);
+      }
+    });
+    this.step4ChildComponents.changes.subscribe(() => {
+      if (this.step4ChildComponents.length > 0 && this.entretienData) {
+        this.initializeStep4ChildForm(this.step4ChildComponents.first);
+      }
+    });
+    this.step5ChildComponents.changes.subscribe(() => {
+      if (this.step5ChildComponents.length > 0 && this.entretienData) {
+        this.initializeStep5ChildForm(this.step5ChildComponents.first);
+      }
+    });
+
     this.getEntretienById();
+    this.cdref.detectChanges();
   }
 
   ngOnInit() {}
@@ -150,7 +216,6 @@ export class EntretienFormationComponent extends FormProvider implements OnChang
   }
 
   getEntretienById() {
-    console.log('getEntretienById');
     this.route.params.subscribe(params => {
       const id = params['id'];
       if (id !== undefined) {
@@ -169,13 +234,42 @@ export class EntretienFormationComponent extends FormProvider implements OnChang
   }
 
   getForm(): FormGroup {
-    // console.log(this.entretienForm.value);
     return this.entretienForm;
   }
 
   setForm(entretien: Entretien) {
+    this.entretienData = entretien; // Stocker les données
     this.entretienForm.patchValue(entretien);
+
     this.transformDatesToDisplay();
+
+    // Initialisez immédiatement si l'enfant est déjà disponible
+    if (this.step2ChildComponents.length > 0) {
+      this.initializeStep2ChildForm(this.step2ChildComponents.first);
+    }
+    if (this.step3ChildComponents.length > 0) {
+      this.initializeStep3ChildForm(this.step3ChildComponents.first);
+    }
+    if (this.step4ChildComponents.length > 0) {
+      this.initializeStep4ChildForm(this.step4ChildComponents.first);
+    }
+    if (this.step5ChildComponents.length > 0) {
+      this.initializeStep5ChildForm(this.step5ChildComponents.first);
+    }
+  }
+
+  private initializeStep2ChildForm(child: EntretienFormStep2Component) {
+    child.initializeFormWithData(this.entretienData!.formationsDispensees);
+  }
+  private initializeStep3ChildForm(child: EntretienFormStep3Component) {
+    child.initializeFormWithData(this.entretienData!.formationsRealisees);
+  }
+  private initializeStep4ChildForm(child: EntretienFormStep4Component) {
+    child.initializeFormWithData(this.entretienData!.formationsDemandees);
+  }
+  private initializeStep5ChildForm(child: EntretienFormStep5Component) {
+    child.initializeFormContinueWithData(this.entretienData!.formationsContinue);
+    child.initializeActionFormDemandeesWithData(this.entretienData!.actionsFormationsDemandees);
   }
 
   getAgent() {
@@ -242,7 +336,17 @@ export class EntretienFormationComponent extends FormProvider implements OnChang
       return;
     }
 
+    if (this.entretienForm.value.statut != StatutDemandeEnum.PREPARE) {
+      this.entretienForm.value.statut = StatutDemandeEnum.AGENTSIGN;
+    }
+
     console.log(this.entretienForm.value);
+  }
+
+  get boutonLabelSubmit(): string {
+    return this.entretienForm.value.statut === StatutDemandeEnum.PREPARE
+      ? 'ENREGISTRER'
+      : 'VALIDER';
   }
 
   private transformDatesToDisplay(): void {

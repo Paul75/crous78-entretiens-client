@@ -1,4 +1,4 @@
-<app-header />
+<app-header [authState]="authState$ | async" (logout)="onLogout()" />
 <main>
   <div class="progress-spinner" *ngIf="loaderService.isLoading$ | async">
     <p-progressSpinner></p-progressSpinner>

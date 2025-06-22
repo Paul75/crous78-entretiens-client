@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {
@@ -35,20 +35,45 @@ export class EntretienFormStep3Component {
 
   columns: string[] = []; // Pour stocker les noms des colonnes dynamiques
   columnLabels: { [key: string]: string } = {
-    column1: 'Libellé de la formation',
-    column2: 'Nombres d’heures',
-    column3: 'Nombres d’heures CPF utilisées',
-    column4: 'Nombre d’heures suivi effectif (si absence partielle)',
+    libelleFormation: 'Libellé de la formation',
+    nombresHeures: 'Nombres d’heures',
+    nombresHeuresCpf: 'Nombres d’heures CPF utilisées',
+    nombresHeuresSuiviEffectif: 'Nombre d’heures suivi effectif (si absence partielle)',
   };
 
   constructor(
     private formProvider: FormProvider,
     private fb: FormBuilder,
+    private cdref: ChangeDetectorRef,
   ) {
     this.form = this.formProvider.getForm();
+  }
 
-    this.form.addControl('formationsRealisees', this.fb.array([]));
-    this.addFormationRealisees();
+  initializeFormWithData(formations: any[]) {
+    if (!this.form.contains('formationsRealisees')) {
+      this.form.addControl('formationsRealisees', this.fb.array([]));
+    }
+
+    const array = this.formationsRealisees;
+    array.clear();
+
+    if (formations?.length) {
+      formations.forEach(formation => {
+        array.push(
+          this.fb.group({
+            libelleFormation: [formation.libelleFormation],
+            nombresHeures: [formation.nombresHeures],
+            nombresHeuresCpf: [formation.nombresHeuresCpf],
+            nombresHeuresSuiviEffectif: [formation.nombresHeuresSuiviEffectif],
+          }),
+        );
+      });
+    } else {
+      this.addFormationRealisees(); // Ajouter une ligne vide
+    }
+
+    this.updateColumns();
+    this.cdref.detectChanges();
   }
 
   get registerFormControl() {
@@ -57,17 +82,18 @@ export class EntretienFormStep3Component {
 
   addFormationRealisees() {
     const formationGroup = this.fb.group({
-      column1: [''],
-      column2: [''],
-      column3: [''],
-      column4: [''],
+      libelleFormation: [''],
+      nombresHeures: [''],
+      nombresHeuresCpf: [''],
+      nombresHeuresSuiviEffectif: [''],
     });
     this.formationsRealisees.push(formationGroup);
     this.updateColumns();
   }
 
   removeFormation(index: number) {
-    if (index !== 0) {
+    if (this.formationsRealisees.length > 1) {
+      // if (index !== 0) {
       this.formationsRealisees.removeAt(index);
     }
   }

@@ -6,6 +6,10 @@ import { environment } from '@environments/environment';
 import { SeoService } from '@core/services/seo/seo.service';
 import { HomeItemComponent } from './item/item.component';
 import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
+import { AuthState } from '@core/types/auth.types';
+import { Observable } from 'rxjs';
+import { ShibbolethService } from '@core/services/shibboleth.service';
+import { FoalTSService } from '@core/services/foalts.service';
 
 export enum ColorDemande {
   PREPARE = '#ffd966',
@@ -21,6 +25,8 @@ export enum ColorDemande {
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
+  authState$: Observable<AuthState>;
+
   name = environment.application.name;
   angular = environment.application.angular;
   bootstrap = environment.application.bootstrap;
@@ -38,7 +44,11 @@ export class HomeComponent implements OnInit {
   // typeEntretienEnum = TypeEntretien;
   listeEntretien!: EntretienImpl;
 
-  constructor(private seoService: SeoService) {
+  constructor(
+    private shibbolethService: ShibbolethService,
+    private foaltsService: FoalTSService,
+    private seoService: SeoService,
+  ) {
     const content =
       'This application was developed with ' +
       this.angular +
@@ -50,14 +60,29 @@ export class HomeComponent implements OnInit {
 
     this.seoService.setMetaDescription(content);
     this.seoService.setMetaTitle(title);
+
+    this.authState$ = this.shibbolethService.authState$;
   }
 
   ngOnInit(): void {
+    this.refreshFoalTSProfile();
+
     this.entretienService.getEntretienByMatricule(this.currentUser).subscribe({
       next: (data: EntretienImpl) => {
         this.listeEntretien = data;
       },
       error: e => console.error('getEntretienByMatricule error: ', e),
+    });
+  }
+
+  private refreshFoalTSProfile(): void {
+    this.foaltsService.getUserProfile().subscribe({
+      next: response => {
+        console.log('FoalTS profile loaded:', response);
+      },
+      error: error => {
+        console.error('Failed to load FoalTS profile:', error);
+      },
     });
   }
 }

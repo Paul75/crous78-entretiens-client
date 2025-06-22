@@ -27,6 +27,13 @@ export class EntretienProStep7Component {
 
   constructor(private formProvider: FormProvider) {
     this.form = this.formProvider.getForm();
+
+    /*// 6
+    this.form.addControl(
+      'evolutionActivites',
+      new FormControl(DEFAULT_ENTRETIEN.evolutionActivites),
+    );
+    this.form.addControl('evolutionCarriere', new FormControl(DEFAULT_ENTRETIEN.evolutionCarriere));*/
   }
 
   get registerFormControl() {

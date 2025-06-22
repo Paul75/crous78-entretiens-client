@@ -35,6 +35,4 @@ export class EntretienFormStep1Component {
   get registerFormControl() {
     return this.form.controls;
   }
-
-  ngOnInit() {}
 }

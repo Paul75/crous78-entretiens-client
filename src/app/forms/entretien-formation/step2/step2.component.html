@@ -619,7 +619,7 @@
             class="ms-3"
             size="small"
             icon="pi pi-plus"
-            (click)="addFormation()"
+            (click)="addFormationsDispensees()"
             rounded
             raised
           />
@@ -627,13 +627,13 @@
       </ng-template>
       <ng-template pTemplate="header">
         <tr>
-          <th *ngFor="let column of columns">{{ columnLabels[column] }}</th>
+          <th *ngFor="let column of columnsFormationsDispensees">{{ columnLabels[column] }}</th>
           <th>Actions</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-formation let-rowIndex="rowIndex">
         <tr [formGroup]="formation">
-          <td *ngFor="let column of columns">
+          <td *ngFor="let column of columnsFormationsDispensees">
             <input
               type="text"
               class="form-control"

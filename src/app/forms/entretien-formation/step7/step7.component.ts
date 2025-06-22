@@ -32,7 +32,7 @@ export class EntretienFormStep7Component {
   constructor(private formProvider: FormProvider) {
     this.form = this.formProvider.getForm();
 
-    this.form.addControl('formationsConstruireProjet', new FormControl(''));
+    // this.form.addControl('formationsConstruireProjet', new FormControl(''));
   }
 
   get registerFormControl() {

@@ -15,7 +15,7 @@
     [rows]="5"
     [tableStyle]="{ 'min-width': '50rem' }"
     [rowsPerPageOptions]="[5, 10, 15]"
-    [globalFilterFields]="['nom', 'prenom']"
+    [globalFilterFields]="['matricule', 'nom', 'prenom', 'email']"
   >
     <ng-template #caption>
       <div class="d-flex align-items-center justify-content-between">
@@ -36,6 +36,7 @@
     <ng-template #header>
       <tr>
         <th pFrozenColumn>MATRICULE</th>
+        <th>EST ACTIF</th>
         <th>NOM</th>
         <th>PRENOM</th>
         <th>ENTITE</th>
@@ -79,6 +80,21 @@
             </ng-template>
             <ng-template #output>
               {{ personne.matricule }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td class="text-nowrap">
+          <p-cellEditor>
+            <ng-template #input>
+              <p-togglebutton
+                [(ngModel)]="personne.isActif"
+                onLabel="Oui"
+                offLabel="Non"
+                styleClass="w-24"
+              />
+            </ng-template>
+            <ng-template #output>
+              {{ displayIsActif(personne.isActif) }}
             </ng-template>
           </p-cellEditor>
         </td>
@@ -389,6 +405,18 @@
               severity="secondary"
             ></button>
             <button
+              *ngIf="!editing"
+              pButton
+              pRipple
+              type="button"
+              pCancelEditableRow
+              icon="pi pi-trash"
+              (click)="delRow(personne, ri)"
+              text
+              rounded
+              severity="secondary"
+            ></button>
+            <button
               *ngIf="editing"
               pButton
               pRipple
@@ -408,18 +436,6 @@
               pCancelEditableRow
               icon="pi pi-times"
               (click)="onRowEditCancel(personne, ri)"
-              text
-              rounded
-              severity="secondary"
-            ></button>
-            <button
-              *ngIf="!editing"
-              pButton
-              pRipple
-              type="button"
-              pCancelEditableRow
-              icon="pi pi-trash"
-              (click)="delRow(personne, ri)"
               text
               rounded
               severity="secondary"

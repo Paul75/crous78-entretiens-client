@@ -10,8 +10,8 @@ export class DateService {
     return formatDate(now, 'dd/MM/yyyy', 'fr-FR');
   }
 
-  transformDateEn(date: string): string {
-    if (!date) return '';
+  transformDateEn(date: string): string | null {
+    if (!date) return null;
     // console.log(date);
     /*const [day, month, year] = date.split('/');
     const dateObj = new Date(Number(year), Number(month) - 1, Number(day));

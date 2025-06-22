@@ -299,6 +299,22 @@
                   (click)="dPromotion.toggle()"
                   type="button"
                 ></button>
+
+                <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    registerFormControl['personne'].get('datePromotion')?.invalid &&
+                    registerFormControl['personne'].get('datePromotion')?.touched
+                  "
+                >
+                  <ng-container
+                    *ngIf="
+                      registerFormControl['personne'].get('datePromotion')?.errors?.['required']
+                    "
+                  >
+                    Le date de promotion est requise
+                  </ng-container>
+                </div>
               </div>
             </div>
           </div>

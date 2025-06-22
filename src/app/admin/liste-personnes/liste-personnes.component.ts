@@ -18,6 +18,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { FormsModule } from '@angular/forms';
 import { DEFAULT_PERSONNE } from '@shared/constants/personne.constants';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 
 @Component({
   selector: 'app-admin-liste-personnes',
@@ -35,6 +36,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
     InputNumberModule,
     InputIconModule,
     InputMask,
+    ToggleButtonModule,
     FormsModule,
   ],
   providers: [MessageService, PersonnesService],
@@ -72,6 +74,10 @@ export class AdminListePersonnesComponent implements OnInit {
     });
   }
 
+  displayIsActif(isActif: boolean): string {
+    return isActif ? 'Oui' : 'Non';
+  }
+
   onRowEditInit(personne: Personne) {
     this.clonedPersonnes[personne.id as number] = { ...personne };
   }
@@ -107,7 +113,8 @@ export class AdminListePersonnesComponent implements OnInit {
   }
 
   addRow() {
-    const newPersonne: Personne = DEFAULT_PERSONNE;
+    let newPersonne: Personne = DEFAULT_PERSONNE;
+    newPersonne.isNew = true;
 
     newPersonne.id = this.generateUniqueId();
     this.personnes.unshift(newPersonne); // Ajoute la nouvelle personne au début du tableau
@@ -115,23 +122,28 @@ export class AdminListePersonnesComponent implements OnInit {
   }
 
   delRow(personne: Personne, index: number) {
-    this.loading = true;
-    this.personnesService.deletePersonne(personne.id).subscribe({
-      next: () => {
-        this.personnes[index] = this.clonedPersonnes[personne.id as number];
-        delete this.clonedPersonnes[personne.id as number];
-      },
-      error: e => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Erreur',
-          detail: 'Impossible de supprimer la ligne',
-        });
-      },
-      complete: () => {
-        this.loading = false;
-      },
-    });
+    if (personne.isNew) {
+      this.onRowEditCancel(personne, index);
+    } else {
+      this.loading = true;
+      this.personnesService.deletePersonne(personne.id).subscribe({
+        next: () => {
+          this.personnes[index].isActif = false;
+          this.onRowEditInit(this.personnes[index]);
+        },
+        error: e => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erreur',
+            detail: 'Impossible de supprimer la ligne',
+          });
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+        },
+      });
+    }
   }
 
   onSelectDate(date: Date) {

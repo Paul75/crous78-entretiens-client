@@ -1,6 +1,14 @@
 <p-buttongroup>
   <ng-container *ngIf="entretien">
     <p-button
+      *ngIf="displayButtonsEnPreparation"
+      icon="pi pi-pen-to-square"
+      (click)="newEntretien(false)"
+      severity="help"
+      rounded
+    />
+
+    <p-button
       *ngIf="displayButtonsViewDownload"
       icon="pi pi-search"
       (click)="viewPDF()"
@@ -48,8 +56,8 @@
     <p-button
       *ngIf="displayButtonPlus"
       icon="pi pi-plus"
-      (click)="newEntretien()"
-      styleClass="btn-plus-form"
+      (click)="newEntretien(true)"
+      severity="success"
       rounded
     />
   </ng-container>

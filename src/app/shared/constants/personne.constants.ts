@@ -14,4 +14,6 @@ export const DEFAULT_PERSONNE = {
   structure: '',
   adresse: '',
   ville: '',
+  isNew: false,
+  isActif: true,
 };

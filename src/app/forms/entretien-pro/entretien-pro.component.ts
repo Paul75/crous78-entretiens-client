@@ -15,6 +15,7 @@ import {
   FormBuilder,
   FormGroup,
   Validators,
+  FormArray,
 } from '@angular/forms';
 
 import { NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
@@ -88,15 +89,14 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
     type: [DEFAULT_ENTRETIEN.type, [Validators.required]],
     statut: [DEFAULT_ENTRETIEN.statut],
     dateEntretien: [DEFAULT_ENTRETIEN.dateEntretien, [Validators.required]],
+
+    // Etape 1 (step1)
     personne: new FormBuilder().group({
-      id: [DEFAULT_ENTRETIEN.personne.id, [Validators.required]],
+      id: [DEFAULT_ENTRETIEN.personne.id],
       matricule: [DEFAULT_ENTRETIEN.personne.matricule],
       nomUsage: [DEFAULT_ENTRETIEN.personne.nomUsage],
-      nom: [DEFAULT_ENTRETIEN.personne.nom, [Validators.minLength(2), Validators.maxLength(100)]],
-      prenom: [
-        DEFAULT_ENTRETIEN.personne.prenom,
-        [Validators.minLength(2), Validators.maxLength(100)],
-      ],
+      nom: [DEFAULT_ENTRETIEN.personne.nom],
+      prenom: [DEFAULT_ENTRETIEN.personne.prenom],
       dateNaissance: [DEFAULT_ENTRETIEN.personne.dateNaissance],
       corpsGrade: [DEFAULT_ENTRETIEN.personne.corpsGrade],
       echelon: [DEFAULT_ENTRETIEN.personne.echelon],
@@ -105,6 +105,7 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
       structure: [DEFAULT_ENTRETIEN.personne.structure],
       adresse: [DEFAULT_ENTRETIEN.personne.adresse],
     }),
+
     superieur: new FormBuilder().group({
       id: [DEFAULT_ENTRETIEN.superieur.id],
       matricule: [DEFAULT_ENTRETIEN.superieur.matricule],
@@ -120,6 +121,11 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
       adresse: [DEFAULT_ENTRETIEN.superieur.adresse],
     }),
 
+    /**
+     * FORMULAIRE ENTRETIEN PROFESSIONNEL
+     */
+
+    // Etape 2 (step2)
     // 1 POSTE
     structure: [DEFAULT_ENTRETIEN.structure],
     intitulePoste: [DEFAULT_ENTRETIEN.intitulePoste],
@@ -127,9 +133,7 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
     emploiType: [DEFAULT_ENTRETIEN.emploiType],
     positionPoste: [DEFAULT_ENTRETIEN.positionPoste],
     quotiteAffectation: [DEFAULT_ENTRETIEN.quotiteAffectation],
-
     missions: [DEFAULT_ENTRETIEN.missions],
-
     conduiteProjet: [DEFAULT_ENTRETIEN.conduiteProjet],
     encadrement: [DEFAULT_ENTRETIEN.encadrement],
     cpeNbAgent: [DEFAULT_ENTRETIEN.cpeNbAgent],
@@ -137,10 +141,11 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
     cpeCategB: [DEFAULT_ENTRETIEN.cpeCategB],
     cpeCategC: [DEFAULT_ENTRETIEN.cpeCategC],
 
-    // 2
+    // Etape 3 (step3)
     rappelObjectifs: [DEFAULT_ENTRETIEN.rappelObjectifs],
     evenementsSurvenus: [DEFAULT_ENTRETIEN.evenementsSurvenus],
 
+    // Etape 4 (step4)
     // 3
     // 3.1
     caCompetences: [DEFAULT_ENTRETIEN.caCompetences],
@@ -157,15 +162,14 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
     realisationObjectifs: [DEFAULT_ENTRETIEN.realisationObjectifs],
     appreciationLitterale: [DEFAULT_ENTRETIEN.appreciationLitterale],
 
-    // 4
+    // Etape 5 (step5)
     acquisExperiencePro: [DEFAULT_ENTRETIEN.acquisExperiencePro],
 
-    // 5
+    // Etape 6 (step6)
     objectifsActivites: [DEFAULT_ENTRETIEN.objectifsActivites],
     demarcheEnvisagee: [DEFAULT_ENTRETIEN.demarcheEnvisagee],
 
-    // 6
-
+    // Etape 7 (step7)
     evolutionActivites: [DEFAULT_ENTRETIEN.evolutionActivites],
     evolutionCarriere: [DEFAULT_ENTRETIEN.evolutionCarriere],
   });
@@ -177,6 +181,8 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
     private route: ActivatedRoute,
   ) {
     super();
+
+    // this.initialize_formationsDispensees();
   }
 
   ngAfterViewInit(): void {
@@ -194,7 +200,7 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
   }
 
   getEntretienById() {
-    console.log('getEntretienById');
+    // console.log('getEntretienById');
     this.route.params.subscribe(params => {
       const id = params['id'];
       if (id !== undefined) {
@@ -206,7 +212,12 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
   getEntretien(id: number): void {
     if (id !== 0) {
       this.entretienService.getEntretien(id).subscribe((item: Entretien) => {
+        // 1. Patch initial du formulaire parent
         this.setForm(item);
+
+        // 2. Envoi des données AUX SOUS-FORMULAIRES via le service
+        // this.dataService.updateEntretien(item);
+
         this.cdref.detectChanges();
       });
     }
@@ -239,10 +250,10 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
   }
 
   validStep1() {
-    return this.getAgent()?.invalid || this.getSuperieur()?.invalid;
+    return this.getAgent().invalid && this.getSuperieur().invalid;
   }
   validStep2() {
-    return this.getPoste()?.invalid;
+    return this.getPoste().invalid;
   }
   validStep3() {
     const rappelObjectifs = this.getForm().get('rappelObjectifs') as FormGroup;
@@ -299,7 +310,12 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
 
     // console.log('Your form data:', this.entretienForm.value);
 
-    this.entretienForm.value.statut = StatutDemandeEnum.AGENTSIGN;
+    if (
+      this.entretienForm.value.statut !== StatutDemandeEnum.PREPARE &&
+      this.entretienForm.value.statut !== StatutDemandeEnum.RDV
+    ) {
+      this.entretienForm.value.statut = StatutDemandeEnum.AGENTSIGN;
+    }
 
     // also recommended
     this.entretienService
@@ -311,6 +327,13 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
         error: e => console.error(e),
         complete: () => console.info('complete'),
       });
+  }
+
+  get boutonLabelSubmit(): string {
+    return this.entretienForm.value.statut === StatutDemandeEnum.PREPARE ||
+      this.entretienForm.value.statut === StatutDemandeEnum.RDV
+      ? 'ENREGISTRER'
+      : 'VALIDER';
   }
 
   private transformDatesToDisplay(): void {

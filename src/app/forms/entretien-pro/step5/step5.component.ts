@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { StepperModule } from 'primeng/stepper';
@@ -27,6 +27,12 @@ export class EntretienProStep5Component {
 
   constructor(private formProvider: FormProvider) {
     this.form = this.formProvider.getForm();
+
+    /*// 4
+    this.form.addControl(
+      'acquisExperiencePro',
+      new FormControl(DEFAULT_ENTRETIEN.acquisExperiencePro),
+    );*/
   }
 
   get registerFormControl() {

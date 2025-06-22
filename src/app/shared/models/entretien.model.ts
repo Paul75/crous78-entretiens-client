@@ -43,4 +43,9 @@ export interface Entretien {
   dateTransmission?: string;
   commentairesEvaluation?: string;
   commentairesEvaluationPerspectives?: string;
+  formationsDispensees: any[];
+  formationsRealisees: any[];
+  formationsDemandees: any[];
+  formationsContinue: any[];
+  actionsFormationsDemandees: any[];
 }

@@ -2,7 +2,12 @@ import { ApplicationConfig, isDevMode, LOCALE_ID, provideZoneChangeDetection } f
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
-import { HTTP_INTERCEPTORS, provideHttpClient, withFetch } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withFetch,
+  withInterceptors,
+} from '@angular/common/http';
 import { provideServiceWorker } from '@angular/service-worker';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
@@ -25,10 +30,13 @@ import { LoaderInterceptor } from '@shared/interceptor/loader.interceptor';
 
 registerLocaleData(localeFr, 'fr-FR', localeFRExtra);
 import { fr } from 'primelocale/fr.json';
+import { authInterceptor } from '@shared/interceptor/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(withFetch()),
+    provideHttpClient(withInterceptors([authInterceptor])),
+
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(
       routes,
@@ -54,9 +62,18 @@ export const appConfig: ApplicationConfig = {
     { provide: NgbDateAdapter, useClass: CustomDatepickerAdapter },
     { provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter },
     { provide: NgbProgressbarModule },
-    AuthenticationService,
-    AuthenticationGuard,
+    // AuthenticationService,
+    // AuthenticationGuard,
     // { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
   ],
+};
+// Détection automatique de l'environnement
+export const getCurrentConfig = () => {
+  const isProduction =
+    window.location.hostname !== 'localhost' &&
+    window.location.hostname !== '127.0.0.1' &&
+    !window.location.hostname.includes('stackblitz');
+
+  return isProduction ? true : false;
 };

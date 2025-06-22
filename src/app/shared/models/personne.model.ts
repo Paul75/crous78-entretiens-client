@@ -12,4 +12,6 @@ export interface Personne {
   structure: string;
   adresse: string;
   ville: string;
+  isNew?: boolean;
+  isActif?: boolean;
 }

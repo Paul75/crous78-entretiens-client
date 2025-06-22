@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {
@@ -35,29 +35,77 @@ export class EntretienFormStep5Component {
 
   columns: string[] = []; // Pour stocker les noms des colonnes dynamiques
   columnLabels: { [key: string]: string } = {
-    column1: 'Libellé de la formation',
-    column2: 'Finalité (action de formation de type 1, 2 ou 3)',
-    column3: "Demande à l`initiative de :<br /><ul><li>l'agent</li><li>l'administration</li></ul>",
-    column4: 'Durée',
+    libelleFormation: 'Libellé de la formation',
+    finalite: 'Finalité (action de formation de type 1, 2 ou 3)',
+    initiativeDemande:
+      "Demande à l`initiative de :<br /><ul><li>l'agent</li><li>l'administration</li></ul>",
+    duree: 'Durée',
   };
 
   columnsFormationsDemandees: string[] = []; // Pour stocker les noms des colonnes dynamiques
   columnLabelsFormationsDemandees: { [key: string]: string } = {
-    column1: 'Libellé de la formation',
-    column2: "Motivation du responsable conduisant l'entretien (si avis défavorable)",
+    libelleFormation: 'Libellé de la formation',
+    motivationResponsable: "Motivation du responsable conduisant l'entretien (si avis défavorable)",
   };
 
   constructor(
     private formProvider: FormProvider,
     private fb: FormBuilder,
+    private cdref: ChangeDetectorRef,
   ) {
     this.form = this.formProvider.getForm();
+  }
 
-    this.form.addControl('formationsContinue', this.fb.array([]));
-    this.addFormationContinue();
+  initializeFormContinueWithData(formations: any[]) {
+    if (!this.form.contains('formationsContinue')) {
+      this.form.addControl('formationsContinue', this.fb.array([]));
+    }
 
-    this.form.addControl('actionsFormationsDemandees', this.fb.array([]));
-    this.addActionFormationDemandees();
+    const array = this.formationsContinue;
+    array.clear();
+
+    if (formations?.length) {
+      formations.forEach(formation => {
+        array.push(
+          this.fb.group({
+            libelleFormation: [formation.libelleFormation],
+            finalite: [formation.finalite],
+            initiativeDemande: [formation.initiativeDemande],
+            duree: [formation.duree],
+          }),
+        );
+      });
+    } else {
+      this.addFormationContinue(); // Ajouter une ligne vide
+    }
+
+    this.updateColumns();
+    this.cdref.detectChanges();
+  }
+
+  initializeActionFormDemandeesWithData(formations: any[]) {
+    if (!this.form.contains('actionsFormationsDemandees')) {
+      this.form.addControl('actionsFormationsDemandees', this.fb.array([]));
+    }
+
+    const array = this.actionsFormationsDemandees;
+    array.clear();
+
+    if (formations?.length) {
+      formations.forEach(formation => {
+        array.push(
+          this.fb.group({
+            libelleFormation: [formation.libelleFormation],
+            motivationResponsable: [formation.motivationResponsable],
+          }),
+        );
+      });
+    } else {
+      this.addActionFormationDemandees(); // Ajouter une ligne vide
+    }
+
+    this.updateColumnsFormationsDemandees();
+    this.cdref.detectChanges();
   }
 
   get registerFormControl() {
@@ -66,17 +114,18 @@ export class EntretienFormStep5Component {
 
   addFormationContinue() {
     const formationGroup = this.fb.group({
-      column1: [''],
-      column2: [''],
-      column3: [''],
-      column4: [''],
+      libelleFormation: [''],
+      finalite: [''],
+      initiativeDemande: [''],
+      duree: [''],
     });
     this.formationsContinue.push(formationGroup);
     this.updateColumns();
   }
 
   removeFormation(index: number) {
-    if (index !== 0) {
+    if (this.formationsContinue.length > 1) {
+      // if (index !== 0) {
       this.formationsContinue.removeAt(index);
     }
   }
@@ -90,8 +139,8 @@ export class EntretienFormStep5Component {
 
   addActionFormationDemandees() {
     const formationGroup = this.fb.group({
-      column1: [''],
-      column2: [''],
+      libelleFormation: [''],
+      motivationResponsable: [''],
     });
     this.actionsFormationsDemandees.push(formationGroup);
     this.updateColumnsFormationsDemandees();
@@ -105,7 +154,8 @@ export class EntretienFormStep5Component {
   }
 
   removeFormationsDemandees(index: number) {
-    if (index !== 0) {
+    if (this.actionsFormationsDemandees.length > 1) {
+      // if (index !== 0) {
       this.actionsFormationsDemandees.removeAt(index);
     }
   }

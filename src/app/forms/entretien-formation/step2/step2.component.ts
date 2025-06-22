@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {
@@ -32,51 +32,73 @@ import { TableModule } from 'primeng/table';
   templateUrl: './step2.component.html',
   styleUrl: './step2.component.scss',
 })
-export class EntretienFormStep2Component implements OnInit {
+export class EntretienFormStep2Component {
   form: FormGroup;
-  columns: string[] = []; // Pour stocker les noms des colonnes dynamiques
+  columnsFormationsDispensees: string[] = []; // Pour stocker les noms des colonnes dynamiques
   columnLabels: { [key: string]: string } = {
-    column1: 'Année',
-    column2: 'Discipline de formation',
-    column3: 'Titre de la (des) formation(s) animée(s) et organisme(s) concerné(s)',
+    annee: 'Année',
+    disciplineFormation: 'Discipline de formation',
+    titreFormation: 'Titre de la (des) formation(s) animée(s) et organisme(s) concerné(s)',
   };
 
   constructor(
     private formProvider: FormProvider,
     private fb: FormBuilder,
+    private cdref: ChangeDetectorRef,
   ) {
     this.form = this.formProvider.getForm();
-
-    this.form.addControl('formationsDispensees', this.fb.array([]));
-    this.addFormation();
   }
 
-  ngOnInit() {}
+  public initializeFormWithData(formations: any[]) {
+    if (!this.form.contains('formationsDispensees')) {
+      this.form.addControl('formationsDispensees', this.fb.array([]));
+    }
+
+    const array = this.formationsDispensees;
+    array.clear();
+
+    if (formations?.length) {
+      formations.forEach(formation => {
+        array.push(
+          this.fb.group({
+            annee: [formation.annee],
+            disciplineFormation: [formation.disciplineFormation],
+            titreFormation: [formation.titreFormation],
+          }),
+        );
+      });
+    } else {
+      this.addFormationsDispensees(); // Ajouter une ligne vide
+    }
+
+    this.updateColumnsFormationsDispensees();
+    this.cdref.detectChanges();
+  }
 
   get registerFormControl() {
     return this.form.controls;
   }
 
-  addFormation() {
+  addFormationsDispensees() {
     const formationGroup = this.fb.group({
-      column1: [''],
-      column2: [''],
-      column3: [''],
+      annee: [''],
+      disciplineFormation: [''],
+      titreFormation: [''],
     });
     this.formationsDispensees.push(formationGroup);
-    this.updateColumns();
+    this.updateColumnsFormationsDispensees();
   }
 
   removeFormation(index: number) {
-    if (index !== 0) {
+    if (this.formationsDispensees.length > 1) {
       this.formationsDispensees.removeAt(index);
     }
   }
 
-  updateColumns() {
+  updateColumnsFormationsDispensees() {
     if (this.formationsDispensees.length > 0) {
       const sampleGroup = this.formationsDispensees.at(0) as FormGroup;
-      this.columns = Object.keys(sampleGroup.controls);
+      this.columnsFormationsDispensees = Object.keys(sampleGroup.controls);
     }
   }
 

@@ -54,4 +54,7 @@ export const DEFAULT_ENTRETIEN = {
   competenceTransferTuteur: '',
   competenceTransferPresident: '',
   competenceTransferMembre: '',
+
+  formationsPreparationConcours: '',
+  formationsConstruireProjet: '',
 };

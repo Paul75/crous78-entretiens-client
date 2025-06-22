@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {
@@ -35,35 +35,59 @@ export class EntretienFormStep4Component {
 
   columns: string[] = []; // Pour stocker les noms des colonnes dynamiques
   columnLabels: { [key: string]: string } = {
-    column1: 'Action de formation',
-    column2: "Nombre d'heures",
+    action: 'Action de formation',
+    nombresHeures: "Nombre d'heures",
   };
 
   constructor(
     private formProvider: FormProvider,
     private fb: FormBuilder,
+    private cdref: ChangeDetectorRef,
   ) {
     this.form = this.formProvider.getForm();
+  }
 
-    this.form.addControl('formationsDemandees', this.fb.array([]));
-    this.addFormationRealisees();
+  initializeFormWithData(formations: any[]) {
+    if (!this.form.contains('formationsDemandees')) {
+      this.form.addControl('formationsDemandees', this.fb.array([]));
+    }
+
+    const array = this.formationsDemandees;
+    array.clear();
+
+    if (formations?.length) {
+      formations.forEach(formation => {
+        array.push(
+          this.fb.group({
+            action: [formation.action],
+            nombresHeures: [formation.nombresHeures],
+          }),
+        );
+      });
+    } else {
+      this.addLine(); // Ajouter une ligne vide
+    }
+
+    this.updateColumns();
+    this.cdref.detectChanges();
   }
 
   get registerFormControl() {
     return this.form.controls;
   }
 
-  addFormationRealisees() {
+  addLine() {
     const formationGroup = this.fb.group({
-      column1: [''],
-      column2: [''],
+      action: [''],
+      nombresHeures: [''],
     });
     this.formationsDemandees.push(formationGroup);
     this.updateColumns();
   }
 
-  removeFormation(index: number) {
-    if (index !== 0) {
+  removeLine(index: number) {
+    if (this.formationsDemandees.length > 1) {
+      // if (index !== 0) {
       this.formationsDemandees.removeAt(index);
     }
   }

@@ -27,11 +27,16 @@ export class EntretienProStep6Component {
 
   constructor(private formProvider: FormProvider) {
     this.form = this.formProvider.getForm();
+
+    /*// 5
+    this.form.addControl(
+      'objectifsActivites',
+      new FormControl(DEFAULT_ENTRETIEN.objectifsActivites),
+    );
+    this.form.addControl('demarcheEnvisagee', new FormControl(DEFAULT_ENTRETIEN.demarcheEnvisagee));*/
   }
 
   get registerFormControl() {
     return this.form.controls;
   }
-
-  ngOnInit() {}
 }

@@ -56,11 +56,16 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
     this.statutDemandeEnum.VALIDE,
   ];
 
-  private readonly displayBtnRdv = [this.statutDemandeEnum.PREPARE];
+  private readonly displayBtnRdv = [this.statutDemandeEnum.RDV, this.statutDemandeEnum.PREPARE];
 
   private readonly displayBtnSign = [this.statutDemandeEnum.CHEFSIGN];
 
   private readonly displayBtnPlus = [this.statutDemandeEnum.RDV, this.statutDemandeEnum.ENCOURS];
+
+  private readonly displayBtnEnPreparation = [
+    this.statutDemandeEnum.PREPARE,
+    this.statutDemandeEnum.RDV,
+  ];
 
   @ViewChild('op') op!: Popover;
 
@@ -101,21 +106,27 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
     });
   }
 
-  newEntretien() {
-    this.entretienService
-      .changeStatut(this.statutDemandeEnum.ENCOURS, this.entretien.id)
-      .subscribe({
-        next: _ => {
-          if (this.entretien.type == this.typeEntretienEnum.ENTRETIEN_FORMATION) {
-            this.router.navigate(['/forms/entretien/form/', this.entretien.id]);
-          } else {
-            this.router.navigate(['/forms/entretien/pro/', this.entretien.id]);
-          }
-        },
-        error: err => {
-          console.error('Error saving date:', err);
-        },
-      });
+  newEntretien(changeStatus: boolean) {
+    const navigateToEntretien = () => {
+      const path =
+        this.entretien.type === this.typeEntretienEnum.ENTRETIEN_FORMATION
+          ? '/forms/entretien/form/'
+          : '/forms/entretien/pro/';
+      this.router.navigate([path, this.entretien.id]);
+    };
+
+    if (!changeStatus) {
+      navigateToEntretien();
+    } else {
+      this.entretienService
+        .changeStatut(this.statutDemandeEnum.ENCOURS, this.entretien.id)
+        .subscribe({
+          next: navigateToEntretien,
+          error: err => {
+            console.error('Error saving date:', err);
+          },
+        });
+    }
   }
 
   getPDF() {
@@ -139,6 +150,10 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
   }
 
   // Gestion affichage des boutons
+
+  get displayButtonsEnPreparation(): boolean {
+    return this.displayBtnEnPreparation.includes(this.entretien.statut);
+  }
 
   get displayButtonsViewDownload(): boolean {
     return this.displayBtnViewDownload.includes(this.entretien.statut);
