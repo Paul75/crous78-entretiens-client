@@ -317,7 +317,6 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
       this.entretienForm.value.statut = StatutDemandeEnum.AGENTSIGN;
     }
 
-    // also recommended
     this.entretienService
       .updateEntretien(this.entretienForm.value.id, this.entretienForm.value)
       .subscribe({

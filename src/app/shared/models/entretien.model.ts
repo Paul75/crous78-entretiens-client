@@ -2,6 +2,11 @@ import { TypeEntretien } from '@shared/enums/type-entretien.enum';
 import { AppreciationGeneraleEnum } from '@shared/enums/appreciation_generale.enum';
 import { Personne } from './personne.model';
 import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
+import { FormationsDispensees } from './formations-dispensees.model';
+import { FormationsRealisees } from './formations-realisees.model';
+import { FormationsDemandees } from './formations-demandees.model';
+import { FormationsContinue } from './formations-continue.model';
+import { ActionsFormationsDemandees } from './ actions-formations-demandees.model';
 
 export interface Entretien {
   id: number;
@@ -43,9 +48,12 @@ export interface Entretien {
   dateTransmission?: string;
   commentairesEvaluation?: string;
   commentairesEvaluationPerspectives?: string;
-  formationsDispensees: any[];
-  formationsRealisees: any[];
-  formationsDemandees: any[];
-  formationsContinue: any[];
-  actionsFormationsDemandees: any[];
+  dateEntretienPrecedent: string | null;
+  soldeCPF: number;
+  utiliserCPF: number;
+  formationsDispensees: FormationsDispensees[];
+  formationsRealisees: FormationsRealisees[];
+  formationsDemandees: FormationsDemandees[];
+  formationsContinue: FormationsContinue[];
+  actionsFormationsDemandees: ActionsFormationsDemandees[];
 }

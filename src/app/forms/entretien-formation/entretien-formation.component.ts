@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  inject,
   OnChanges,
   QueryList,
   SimpleChanges,
@@ -21,7 +22,7 @@ import {
 import { DEFAULT_ENTRETIEN } from '@shared/constants/entretien.constants';
 import { EntretienService } from '@shared/services/entretiens/entretien.service';
 import { DateService } from '@shared/services/date.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormProvider } from '@forms/providers/form.provider';
 import { Entretien } from '@shared/models/entretien.model';
 import { ButtonModule } from 'primeng/button';
@@ -64,6 +65,8 @@ export class EntretienFormationComponent extends FormProvider implements OnChang
   angular = environment.application.angular;
   bootstrap = environment.application.bootstrap;
   fontawesome = environment.application.fontawesome;
+
+  private router = inject(Router);
 
   today = new Date();
   minDate: NgbDateStruct = {
@@ -358,7 +361,27 @@ export class EntretienFormationComponent extends FormProvider implements OnChang
       this.entretienForm.value.statut = StatutDemandeEnum.AGENTSIGN;
     }
 
+    this.entretienForm.value.dateEntretien = this.dateService.transformDateEn(
+      this.entretienForm.value.dateEntretien,
+    );
+    this.entretienForm.value.dateAffectation = this.dateService.transformDateEn(
+      this.entretienForm.value.dateAffectation,
+    );
+    this.entretienForm.value.dateEntretienPrecedent = this.dateService.transformDateEn(
+      this.entretienForm.value.dateEntretienPrecedent,
+    );
+
     console.log(this.entretienForm.value);
+
+    this.entretienService
+      .updateEntretien(this.entretienForm.value.id, this.entretienForm.value)
+      .subscribe({
+        next: (v: any) => {
+          this.router.navigate(['/forms/confirmation']);
+        },
+        error: e => console.error(e),
+        complete: () => console.info('complete'),
+      });
   }
 
   get boutonLabelSubmit(): string {
@@ -375,6 +398,9 @@ export class EntretienFormationComponent extends FormProvider implements OnChang
         ),
         dateAffectation: this.dateService.formatDateOrEmpty(
           this.entretienForm.get('dateAffectation')?.value,
+        ),
+        dateEntretienPrecedent: this.dateService.formatDateOrEmpty(
+          this.entretienForm.get('dateEntretienPrecedent')?.value,
         ),
         personne: {
           dateNaissance: this.dateService.formatDateOrEmpty(

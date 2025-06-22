@@ -1,5 +1,6 @@
 import { AppreciationGeneraleEnum } from '../enums/appreciation_generale.enum';
 import { TypeEntretien } from '../enums/type-entretien.enum';
+import { DEFAUT_FORMATIONS_DISPENSEES } from './formations-dispensees.constants';
 import { DEFAULT_PERSONNE } from './personne.constants';
 
 export const URL_ENTRETIENS = 'entretien';
@@ -54,6 +55,8 @@ export const DEFAULT_ENTRETIEN = {
   competenceTransferTuteur: '',
   competenceTransferPresident: '',
   competenceTransferMembre: '',
+
+  formationsDispensees: DEFAUT_FORMATIONS_DISPENSEES,
 
   formationsPreparationConcours: '',
   formationsConstruireProjet: '',
