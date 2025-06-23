@@ -526,23 +526,15 @@
       <tr>
         <th>Solde des droits CPF au 1<sup>er</sup> janvier :</th>
         <td>
-          <input
-            type="text"
+          <p-inputnumber
             name="soldeCPF"
+            inputId="soldeCPF"
             formControlName="soldeCPF"
-            [class.is-invalid]="
+            [class.ng-invalid.ng-dirty]="
               form.get('soldeCPF')?.invalid &&
               (form.get('soldeCPF')?.touched || form.get('soldeCPF')?.dirty)
             "
           />
-          <div
-            class="invalid-feedback"
-            *ngIf="form.get('soldeCPF')?.invalid && form.get('soldeCPF')?.touched"
-          >
-            <ng-container *ngIf="form.get('soldeCPF')?.errors?.['required']">
-              Le solde CPF est requis
-            </ng-container>
-          </div>
         </td>
       </tr>
       <tr>

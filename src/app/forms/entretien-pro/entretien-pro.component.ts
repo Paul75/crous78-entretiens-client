@@ -310,10 +310,10 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
 
     // console.log('Your form data:', this.entretienForm.value);
 
-    if (
-      this.entretienForm.value.statut !== StatutDemandeEnum.PREPARE &&
-      this.entretienForm.value.statut !== StatutDemandeEnum.RDV
-    ) {
+    const statutsExclus = [StatutDemandeEnum.PREPARE, StatutDemandeEnum.RDV];
+
+    const statut = this.entretienForm.value.statut;
+    if (!statutsExclus.includes(statut)) {
       this.entretienForm.value.statut = StatutDemandeEnum.AGENTSIGN;
     }
 
@@ -329,10 +329,9 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
   }
 
   get boutonLabelSubmit(): string {
-    return this.entretienForm.value.statut === StatutDemandeEnum.PREPARE ||
-      this.entretienForm.value.statut === StatutDemandeEnum.RDV
-      ? 'ENREGISTRER'
-      : 'VALIDER';
+    const statut = this.entretienForm.value.statut;
+    const statutsEnregistrer = [StatutDemandeEnum.PREPARE, StatutDemandeEnum.RDV];
+    return statutsEnregistrer.includes(statut) ? 'ENREGISTRER' : 'VALIDER';
   }
 
   private transformDatesToDisplay(): void {

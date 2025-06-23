@@ -25,9 +25,17 @@
         <tr [formGroup]="formation">
           <td *ngFor="let column of columns">
             <input
+              *ngIf="columnTypes[column] === 'string'"
               type="text"
               class="form-control"
               pInputText
+              [formControlName]="column"
+              [placeholder]=""
+            />
+            <p-inputnumber
+              *ngIf="columnTypes[column] === 'number'"
+              name="column"
+              inputId="column"
               [formControlName]="column"
               [placeholder]=""
             />
@@ -83,9 +91,17 @@
         <tr [formGroup]="formation">
           <td *ngFor="let column of columnsFormationsDemandees">
             <input
+              *ngIf="columnTypes[column] === 'string'"
               type="text"
               class="form-control"
               pInputText
+              [formControlName]="column"
+              [placeholder]=""
+            />
+            <p-inputnumber
+              *ngIf="columnTypes[column] === 'number'"
+              name="column"
+              inputId="column"
               [formControlName]="column"
               [placeholder]=""
             />

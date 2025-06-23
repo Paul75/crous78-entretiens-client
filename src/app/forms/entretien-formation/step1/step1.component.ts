@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { FormProvider } from '../../providers/form.provider';
 import { DatePickerModule } from 'primeng/datepicker';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   selector: 'app-entretien-form-step1',
@@ -20,6 +21,7 @@ import { DatePickerModule } from 'primeng/datepicker';
     ButtonModule,
     StepperModule,
     DatePickerModule,
+    InputNumberModule,
     ToggleButtonModule,
   ],
   templateUrl: './step1.component.html',

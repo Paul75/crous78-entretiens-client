@@ -252,6 +252,8 @@ export class EntretienFormationComponent extends FormProvider implements OnChang
     this.entretienForm.patchValue(entretien);
     this.transformDatesToDisplay();
 
+    console.log(this.entretienForm.value);
+
     // Initialiser immédiatement si l'enfant est déjà disponible
     const childComponents = [
       {
@@ -357,9 +359,9 @@ export class EntretienFormationComponent extends FormProvider implements OnChang
       return;
     }
 
-    if (this.entretienForm.value.statut != StatutDemandeEnum.PREPARE) {
+    /*if (this.entretienForm.value.statut != StatutDemandeEnum.PREPARE) {
       this.entretienForm.value.statut = StatutDemandeEnum.AGENTSIGN;
-    }
+    }*/
 
     this.entretienForm.value.dateEntretien = this.dateService.transformDateEn(
       this.entretienForm.value.dateEntretien,
@@ -371,7 +373,16 @@ export class EntretienFormationComponent extends FormProvider implements OnChang
       this.entretienForm.value.dateEntretienPrecedent,
     );
 
-    console.log(this.entretienForm.value);
+    const statutsExclus = [StatutDemandeEnum.PREPARE, StatutDemandeEnum.RDV];
+
+    const statut = this.entretienForm.value.statut;
+    if (!statutsExclus.includes(statut)) {
+      this.entretienForm.value.statut = StatutDemandeEnum.AGENTSIGN;
+    }
+
+    // throw new Error('');
+
+    // console.log(this.entretienForm.value);
 
     this.entretienService
       .updateEntretien(this.entretienForm.value.id, this.entretienForm.value)
@@ -385,9 +396,9 @@ export class EntretienFormationComponent extends FormProvider implements OnChang
   }
 
   get boutonLabelSubmit(): string {
-    return this.entretienForm.value.statut === StatutDemandeEnum.PREPARE
-      ? 'ENREGISTRER'
-      : 'VALIDER';
+    const statut = this.entretienForm.value.statut;
+    const statutsEnregistrer = [StatutDemandeEnum.PREPARE, StatutDemandeEnum.RDV];
+    return statutsEnregistrer.includes(statut) ? 'ENREGISTRER' : 'VALIDER';
   }
 
   private transformDatesToDisplay(): void {

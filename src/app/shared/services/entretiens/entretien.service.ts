@@ -51,15 +51,16 @@ export class EntretienService {
       );
   }
 
-  newEntretien(newLine: any): Observable<any> {
+  newEntretien(newLine: Entretien): Observable<Entretien> {
     return this.http
-      .post(this.backendUrl + '/entretien', newLine)
-      .pipe(catchError(this.handleError('newEntretien', DEFAULT_ENTRETIEN)));
+      .post<Entretien>(this.backendUrl + '/entretien', newLine)
+      .pipe(catchError(this.handleError<Entretien>('newEntretien')))
+      .pipe(tap((e: Entretien) => this.pdfService.resetCache(e.id)));
   }
 
   updateEntretien(entretienId: number, datas: Partial<Entretien>): Observable<Entretien> {
     return this.http
-      .put<Entretien>(`${this.backendUrl}/entretien/${entretienId}`, datas)
+      .put<Entretien>(`${this.backendUrl}/entretien/${entretienId}/form`, datas)
       .pipe(catchError(this.handleError<Entretien>('updateEntretien')))
       .pipe(tap(() => this.pdfService.resetCache(entretienId)));
   }

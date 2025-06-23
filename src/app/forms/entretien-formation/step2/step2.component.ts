@@ -15,6 +15,7 @@ import { ButtonModule } from 'primeng/button';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { FormProvider } from '../../providers/form.provider';
 import { TableModule } from 'primeng/table';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   selector: 'app-entretien-form-step2',
@@ -25,6 +26,7 @@ import { TableModule } from 'primeng/table';
     NgbDatepickerModule,
     ButtonModule,
     StepperModule,
+    InputNumberModule,
     TableModule,
     ToggleButtonModule,
   ],
@@ -35,6 +37,12 @@ import { TableModule } from 'primeng/table';
 export class EntretienFormStep2Component {
   form: FormGroup;
   columnsFormationsDispensees: string[] = []; // Pour stocker les noms des colonnes dynamiques
+  columnTypes: { [key: string]: string } = {
+    annee: 'number',
+    disciplineFormation: 'string',
+    titreFormation: 'string',
+  };
+
   columnLabels: { [key: string]: string } = {
     annee: 'Année',
     disciplineFormation: 'Discipline de formation',

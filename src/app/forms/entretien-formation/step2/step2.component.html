@@ -319,41 +319,16 @@
                   <div class="mb-3 row row-cols-2">
                     <div class="col-6">préciser le nombre d'agents :</div>
                     <div class="col">
-                      <input
-                        type="text"
-                        class="form-control"
-                        id=""
+                      <p-inputnumber
+                        name="cpeNbAgent"
+                        inputId="cpeNbAgent"
                         formControlName="cpeNbAgent"
-                        [class.is-invalid]="
+                        [class.ng-invalid.ng-dirty]="
                           registerFormControl['cpeNbAgent'].invalid &&
                           (registerFormControl['cpeNbAgent'].touched ||
                             registerFormControl['cpeNbAgent'].dirty)
                         "
                       />
-
-                      <div
-                        class="invalid-feedback"
-                        *ngIf="
-                          registerFormControl['cpeNbAgent'].invalid &&
-                          registerFormControl['cpeNbAgent'].touched
-                        "
-                      >
-                        <ng-container
-                          *ngIf="registerFormControl['cpeNbAgent']?.errors?.['required']"
-                        >
-                          La nombre_agents est requise
-                        </ng-container>
-                        <ng-container
-                          *ngIf="registerFormControl['cpeNbAgent']?.errors?.['minlength']"
-                        >
-                          Minimum 2 charactères
-                        </ng-container>
-                        <ng-container
-                          *ngIf="registerFormControl['cpeNbAgent']?.errors?.['maxlength']"
-                        >
-                          Maximum de charactères atteint
-                        </ng-container>
-                      </div>
                     </div>
                   </div>
                   <div class="mb-3 row row-cols-2">
@@ -361,12 +336,12 @@
                     <div class="col">
                       <div class="mb-3 row row-cols-2">
                         <div class="col-5">
-                          <input
-                            type="text"
-                            class="form-control"
-                            id=""
+                          <p-inputnumber
+                            name="cpeCategA"
+                            inputId="cpeCategA"
                             formControlName="cpeCategA"
-                            [class.is-invalid]="
+                            fluid
+                            [class.ng-invalid.ng-dirty]="
                               registerFormControl['cpeCategA'].invalid &&
                               (registerFormControl['cpeCategA'].touched ||
                                 registerFormControl['cpeCategA'].dirty)
@@ -374,39 +349,20 @@
                           />
                         </div>
                         <div class="col">A</div>
-
-                        <div
-                          class="invalid-feedback"
-                          *ngIf="
-                            registerFormControl['cpeCategA'].invalid &&
-                            registerFormControl['cpeCategA'].touched
-                          "
-                        >
-                          <ng-container
-                            *ngIf="registerFormControl['cpeCategA']?.errors?.['required']"
-                          >
-                            La a est requise
-                          </ng-container>
-                          <ng-container
-                            *ngIf="registerFormControl['cpeCategA']?.errors?.['minlength']"
-                          >
-                            Minimum 2 charactères
-                          </ng-container>
-                          <ng-container
-                            *ngIf="registerFormControl['cpeCategA']?.errors?.['maxlength']"
-                          >
-                            Maximum de charactères atteint
-                          </ng-container>
-                        </div>
                       </div>
 
                       <div class="mb-3 row row-cols-2">
                         <div class="col-5">
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="cpeCategB"
+                          <p-inputnumber
+                            name="cpeCategB"
+                            inputId="cpeCategB"
                             formControlName="cpeCategB"
+                            fluid
+                            [class.ng-invalid.ng-dirty]="
+                              registerFormControl['cpeCategB'].invalid &&
+                              (registerFormControl['cpeCategB'].touched ||
+                                registerFormControl['cpeCategB'].dirty)
+                            "
                           />
                         </div>
                         <div class="col">B</div>
@@ -414,11 +370,16 @@
 
                       <div class="mb-3 row row-cols-2">
                         <div class="col-5">
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="cpeCategC"
+                          <p-inputnumber
+                            name="cpeCategC"
+                            inputId="cpeCategC"
                             formControlName="cpeCategC"
+                            fluid
+                            [class.ng-invalid.ng-dirty]="
+                              registerFormControl['cpeCategC'].invalid &&
+                              (registerFormControl['cpeCategC'].touched ||
+                                registerFormControl['cpeCategC'].dirty)
+                            "
                           />
                         </div>
                         <div class="col">C</div>
@@ -635,9 +596,15 @@
         <tr [formGroup]="formation">
           <td *ngFor="let column of columnsFormationsDispensees">
             <input
+              *ngIf="columnTypes[column] === 'string'"
               type="text"
               class="form-control"
               pInputText
+              [formControlName]="column"
+              [placeholder]=""
+            />
+            <p-inputnumber
+              *ngIf="columnTypes[column] === 'number'"
               [formControlName]="column"
               [placeholder]=""
             />

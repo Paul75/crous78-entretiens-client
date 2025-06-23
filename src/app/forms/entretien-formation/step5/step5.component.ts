@@ -14,6 +14,7 @@ import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { FormProvider } from '../../providers/form.provider';
 import { TableModule } from 'primeng/table';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   selector: 'app-entretien-form-step5',
@@ -24,6 +25,7 @@ import { TableModule } from 'primeng/table';
     NgbDatepickerModule,
     ButtonModule,
     StepperModule,
+    InputNumberModule,
     TableModule,
   ],
   providers: [],
@@ -34,6 +36,15 @@ export class EntretienFormStep5Component {
   form: FormGroup;
 
   columns: string[] = []; // Pour stocker les noms des colonnes dynamiques
+
+  columnTypes: { [key: string]: string } = {
+    libelleFormation: 'string',
+    finalite: 'string',
+    initiativeDemande: 'string',
+    duree: 'number',
+    motivationResponsable: 'string',
+  };
+
   columnLabels: { [key: string]: string } = {
     libelleFormation: 'Libellé de la formation',
     finalite: 'Finalité (action de formation de type 1, 2 ou 3)',
