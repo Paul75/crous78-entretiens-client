@@ -33,7 +33,7 @@ export class HomeItemComponent implements OnInit {
   entretien!: Entretien;
 
   // Signature
-  @ViewChild('agentCommentaireDialog') agentCommentaireDialog!: SignatureComponent;
+  @ViewChild('agentCommentaireDialog') agentCommentaireDialog!: AgentCommentaireComponent;
   // Signature
   @ViewChild('signatureDialog') signatureDialog!: SignatureComponent;
 
@@ -143,6 +143,7 @@ export class HomeItemComponent implements OnInit {
       this.entretien.id,
       sendName,
       TypesSignatureEnum.PERSONNE,
+      this.entretien.type,
     );
   }
 

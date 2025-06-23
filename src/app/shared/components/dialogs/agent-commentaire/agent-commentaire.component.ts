@@ -12,6 +12,7 @@ import { Entretien } from '@shared/models/entretien.model';
 import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
 import { CommunicationCommentairesService } from '@shared/services/communications/communication-commentaires.service';
 import { MessageService } from 'primeng/api';
+import { TypeEntretien } from '@shared/enums/type-entretien.enum';
 
 @Component({
   selector: 'app-agent-commentaire',
@@ -33,6 +34,7 @@ export class AgentCommentaireComponent implements AfterViewInit {
 
   commentairesEvaluation: string = '';
   commentairesEvaluationPerspectives: string = '';
+  typeEntretien: TypeEntretien = TypeEntretien.ENTRETIEN_PRO;
 
   private entretienService = inject(EntretienService);
   private communicationCommentairesService = inject(CommunicationCommentairesService);
@@ -45,11 +47,21 @@ export class AgentCommentaireComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {}
 
-  openDialog(entretienId: number, text: string, typesSignature: TypesSignatureEnum) {
+  get getEntretienPro() {
+    return this.typeEntretien === TypeEntretien.ENTRETIEN_PRO;
+  }
+
+  openDialog(
+    entretienId: number,
+    text: string,
+    typesSignature: TypesSignatureEnum,
+    type: TypeEntretien,
+  ) {
     this.entretienId = entretienId;
     this.agent = text;
     this.typeSignature = typesSignature;
     this.display = true;
+    this.typeEntretien = type;
   }
 
   closeSignature() {
