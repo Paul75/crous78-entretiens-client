@@ -65,6 +65,16 @@ export class EntretienService {
       .pipe(tap(() => this.pdfService.resetCache(entretienId)));
   }
 
+  updateCommentaireEntretien(
+    entretienId: number,
+    datas: Partial<Entretien>,
+  ): Observable<Entretien> {
+    return this.http
+      .put<Entretien>(`${this.backendUrl}/entretien/${entretienId}`, datas)
+      .pipe(catchError(this.handleError<Entretien>('updateCommentaireEntretien')))
+      .pipe(tap(() => this.pdfService.resetCache(entretienId)));
+  }
+
   changeStatut(statut: StatutDemandeEnum, entretienId: number): Observable<any> {
     return this.http
       .put(`${this.backendUrl}/entretien/${entretienId}`, {

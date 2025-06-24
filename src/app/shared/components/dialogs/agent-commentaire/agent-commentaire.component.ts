@@ -91,7 +91,7 @@ export class AgentCommentaireComponent implements AfterViewInit {
       statut: StatutDemandeEnum.AGENTCOMMENTAIRE,
     };
 
-    this.entretienService.updateEntretien(this.entretienId, datas).subscribe({
+    this.entretienService.updateCommentaireEntretien(this.entretienId, datas).subscribe({
       next: _ => {
         // Envoi du Mail
         this.communicationEmailsService.envoyerMailCommentaires(this.entretienId).subscribe({
