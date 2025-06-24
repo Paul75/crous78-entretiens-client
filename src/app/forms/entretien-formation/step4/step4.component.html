@@ -24,21 +24,17 @@
       <ng-template pTemplate="body" let-formation let-rowIndex="rowIndex">
         <tr [formGroup]="formation">
           <td *ngFor="let column of columns">
-            <input
-              *ngIf="columnTypes[column] === 'string'"
-              type="text"
-              class="form-control"
-              pInputText
-              [formControlName]="column"
-              [placeholder]=""
-            />
-            <p-inputnumber
-              *ngIf="columnTypes[column] === 'number'"
-              name="column"
-              inputId="column"
-              [formControlName]="column"
-              [placeholder]=""
-            />
+            <ng-container *ngIf="columnTypes[column] === 'string'; else isNumber">
+              <input type="text" class="form-control" pInputText [formControlName]="column" />
+            </ng-container>
+            <ng-template #isNumber>
+              <ng-container *ngIf="columnTypes[column] === 'number'; else unknownType">
+                <p-inputnumber [formControlName]="column" inputId="column"></p-inputnumber>
+              </ng-container>
+            </ng-template>
+            <ng-template #unknownType>
+              <span>Type inconnu</span>
+            </ng-template>
           </td>
           <td>
             <p-button
