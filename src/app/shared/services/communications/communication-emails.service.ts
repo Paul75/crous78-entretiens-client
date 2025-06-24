@@ -16,6 +16,12 @@ export class CommunicationEmailsService {
       .pipe(catchError(this.handleError('envoyerMailChangeDateRdv')));
   }
 
+  envoyerMailCommentaires(entretienId: number): Observable<any> {
+    return this.http
+      .post(`${this.backendUrl}/emails/entretien/commentaires/${entretienId}`, {})
+      .pipe(catchError(this.handleError('envoyerMailCommentaires')));
+  }
+
   envoyerMailSignature(entretienId: number): Observable<any> {
     return this.http
       .post(`${this.backendUrl}/emails/entretien/signature/${entretienId}`, {})

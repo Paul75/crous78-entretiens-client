@@ -13,6 +13,7 @@ import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
 import { CommunicationCommentairesService } from '@shared/services/communications/communication-commentaires.service';
 import { MessageService } from 'primeng/api';
 import { TypeEntretien } from '@shared/enums/type-entretien.enum';
+import { CommunicationEmailsService } from '@shared/services/communications/communication-emails.service';
 
 @Component({
   selector: 'app-agent-commentaire',
@@ -36,8 +37,10 @@ export class AgentCommentaireComponent implements AfterViewInit {
   commentairesEvaluationPerspectives: string = '';
   typeEntretien: TypeEntretien = TypeEntretien.ENTRETIEN_PRO;
 
+  private messageService = inject(MessageService);
   private entretienService = inject(EntretienService);
   private communicationCommentairesService = inject(CommunicationCommentairesService);
+  private communicationEmailsService = inject(CommunicationEmailsService);
 
   entretienId!: number;
   agent = '';
@@ -89,7 +92,22 @@ export class AgentCommentaireComponent implements AfterViewInit {
     };
 
     this.entretienService.updateEntretien(this.entretienId, datas).subscribe({
-      next: _ => {},
+      next: _ => {
+        // Envoi du Mail
+        this.communicationEmailsService.envoyerMailCommentaires(this.entretienId).subscribe({
+          next: _ => {
+            // console.log('Mail envoyé avec succès !');
+          },
+          error: err => {
+            console.error("Erreur lors de l'envoi du mail :", err);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Erreur',
+              detail: "Erreur lors de l'envoi du mail",
+            });
+          },
+        });
+      },
       error: e => console.error('saveCommentaire error: ', e),
       complete: () => {
         this.display = false;
