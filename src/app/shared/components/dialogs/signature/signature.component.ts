@@ -9,7 +9,7 @@ import { MessageService } from 'primeng/api';
 import { TypesSignatureEnum } from '@shared/enums/types.signature.enum';
 import { EntretienService } from '@shared/services/entretiens/entretien.service';
 import { CommunicationSignatureService } from '@shared/services/communications/communication-signature.service';
-import { TypeEntretien } from '@shared/enums/type-entretien.enum';
+import { CommunicationEmailsService } from '@shared/services/communications/communication-emails.service';
 
 @Component({
   selector: 'app-signature-pad',
@@ -27,6 +27,7 @@ export class SignatureComponent implements AfterViewInit {
   private messageService = inject(MessageService);
   private entretienService = inject(EntretienService);
   private communicationSignatureService = inject(CommunicationSignatureService);
+  private communicationEmailsService = inject(CommunicationEmailsService);
 
   entretienId!: number;
   agent = '';
@@ -87,6 +88,20 @@ export class SignatureComponent implements AfterViewInit {
         .saveSignature(this.entretienId, signatureData, this.typeSignature)
         .subscribe({
           next: _ => {
+            // Envoi du Mail
+            this.communicationEmailsService.envoyerMailSignature(this.entretienId).subscribe({
+              next: _ => {
+                // console.log('Mail envoyé avec succès !');
+              },
+              error: err => {
+                console.error("Erreur lors de l'envoi du mail :", err);
+                this.messageService.add({
+                  severity: 'error',
+                  summary: 'Erreur',
+                  detail: "Erreur lors de l'envoi du mail",
+                });
+              },
+            });
             this.signaturePad.clear();
           },
           error: e => console.error('getEntretienByMatricule error: ', e),

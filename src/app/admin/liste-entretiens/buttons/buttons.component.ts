@@ -16,6 +16,9 @@ import { EntretienService } from '@shared/services/entretiens/entretien.service'
 import { SignatureComponent } from '@shared/components/dialogs/signature/signature.component';
 import { TypesSignatureEnum } from '@shared/enums/types.signature.enum';
 import { CommunicationSignatureService } from '@shared/services/communications/communication-signature.service';
+import { CommunicationEmailsService } from '@shared/services/communications/communication-emails.service';
+import { firstValueFrom } from 'rxjs';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-admin-liste-entretiens-buttons',
@@ -45,9 +48,16 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
 
   private router = inject(Router);
 
+  private messageService = inject(MessageService);
+
   private entretienService = inject(EntretienService);
   private communicationService = inject(CommunicationPdfService);
   private communicationSignatureService = inject(CommunicationSignatureService);
+  private communicationEmailsService = inject(CommunicationEmailsService);
+
+  /**
+   * Configuration des BOUTONS
+   */
 
   private readonly displayBtnViewDownload = [
     this.statutDemandeEnum.ENCOURS,
@@ -66,6 +76,10 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
     this.statutDemandeEnum.PREPARE,
     this.statutDemandeEnum.RDV,
   ];
+
+  /**
+   * FIN Configuration des BOUTONS
+   */
 
   @ViewChild('op') op!: Popover;
 
@@ -94,6 +108,21 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
 
         this.entretien.dateEntretien = this.dateValue;
         this.entretien.statut = StatutDemandeEnum.RDV;
+
+        // Envoi du Mail
+        this.communicationEmailsService.envoyerMailChangeDateRdv(this.entretien.id).subscribe({
+          next: _ => {
+            // console.log('Mail envoyé avec succès !');
+          },
+          error: err => {
+            console.error("Erreur lors de l'envoi du mail :", err);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Erreur',
+              detail: "Erreur lors de l'envoi du mail",
+            });
+          },
+        });
 
         this.op.hide();
       },
