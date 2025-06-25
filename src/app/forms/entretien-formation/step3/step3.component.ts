@@ -15,6 +15,7 @@ import { ButtonModule } from 'primeng/button';
 import { FormProvider } from '../../providers/form.provider';
 import { TableModule } from 'primeng/table';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { AnneeScolaire } from '@shared/utils/annee-scolaire.util';
 
 @Component({
   selector: 'app-entretien-form-step3',
@@ -49,12 +50,19 @@ export class EntretienFormStep3Component {
     nombresHeuresSuiviEffectif: 'Nombre d’heures suivi effectif (si absence partielle)',
   };
 
+  formationsRealiseesPeriode = '';
+
   constructor(
     private formProvider: FormProvider,
     private fb: FormBuilder,
     private cdref: ChangeDetectorRef,
   ) {
     this.form = this.formProvider.getForm();
+
+    this.formationsRealiseesPeriode =
+      new AnneeScolaire(new Date().getFullYear()).getAnneeScolaireActuelle().startFormat() +
+      ' - ' +
+      new AnneeScolaire(new Date().getFullYear()).getAnneeScolaireActuelle().endFormat();
   }
 
   initializeFormWithData(formations: any[]) {
