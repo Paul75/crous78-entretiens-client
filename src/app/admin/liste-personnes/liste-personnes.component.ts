@@ -19,6 +19,8 @@ import { FormsModule } from '@angular/forms';
 import { DEFAULT_PERSONNE } from '@shared/constants/personne.constants';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { Credentials, CredentialsService } from '@core/authentication/credentials.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-liste-personnes',
@@ -47,12 +49,22 @@ export class AdminListePersonnesComponent implements OnInit {
   private personnesService = inject(PersonnesService);
 
   private messageService = inject(MessageService);
+  private credentialsService = inject(CredentialsService);
+  private _credentials!: Credentials | null;
 
   loading: boolean = true;
 
   personnes!: Personne[];
 
   clonedPersonnes: { [s: string]: Personne } = {};
+
+  constructor(public router: Router) {
+    this._credentials = this.credentialsService.credentials;
+
+    if (!this.isAdmin) {
+      this.router.navigate(['/home']);
+    }
+  }
 
   ngOnInit(): void {
     this.loading = true;
@@ -72,6 +84,14 @@ export class AdminListePersonnesComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  get isAdmin(): boolean {
+    return this.credentialsService.isAdmin;
+  }
+
+  get isRH(): boolean {
+    return this.credentialsService.isRH;
   }
 
   displayIsActif(isActif: boolean): string {

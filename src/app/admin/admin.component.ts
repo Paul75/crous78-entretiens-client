@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Entretien } from '@shared/models/entretien.model';
 import { environment } from '@environments/environment';
 import { SeoService } from '@core/services/seo/seo.service';
 import { Personne } from '@shared/models/personne.model';
 import { Router, RouterModule } from '@angular/router';
+import { Credentials, CredentialsService } from '@core/authentication/credentials.service';
 
 export class PersonneImpl {
   id!: string;
@@ -26,10 +27,14 @@ export class AdminComponent {
   appInfo = environment.appInfo;
   applicationName = environment.application.name;
 
+  private credentialsService = inject(CredentialsService);
+  private _credentials!: Credentials | null;
+
   constructor(
     private seoService: SeoService,
     public router: Router,
   ) {
+    this._credentials = this.credentialsService.credentials;
     const content =
       'This application was developed with ' +
       this.angular +
@@ -41,6 +46,18 @@ export class AdminComponent {
 
     this.seoService.setMetaDescription(content);
     this.seoService.setMetaTitle(title);
+
+    if (!this.isAdmin) {
+      this.router.navigate(['/home']);
+    }
+  }
+
+  get isAdmin(): boolean {
+    return this.credentialsService.isAdmin;
+  }
+
+  get isRH(): boolean {
+    return this.credentialsService.isRH;
   }
 
   isActive(instruction: any, path: string): boolean {

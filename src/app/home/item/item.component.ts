@@ -13,6 +13,7 @@ import { TypesSignatureEnum } from '@shared/enums/types.signature.enum';
 import { CommunicationSignatureService } from '@shared/services/communications/communication-signature.service';
 import { AgentCommentaireComponent } from '@shared/components/dialogs/agent-commentaire/agent-commentaire.component';
 import { CommunicationCommentairesService } from '@shared/services/communications/communication-commentaires.service';
+import { CredentialsService } from '@core/authentication/credentials.service';
 
 @Component({
   selector: 'app-home-item',
@@ -46,6 +47,7 @@ export class HomeItemComponent implements OnInit {
   private communicationPdfService = inject(CommunicationPdfService);
   private communicationSignatureService = inject(CommunicationSignatureService);
   private communicationCommentairesService = inject(CommunicationCommentairesService);
+  private credentialsService = inject(CredentialsService);
 
   private readonly displayBtnViewDownload = [
     this.statutDemandeEnum.ENCOURS,
@@ -94,11 +96,14 @@ export class HomeItemComponent implements OnInit {
   }
 
   getAgentName(): string {
-    if (!this.entretien) {
+    if (!this.credentialsService.isAuthenticated) {
       return '';
     }
-
-    return this.entretien.personne.prenom + ' ' + this.entretien.personne.nom;
+    return (
+      this.credentialsService.credentials?.personne.prenom +
+      ' ' +
+      this.credentialsService.credentials?.personne.nom
+    );
   }
 
   getDateEntretien(): string {

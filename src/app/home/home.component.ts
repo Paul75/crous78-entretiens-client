@@ -6,10 +6,7 @@ import { environment } from '@environments/environment';
 import { SeoService } from '@core/services/seo/seo.service';
 import { HomeItemComponent } from './item/item.component';
 import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
-import { AuthState } from '@core/types/auth.types';
-import { Observable } from 'rxjs';
-import { ShibbolethService } from '@core/services/shibboleth.service';
-import { FoalTSService } from '@core/services/foalts.service';
+import { Credentials, CredentialsService } from '@core/authentication/credentials.service';
 
 export enum ColorDemande {
   PREPARE = '#ffd966',
@@ -25,30 +22,32 @@ export enum ColorDemande {
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
-  authState$: Observable<AuthState>;
-
   name = environment.application.name;
   angular = environment.application.angular;
   bootstrap = environment.application.bootstrap;
   fontawesome = environment.application.fontawesome;
 
+  private _credentials!: Credentials | null;
+
   currentYear = new Date();
   anneeScolaire = new AnneeScolaire(this.currentYear.getFullYear());
 
-  currentEntretien = '1';
-  currentUser = '1043637';
+  private _currentUser!: number;
 
   statutDemande = StatutDemandeEnum;
 
   private entretienService = inject(EntretienService);
-  // typeEntretienEnum = TypeEntretien;
   listeEntretien!: EntretienImpl;
 
   constructor(
-    private shibbolethService: ShibbolethService,
-    private foaltsService: FoalTSService,
     private seoService: SeoService,
+    private credentialsService: CredentialsService,
   ) {
+    this._credentials = this.credentialsService.credentials;
+
+    // console.log(this._credentials);
+    this._currentUser = this._credentials?.personne.matricule ?? 0;
+
     const content =
       'This application was developed with ' +
       this.angular +
@@ -60,29 +59,14 @@ export class HomeComponent implements OnInit {
 
     this.seoService.setMetaDescription(content);
     this.seoService.setMetaTitle(title);
-
-    this.authState$ = this.shibbolethService.authState$;
   }
 
   ngOnInit(): void {
-    this.refreshFoalTSProfile();
-
-    this.entretienService.getEntretienByMatricule(this.currentUser).subscribe({
+    this.entretienService.getEntretienByMatricule(this._currentUser.toString()).subscribe({
       next: (data: EntretienImpl) => {
         this.listeEntretien = data;
       },
       error: e => console.error('getEntretienByMatricule error: ', e),
-    });
-  }
-
-  private refreshFoalTSProfile(): void {
-    this.foaltsService.getUserProfile().subscribe({
-      next: response => {
-        console.log('FoalTS profile loaded:', response);
-      },
-      error: error => {
-        console.error('Failed to load FoalTS profile:', error);
-      },
     });
   }
 }

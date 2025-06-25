@@ -20,8 +20,6 @@ import {
   NgbProgressbarModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import { CustomDatepickerAdapter } from '@shared/services/datepicker/datepicker.adapter';
-import { AuthenticationService } from '@core/authentication/authentication.service';
-import { AuthenticationGuard } from '@core/authentication/authentication.guard';
 import { CustomDateParserFormatter } from '@shared/services/datepicker/datepicker.formatter';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
@@ -30,12 +28,13 @@ import { LoaderInterceptor } from '@shared/interceptor/loader.interceptor';
 
 registerLocaleData(localeFr, 'fr-FR', localeFRExtra);
 import { fr } from 'primelocale/fr.json';
-import { authInterceptor } from '@shared/interceptor/auth.interceptor';
+import { AuthenticationGuard } from '@core/authentication/authentication.guard';
+import { AuthenticationService } from '@core/authentication/authentication.service';
+import { DatasCoreService } from '@core/services/datas-core.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(withFetch()),
-    provideHttpClient(withInterceptors([authInterceptor])),
 
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(
@@ -62,10 +61,11 @@ export const appConfig: ApplicationConfig = {
     { provide: NgbDateAdapter, useClass: CustomDatepickerAdapter },
     { provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter },
     { provide: NgbProgressbarModule },
-    // AuthenticationService,
-    // AuthenticationGuard,
     // { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
+    AuthenticationGuard,
+    DatasCoreService,
+    AuthenticationService,
   ],
 };
 // Détection automatique de l'environnement

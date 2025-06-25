@@ -16,12 +16,13 @@ import { SeoService } from '@core/services/seo/seo.service';
 import { CommunicationPdfService } from '@shared/services/communications/communication-pdf.service';
 import { TypeEntretien } from '@shared/enums/type-entretien.enum';
 import { Personne } from '@shared/models/personne.model';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AdminListeEntretiensHeaderComponent } from './header/header.component';
 import { AdminListeEntretiensContentComponent } from './content/content.component';
 import { PersonnelService } from '@admin/services/personnel.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { Credentials, CredentialsService } from '@core/authentication/credentials.service';
 
 export class PersonneImpl {
   id!: string;
@@ -58,11 +59,15 @@ export class ListeEntretiensComponent implements OnInit {
   bootstrap = environment.application.bootstrap;
   fontawesome = environment.application.fontawesome;
 
+  private credentialsService = inject(CredentialsService);
+  private _credentials!: Credentials | null;
   private messageService = inject(MessageService);
   private communicationService = inject(CommunicationPdfService);
   private personnelService = inject(PersonnelService);
   private pdfService = inject(PdfService);
   public showViewer = false;
+
+  private _currentUser!: number;
 
   loading: boolean = true;
 
@@ -75,7 +80,13 @@ export class ListeEntretiensComponent implements OnInit {
   visibleDetailPdf = false;
   src!: Blob;
 
-  constructor(private seoService: SeoService) {
+  constructor(
+    private seoService: SeoService,
+    public router: Router,
+  ) {
+    this._credentials = this.credentialsService.credentials;
+    this._currentUser = this._credentials?.personne.matricule ?? 0;
+
     const content =
       'This application was developed with ' +
       this.angular +
@@ -95,17 +106,29 @@ export class ListeEntretiensComponent implements OnInit {
     this.communicationService.actionView$.subscribe(action => {
       this.viewPDF(action);
     });
+
+    if (!this.isAdmin) {
+      this.router.navigate(['/home']);
+    }
   }
 
   ngOnInit(): void {
     this.refreshDatas();
   }
 
+  get isAdmin(): boolean {
+    return this.credentialsService.isAdmin;
+  }
+
+  get isRH(): boolean {
+    return this.credentialsService.isRH;
+  }
+
   refreshDatas() {
     // const employeNumber = 1043637;
-    const employeNumber = 1072989;
+    //const employeNumber = 1072989;
 
-    this.personnelService.getPersonnels(employeNumber).subscribe({
+    this.personnelService.getPersonnels(this._currentUser).subscribe({
       next: (entretiens: PersonneImpl[]) => {
         this.liste = entretiens;
       },

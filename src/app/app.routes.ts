@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
-import { AuthGuard } from '@core/authentication/guards/auth.guard';
+import { AuthenticationGuard } from '@core/authentication/authentication.guard';
 
 export const routes: Routes = [
   {
@@ -10,26 +10,21 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'login',
-    loadComponent: () => import('./login/login.component').then(m => m.LoginComponent),
-  },
-  {
     path: 'home',
     component: HomeComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthenticationGuard],
   },
   {
     path: 'forms',
     data: { page: 'form' },
     loadChildren: () => import(`./forms/forms.routes`).then(routes => routes.routes),
-    canActivate: [AuthGuard],
+    canActivate: [AuthenticationGuard],
   },
   {
     path: 'admin',
-    //canActivate: [AuthenticationGuard],
+    canActivate: [AuthenticationGuard],
     data: { page: 'admin' },
     loadChildren: () => import(`./admin/admin.routes`).then(routes => routes.routes),
-    canActivate: [AuthGuard],
   },
 
   { path: '**', component: NotFoundComponent },

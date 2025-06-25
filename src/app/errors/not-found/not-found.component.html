@@ -1,3 +1,19 @@
-<div class="container">
-  <p>not-found works!</p>
+<div class="page-wrap d-flex flex-row align-items-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-12 text-center">
+        <h2>{{ errorMessage }}</h2>
+        <br />
+        <!--
+        <div class="mb-4 lead">
+          Pour pouvoir accéder à l'application, veuillez contacter
+          <a href="mailto:glpi@crous-versailles.fr">glpi@crous-versailles.fr</a>
+        </div>-->
+      </div>
+
+      <div class="row">
+        <button (click)="returnLogin()" class="btn btn-info btn-lg">Accueil</button>
+      </div>
+    </div>
+  </div>
 </div>

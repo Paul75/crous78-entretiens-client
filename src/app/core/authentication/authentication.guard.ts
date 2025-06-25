@@ -1,37 +1,34 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-
+import { Router, CanActivate } from '@angular/router';
 import { AuthenticationService } from './authentication.service';
-import { catchError, map, Observable, of } from 'rxjs';
+import { CredentialsService } from './credentials.service';
+import { Observable } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
+    private credentialsService: CredentialsService,
   ) {}
 
-  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    const page = next.data['page']; // Assurez-vous de définir 'page' dans vos données de route
-    /*if (this.authenticationService.isAuthenticated()) {
-      return true;
-    }
+  canActivate(): Observable<boolean> {
+    console.log('Begin canActivate()');
 
-    this.router.navigate(['/unauthorized']); // Redirigez vers une page non autorisée
-    return false;*/
-
-    return this.authenticationService.checkAccess(page).pipe(
-      map(hasAccess => {
-        if (hasAccess) {
+    return this.authenticationService.setAuth().pipe(
+      map(() => {
+        if (this.credentialsService.isAuthenticated()) {
+          console.log('connected');
           return true;
-        } else {
-          this.router.navigate(['/unauthorized']); // Redirigez vers une page non autorisée
-          return false;
         }
+        this.router.navigate(['/messages/401'], { replaceUrl: true });
+        return false;
       }),
-      catchError(() => {
-        this.router.navigate(['/unauthorized']);
-        return of(false);
+      catchError((err: any) => {
+        console.debug('Not authenticated, redirecting...');
+        this.router.navigate(['/messages/401'], { replaceUrl: true });
+        return [false];
       }),
     );
   }
