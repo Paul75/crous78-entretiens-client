@@ -24,7 +24,7 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
-    canActivate: [AuthenticationGuard, AdminGuard, RhGuard],
+    canActivate: [AuthenticationGuard],
     data: { page: 'admin' },
     loadChildren: () => import(`./admin/admin.routes`).then(routes => routes.routes),
   },

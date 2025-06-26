@@ -17,7 +17,7 @@ export const routes: Routes = [
       },
       {
         path: 'entretiens',
-        canActivate: [AuthenticationGuard, AdminGuard, RhGuard],
+        canActivate: [AuthenticationGuard],
         loadComponent: () =>
           import(`./liste-entretiens/liste-entretiens.component`).then(
             mod => mod.ListeEntretiensComponent,
@@ -25,7 +25,7 @@ export const routes: Routes = [
       },
       {
         path: 'personnes',
-        canActivate: [AuthenticationGuard, AdminGuard, RhGuard],
+        canActivate: [AuthenticationGuard],
         loadComponent: () =>
           import(`./liste-personnes/liste-personnes.component`).then(
             mod => mod.AdminListePersonnesComponent,
