@@ -12,19 +12,19 @@ export class CommunicationEmailsService {
 
   envoyerMailChangeDateRdv(entretienId: number): Observable<any> {
     return this.http
-      .post(`${this.backendUrl}/emails/entretien/rdv/${entretienId}`, {})
+      .post(`${this.backendUrl}/emails/entretien/${entretienId}/rdv`, {})
       .pipe(catchError(this.handleError('envoyerMailChangeDateRdv')));
   }
 
   envoyerMailCommentaires(entretienId: number): Observable<any> {
     return this.http
-      .post(`${this.backendUrl}/emails/entretien/commentaires/${entretienId}`, {})
+      .post(`${this.backendUrl}/emails/entretien/${entretienId}/commentaires`, {})
       .pipe(catchError(this.handleError('envoyerMailCommentaires')));
   }
 
   envoyerMailSignature(entretienId: number): Observable<any> {
     return this.http
-      .post(`${this.backendUrl}/emails/entretien/signature/${entretienId}`, {})
+      .post(`${this.backendUrl}/emails/entretien/${entretienId}/signature`, {})
       .pipe(catchError(this.handleError('envoyerMailSignature')));
   }
 
