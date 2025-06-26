@@ -31,8 +31,8 @@
           <a class="nav-link" routerLink="/admin" routerLinkActive="active-link">Administration</a>
         </li>
       </ul>
-      <form class="d-flex">
-        <ul class="navbar-nav me-auto">
+      <form class="d-flex align-items-end align-items-center">
+        <ul class="navbar-nav">
           <li class="nav-item" *ngIf="isConnected">
             <a
               href="javascript:void(0);"
@@ -41,8 +41,15 @@
             ></a>
           </li>
         </ul>
-        <button (click)="onLogout()" class="btn btn-sm nga-btn-navbar me-2 btnLogout">
-          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button (click)="onLogout()" class="btn btn-sm nga-btn-navbar">
+          <svg
+            class="me-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+          >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
