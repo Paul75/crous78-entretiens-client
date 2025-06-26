@@ -8,13 +8,6 @@ import { HomeItemComponent } from './item/item.component';
 import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
 import { Credentials, CredentialsService } from '@core/authentication/credentials.service';
 
-export enum ColorDemande {
-  PREPARE = '#ffd966',
-  RDV = '#e69138',
-  ENCOURS = '#6aa84f',
-  VALIDE = '#3d85c6',
-}
-
 @Component({
   selector: 'app-home',
   imports: [CommonModule, HomeItemComponent],

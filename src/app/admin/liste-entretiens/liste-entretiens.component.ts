@@ -106,10 +106,6 @@ export class ListeEntretiensComponent implements OnInit {
     this.communicationService.actionView$.subscribe(action => {
       this.viewPDF(action);
     });
-
-    if (!this.isAdmin) {
-      this.router.navigate(['/home']);
-    }
   }
 
   ngOnInit(): void {

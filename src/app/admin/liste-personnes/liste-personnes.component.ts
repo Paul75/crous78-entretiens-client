@@ -60,10 +60,6 @@ export class AdminListePersonnesComponent implements OnInit {
 
   constructor(public router: Router) {
     this._credentials = this.credentialsService.credentials;
-
-    if (!this.isAdmin) {
-      this.router.navigate(['/home']);
-    }
   }
 
   ngOnInit(): void {

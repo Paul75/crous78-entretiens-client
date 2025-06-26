@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Entretien } from '@shared/models/entretien.model';
 import { environment } from '@environments/environment';
@@ -6,6 +6,7 @@ import { SeoService } from '@core/services/seo/seo.service';
 import { Personne } from '@shared/models/personne.model';
 import { Router, RouterModule } from '@angular/router';
 import { Credentials, CredentialsService } from '@core/authentication/credentials.service';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 export class PersonneImpl {
   id!: string;
@@ -16,7 +17,7 @@ export class PersonneImpl {
 
 @Component({
   selector: 'app-admin',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ProgressSpinnerModule],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss',
 })
@@ -46,10 +47,6 @@ export class AdminComponent {
 
     this.seoService.setMetaDescription(content);
     this.seoService.setMetaTitle(title);
-
-    if (!this.isAdmin) {
-      this.router.navigate(['/home']);
-    }
   }
 
   get isAdmin(): boolean {

@@ -28,9 +28,11 @@ import { LoaderInterceptor } from '@shared/interceptor/loader.interceptor';
 
 registerLocaleData(localeFr, 'fr-FR', localeFRExtra);
 import { fr } from 'primelocale/fr.json';
-import { AuthenticationGuard } from '@core/authentication/authentication.guard';
 import { AuthenticationService } from '@core/authentication/authentication.service';
 import { DatasCoreService } from '@core/services/datas-core.service';
+import { AuthenticationGuard } from '@core/authentication/guards/authentication.guard';
+import { AdminGuard } from '@core/authentication/guards/admin.guard';
+import { RhGuard } from '@core/authentication/guards/rh.guard';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -64,6 +66,8 @@ export const appConfig: ApplicationConfig = {
     // { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
     AuthenticationGuard,
+    AdminGuard,
+    RhGuard,
     DatasCoreService,
     AuthenticationService,
   ],
