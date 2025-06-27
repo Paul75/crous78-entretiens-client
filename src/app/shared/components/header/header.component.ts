@@ -33,6 +33,9 @@ export class HeaderComponent {
   get isAdmin(): boolean {
     return this.credentialsService.isAdmin;
   }
+  get isRH(): boolean {
+    return this.credentialsService.isRH;
+  }
 
   get email(): string | null {
     const credentials = this.credentialsService.credentials;

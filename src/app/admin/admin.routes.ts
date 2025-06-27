@@ -4,6 +4,7 @@ import { AdminComponent } from './admin.component';
 import { AuthenticationGuard } from '@core/authentication/guards/authentication.guard';
 import { AdminGuard } from '@core/authentication/guards/admin.guard';
 import { RhGuard } from '@core/authentication/guards/rh.guard';
+import { AdminOrRhGuard } from '@core/authentication/guards/admin-or-rh.guard';
 
 export const routes: Routes = [
   {
@@ -17,7 +18,7 @@ export const routes: Routes = [
       },
       {
         path: 'entretiens',
-        canActivate: [AuthenticationGuard],
+        canActivate: [AuthenticationGuard, AdminOrRhGuard],
         loadComponent: () =>
           import(`./liste-entretiens/liste-entretiens.component`).then(
             mod => mod.ListeEntretiensComponent,
@@ -25,7 +26,7 @@ export const routes: Routes = [
       },
       {
         path: 'personnes',
-        canActivate: [AuthenticationGuard],
+        canActivate: [AuthenticationGuard, AdminOrRhGuard],
         loadComponent: () =>
           import(`./liste-personnes/liste-personnes.component`).then(
             mod => mod.AdminListePersonnesComponent,

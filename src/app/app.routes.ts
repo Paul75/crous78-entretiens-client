@@ -2,8 +2,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { AuthenticationGuard } from '@core/authentication/guards/authentication.guard';
-import { AdminGuard } from '@core/authentication/guards/admin.guard';
-import { RhGuard } from '@core/authentication/guards/rh.guard';
+import { AdminOrRhGuard } from '@core/authentication/guards/admin-or-rh.guard';
 
 export const routes: Routes = [
   {
@@ -24,7 +23,7 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
-    canActivate: [AuthenticationGuard],
+    canActivate: [AuthenticationGuard, AdminOrRhGuard],
     data: { page: 'admin' },
     loadChildren: () => import(`./admin/admin.routes`).then(routes => routes.routes),
   },

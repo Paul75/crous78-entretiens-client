@@ -33,6 +33,7 @@ import { DatasCoreService } from '@core/services/datas-core.service';
 import { AuthenticationGuard } from '@core/authentication/guards/authentication.guard';
 import { AdminGuard } from '@core/authentication/guards/admin.guard';
 import { RhGuard } from '@core/authentication/guards/rh.guard';
+import { AdminOrRhGuard } from '@core/authentication/guards/admin-or-rh.guard';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -68,6 +69,7 @@ export const appConfig: ApplicationConfig = {
     AuthenticationGuard,
     AdminGuard,
     RhGuard,
+    AdminOrRhGuard,
     DatasCoreService,
     AuthenticationService,
   ],

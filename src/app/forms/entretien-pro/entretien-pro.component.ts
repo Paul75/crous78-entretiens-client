@@ -93,7 +93,6 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
     // Etape 1 (step1)
     personne: new FormBuilder().group({
       id: [DEFAULT_ENTRETIEN.personne.id],
-      matricule: [DEFAULT_ENTRETIEN.personne.matricule],
       nomUsage: [DEFAULT_ENTRETIEN.personne.nomUsage],
       nom: [DEFAULT_ENTRETIEN.personne.nom],
       prenom: [DEFAULT_ENTRETIEN.personne.prenom],
@@ -108,7 +107,6 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
 
     superieur: new FormBuilder().group({
       id: [DEFAULT_ENTRETIEN.superieur.id],
-      matricule: [DEFAULT_ENTRETIEN.superieur.matricule],
       nomUsage: [DEFAULT_ENTRETIEN.superieur.nomUsage],
       nom: [DEFAULT_ENTRETIEN.superieur.nom],
       prenom: [DEFAULT_ENTRETIEN.superieur.prenom],
