@@ -60,9 +60,9 @@ export class EntretienFormStep3Component {
     this.form = this.formProvider.getForm();
 
     this.formationsRealiseesPeriode =
-      new AnneeScolaire(new Date().getFullYear()).getAnneeScolaireActuelle().startFormat() +
+      AnneeScolaire.getAnneeScolaireActuelle().startFormat() +
       ' - ' +
-      new AnneeScolaire(new Date().getFullYear()).getAnneeScolaireActuelle().endFormat();
+      AnneeScolaire.getAnneeScolaireActuelle().endFormat();
   }
 
   initializeFormWithData(formations: any[]) {

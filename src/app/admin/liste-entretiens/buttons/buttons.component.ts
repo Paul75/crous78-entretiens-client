@@ -19,6 +19,7 @@ import { CommunicationSignatureService } from '@shared/services/communications/c
 import { CommunicationEmailsService } from '@shared/services/communications/communication-emails.service';
 import { firstValueFrom } from 'rxjs';
 import { MessageService } from 'primeng/api';
+import { AnneeScolaire } from '@shared/utils/annee-scolaire.util';
 
 @Component({
   selector: 'app-admin-liste-entretiens-buttons',
@@ -179,9 +180,16 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
   }
 
   // Gestion affichage des boutons
+  get isInCurrentSchoolYear(): boolean {
+    return AnneeScolaire.getAnneeScolaireActuelle().isInCurrentSchoolYear(
+      this.entretien.dateEntretien,
+    );
+  }
 
   get displayButtonsEnPreparation(): boolean {
-    return this.displayBtnEnPreparation.includes(this.entretien.statut);
+    return (
+      this.displayBtnEnPreparation.includes(this.entretien.statut) && this.isInCurrentSchoolYear
+    );
   }
 
   get displayButtonsViewDownload(): boolean {
@@ -189,14 +197,14 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
   }
 
   get displayButtonRdv(): boolean {
-    return this.displayBtnRdv.includes(this.entretien.statut);
+    return this.displayBtnRdv.includes(this.entretien.statut) && this.isInCurrentSchoolYear;
   }
 
   get displayButtonSign(): boolean {
-    return this.displayBtnSign.includes(this.entretien.statut);
+    return this.displayBtnSign.includes(this.entretien.statut) && this.isInCurrentSchoolYear;
   }
 
   get displayButtonPlus(): boolean {
-    return this.displayBtnPlus.includes(this.entretien.statut);
+    return this.displayBtnPlus.includes(this.entretien.statut) && this.isInCurrentSchoolYear;
   }
 }

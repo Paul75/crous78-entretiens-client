@@ -32,11 +32,18 @@ export class AnneeScolaire {
   }
 
   // Méthode statique pour obtenir l'année scolaire actuelle
-  getAnneeScolaireActuelle(date = new Date()) {
-    const mois = date.getMonth() + 1; // Janvier = 0
+  static getAnneeScolaireActuelle(date = new Date()) {
+    const mois = date.getMonth() + 1;
     const annee = date.getFullYear();
-    // Supposons que l'année scolaire commence en septembre
     const anneeDebut = mois >= 9 ? annee : annee - 1;
     return new AnneeScolaire(anneeDebut);
+  }
+
+  isInCurrentSchoolYear(date: string): boolean {
+    const dd = new Date(date);
+    const start = new Date(this.anneeDebut, 8, 1); // 1er septembre anneeDebut
+    const end = new Date(this.anneeFin, 7, 31, 23, 59, 59); // 31 août anneeFin
+
+    return dd >= start && dd <= end;
   }
 }
