@@ -57,7 +57,7 @@ export class EntretienFormStep2Component {
     this.form = this.formProvider.getForm();
   }
 
-  public initializeFormWithData(formations: any[]) {
+  public initializeFormWithData(formations?: any[]) {
     if (!this.form.contains('formationsDispensees')) {
       this.form.addControl('formationsDispensees', this.fb.array([]));
     }

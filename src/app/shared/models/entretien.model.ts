@@ -48,12 +48,12 @@ export interface Entretien {
   dateTransmission?: string;
   commentairesEvaluation?: string;
   commentairesEvaluationPerspectives?: string;
-  dateEntretienPrecedent: string | null;
+  dateEntretienPrecedent?: string | null;
   soldeCPF: number;
   utiliserCPF: number;
-  formationsDispensees: FormationsDispensees[];
-  formationsRealisees: FormationsRealisees[];
-  formationsDemandees: FormationsDemandees[];
-  formationsContinue: FormationsContinue[];
-  actionsFormationsDemandees: ActionsFormationsDemandees[];
+  formationsDispensees?: FormationsDispensees[];
+  formationsRealisees?: FormationsRealisees[];
+  formationsDemandees?: FormationsDemandees[];
+  formationsContinue?: FormationsContinue[];
+  actionsFormationsDemandees?: ActionsFormationsDemandees[];
 }

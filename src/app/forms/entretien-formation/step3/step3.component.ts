@@ -65,7 +65,7 @@ export class EntretienFormStep3Component {
       AnneeScolaire.getAnneeScolaireActuelle().endFormat();
   }
 
-  initializeFormWithData(formations: any[]) {
+  initializeFormWithData(formations?: any[]) {
     if (!this.form.contains('formationsRealisees')) {
       this.form.addControl('formationsRealisees', this.fb.array([]));
     }

@@ -7,7 +7,7 @@ export interface Personne {
   dateNaissance: string;
   corpsGrade: string;
   echelon: string;
-  datePromotion: string | null;
+  datePromotion?: string | null;
   fonction: string;
   structure: string;
   adresse: string;

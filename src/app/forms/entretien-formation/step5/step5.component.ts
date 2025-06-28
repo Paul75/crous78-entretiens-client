@@ -67,7 +67,7 @@ export class EntretienFormStep5Component {
     this.form = this.formProvider.getForm();
   }
 
-  initializeFormContinueWithData(formations: any[]) {
+  initializeFormContinueWithData(formations?: any[]) {
     if (!this.form.contains('formationsContinue')) {
       this.form.addControl('formationsContinue', this.fb.array([]));
     }
@@ -94,7 +94,7 @@ export class EntretienFormStep5Component {
     this.cdref.detectChanges();
   }
 
-  initializeActionFormDemandeesWithData(formations: any[]) {
+  initializeActionFormDemandeesWithData(formations?: any[]) {
     if (!this.form.contains('actionsFormationsDemandees')) {
       this.form.addControl('actionsFormationsDemandees', this.fb.array([]));
     }
