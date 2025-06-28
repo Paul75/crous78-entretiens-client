@@ -28,8 +28,23 @@
               <input type="text" class="form-control" pInputText [formControlName]="column" />
             </ng-container>
             <ng-template #isNumber>
-              <ng-container *ngIf="columnTypes[column] === 'number'; else unknownType">
-                <p-inputnumber [formControlName]="column" inputId="column"></p-inputnumber>
+              <ng-container *ngIf="columnTypes[column] === 'number'; else isSelect">
+                <p-inputnumber
+                  [formControlName]="column"
+                  inputId="column"
+                  [useGrouping]="false"
+                ></p-inputnumber>
+              </ng-container>
+            </ng-template>
+            <ng-template #isSelect>
+              <ng-container *ngIf="columnTypes[column] === 'select'; else unknownType">
+                <p-select
+                  appendTo="body"
+                  [formControlName]="column"
+                  [options]="initiative"
+                  placeholder=""
+                  class="w-full"
+                />
               </ng-container>
             </ng-template>
             <ng-template #unknownType>
@@ -91,7 +106,11 @@
             </ng-container>
             <ng-template #isNumber>
               <ng-container *ngIf="columnTypes[column] === 'number'; else unknownType">
-                <p-inputnumber [formControlName]="column" inputId="column"></p-inputnumber>
+                <p-inputnumber
+                  [formControlName]="column"
+                  inputId="column"
+                  [useGrouping]="false"
+                ></p-inputnumber>
               </ng-container>
             </ng-template>
             <ng-template #unknownType>

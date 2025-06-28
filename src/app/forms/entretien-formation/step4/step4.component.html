@@ -29,7 +29,11 @@
             </ng-container>
             <ng-template #isNumber>
               <ng-container *ngIf="columnTypes[column] === 'number'; else unknownType">
-                <p-inputnumber [formControlName]="column" inputId="column"></p-inputnumber>
+                <p-inputnumber
+                  [formControlName]="column"
+                  inputId="column"
+                  [useGrouping]="false"
+                ></p-inputnumber>
               </ng-container>
             </ng-template>
             <ng-template #unknownType>

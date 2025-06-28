@@ -15,6 +15,7 @@ import { ButtonModule } from 'primeng/button';
 import { FormProvider } from '../../providers/form.provider';
 import { TableModule } from 'primeng/table';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'app-entretien-form-step5',
@@ -27,6 +28,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
     StepperModule,
     InputNumberModule,
     TableModule,
+    SelectModule,
   ],
   providers: [],
   templateUrl: './step5.component.html',
@@ -35,12 +37,14 @@ import { InputNumberModule } from 'primeng/inputnumber';
 export class EntretienFormStep5Component {
   form: FormGroup;
 
+  initiative = ['agent', 'administration'];
+
   columns: string[] = []; // Pour stocker les noms des colonnes dynamiques
 
   columnTypes: { [key: string]: string } = {
     libelleFormation: 'string',
     finalite: 'string',
-    initiativeDemande: 'string',
+    initiativeDemande: 'select',
     duree: 'number',
     motivationResponsable: 'string',
   };
