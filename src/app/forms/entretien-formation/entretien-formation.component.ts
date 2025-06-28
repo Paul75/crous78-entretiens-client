@@ -177,8 +177,6 @@ export class EntretienFormationComponent extends FormProvider implements OnChang
     private route: ActivatedRoute,
   ) {
     super();
-
-    //this.initialize_formationsDispensees();
   }
 
   ngAfterViewInit(): void {
@@ -359,19 +357,7 @@ export class EntretienFormationComponent extends FormProvider implements OnChang
       return;
     }
 
-    /*if (this.entretienForm.value.statut != StatutDemandeEnum.PREPARE) {
-      this.entretienForm.value.statut = StatutDemandeEnum.AGENTSIGN;
-    }*/
-
-    this.entretienForm.value.dateEntretien = this.dateService.transformDateEn(
-      this.entretienForm.value.dateEntretien,
-    );
-    this.entretienForm.value.dateAffectation = this.dateService.transformDateEn(
-      this.entretienForm.value.dateAffectation,
-    );
-    this.entretienForm.value.dateEntretienPrecedent = this.dateService.transformDateEn(
-      this.entretienForm.value.dateEntretienPrecedent,
-    );
+    this.transformDatesToBdd();
 
     const statutsExclus = [StatutDemandeEnum.PREPARE, StatutDemandeEnum.RDV];
 
@@ -379,10 +365,6 @@ export class EntretienFormationComponent extends FormProvider implements OnChang
     if (!statutsExclus.includes(statut)) {
       this.entretienForm.value.statut = StatutDemandeEnum.AGENTSIGN;
     }
-
-    // throw new Error('');
-
-    // console.log(this.entretienForm.value);
 
     this.entretienService
       .updateEntretien(this.entretienForm.value.id, this.entretienForm.value)
@@ -399,6 +381,38 @@ export class EntretienFormationComponent extends FormProvider implements OnChang
     const statut = this.entretienForm.value.statut;
     const statutsEnregistrer = [StatutDemandeEnum.PREPARE, StatutDemandeEnum.RDV];
     return statutsEnregistrer.includes(statut) ? 'ENREGISTRER' : 'VALIDER';
+  }
+
+  private transformDatesToBdd(): void {
+    try {
+      this.entretienForm.patchValue({
+        dateEntretien: this.dateService.transformDateEn(
+          this.entretienForm.get('dateEntretien')?.value,
+        ),
+        dateEntretienPrecedent: this.dateService.transformDateEn(
+          this.entretienForm.get('dateEntretienPrecedent')?.value,
+        ),
+        dateAffectation: this.dateService.transformDateEn(
+          this.entretienForm.get('dateAffectation')?.value,
+        ),
+        personne: {
+          dateNaissance: this.dateService.transformDateEn(
+            this.entretienForm.get('personne.dateNaissance')?.value,
+          ),
+          datePromotion: this.dateService.transformDateEn(
+            this.entretienForm.get('personne.datePromotion')?.value,
+          ),
+        },
+        superieur: {
+          dateNaissance: this.dateService.transformDateEn(
+            this.entretienForm.get('superieur.dateNaissance')?.value,
+          ),
+          datePromotion: this.dateService.transformDateEn(
+            this.entretienForm.get('superieur.datePromotion')?.value,
+          ),
+        },
+      });
+    } catch (error) {}
   }
 
   private transformDatesToDisplay(): void {

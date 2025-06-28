@@ -15,7 +15,6 @@ import {
   FormBuilder,
   FormGroup,
   Validators,
-  FormArray,
 } from '@angular/forms';
 
 import { NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
@@ -55,7 +54,6 @@ import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
     EntretienProStep5Component,
     EntretienProStep6Component,
     EntretienProStep7Component,
-    /*, RouterLink*/
   ],
   providers: [{ provide: FormProvider, useExisting: EntretienProComponent }],
   templateUrl: './entretien-pro.component.html',
@@ -63,9 +61,6 @@ import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class EntretienProComponent extends FormProvider implements OnChanges, AfterViewInit {
-  // id: string | undefined;
-  // entretien!: Entretien;
-
   name = environment.application.name;
   angular = environment.application.angular;
   bootstrap = environment.application.bootstrap;
@@ -179,8 +174,6 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
     private route: ActivatedRoute,
   ) {
     super();
-
-    // this.initialize_formationsDispensees();
   }
 
   ngAfterViewInit(): void {
@@ -198,7 +191,6 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
   }
 
   getEntretienById() {
-    // console.log('getEntretienById');
     this.route.params.subscribe(params => {
       const id = params['id'];
       if (id !== undefined) {
@@ -210,19 +202,13 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
   getEntretien(id: number): void {
     if (id !== 0) {
       this.entretienService.getEntretien(id).subscribe((item: Entretien) => {
-        // 1. Patch initial du formulaire parent
         this.setForm(item);
-
-        // 2. Envoi des données AUX SOUS-FORMULAIRES via le service
-        // this.dataService.updateEntretien(item);
-
         this.cdref.detectChanges();
       });
     }
   }
 
   getForm(): FormGroup {
-    // console.log(this.entretienForm.value);
     return this.entretienForm;
   }
 
@@ -299,14 +285,7 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
       return;
     }
 
-    this.entretienForm.value.dateEntretien = this.dateService.transformDateEn(
-      this.entretienForm.value.dateEntretien,
-    );
-    this.entretienForm.value.dateAffectation = this.dateService.transformDateEn(
-      this.entretienForm.value.dateAffectation,
-    );
-
-    // console.log('Your form data:', this.entretienForm.value);
+    this.transformDatesToBdd();
 
     const statutsExclus = [StatutDemandeEnum.PREPARE, StatutDemandeEnum.RDV];
 
@@ -332,11 +311,46 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
     return statutsEnregistrer.includes(statut) ? 'ENREGISTRER' : 'VALIDER';
   }
 
+  private transformDatesToBdd(): void {
+    try {
+      this.entretienForm.patchValue({
+        dateEntretien: this.dateService.transformDateEn(
+          this.entretienForm.get('dateEntretien')?.value,
+        ),
+        dateEntretienPrecedent: this.dateService.transformDateEn(
+          this.entretienForm.get('dateEntretienPrecedent')?.value,
+        ),
+        dateAffectation: this.dateService.transformDateEn(
+          this.entretienForm.get('dateAffectation')?.value,
+        ),
+        personne: {
+          dateNaissance: this.dateService.transformDateEn(
+            this.entretienForm.get('personne.dateNaissance')?.value,
+          ),
+          datePromotion: this.dateService.transformDateEn(
+            this.entretienForm.get('personne.datePromotion')?.value,
+          ),
+        },
+        superieur: {
+          dateNaissance: this.dateService.transformDateEn(
+            this.entretienForm.get('superieur.dateNaissance')?.value,
+          ),
+          datePromotion: this.dateService.transformDateEn(
+            this.entretienForm.get('superieur.datePromotion')?.value,
+          ),
+        },
+      });
+    } catch (error) {}
+  }
+
   private transformDatesToDisplay(): void {
     try {
       this.entretienForm.patchValue({
         dateEntretien: this.dateService.formatDateOrEmpty(
           this.entretienForm.get('dateEntretien')?.value,
+        ),
+        dateEntretienPrecedent: this.dateService.formatDateOrEmpty(
+          this.entretienForm.get('dateEntretienPrecedent')?.value,
         ),
         dateAffectation: this.dateService.formatDateOrEmpty(
           this.entretienForm.get('dateAffectation')?.value,
