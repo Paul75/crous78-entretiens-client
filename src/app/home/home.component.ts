@@ -22,8 +22,7 @@ export class HomeComponent implements OnInit {
 
   private _credentials!: Credentials | null;
 
-  currentYear = new Date();
-  anneeScolaire = new AnneeScolaire(this.currentYear.getFullYear());
+  anneeScolaire = AnneeScolaire.getAnneeScolaireActuelle();
 
   private _currentUser!: number;
 

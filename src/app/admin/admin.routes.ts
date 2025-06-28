@@ -2,8 +2,6 @@ import { Routes } from '@angular/router';
 
 import { AdminComponent } from './admin.component';
 import { AuthenticationGuard } from '@core/authentication/guards/authentication.guard';
-import { AdminGuard } from '@core/authentication/guards/admin.guard';
-import { RhGuard } from '@core/authentication/guards/rh.guard';
 import { AdminOrRhGuard } from '@core/authentication/guards/admin-or-rh.guard';
 
 export const routes: Routes = [
