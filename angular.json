@@ -88,7 +88,10 @@
           },
           "defaultConfiguration": "development",
           "options": {
-            "proxyConfig": "src/proxy.conf.json"
+            "proxyConfig": "src/proxy.conf.json",
+            "prebundle": {
+              "exclude": ["primelocale"]
+            }
           }
         },
         "extract-i18n": {
