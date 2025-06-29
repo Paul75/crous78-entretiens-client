@@ -1,0 +1,45 @@
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+
+export type FormDataType = {
+  formationsDispensees: { annee: number; disciplineFormation: string; titreFormation: string }[];
+  formationsRealisees: {
+    libelleFormation: string;
+    nombresHeures: number;
+    nombresHeuresCpf: number;
+    nombresHeuresSuiviEffectif: number;
+  }[];
+  formationsDemandees: { action: string; nombresHeures: number }[];
+  formationsContinue: {
+    libelleFormation: string;
+    finalite: string;
+    initiativeDemande: string;
+    duree: string;
+  }[];
+  actionsFormationsDemandees: { action: string; nombresHeures: number }[];
+};
+
+const defaultData: FormDataType = {
+  formationsDispensees: [],
+  formationsRealisees: [],
+  formationsDemandees: [],
+  formationsContinue: [],
+  actionsFormationsDemandees: [],
+};
+
+@Injectable({ providedIn: 'root' })
+export class FormulaireService {
+  private data = new BehaviorSubject<FormDataType>(defaultData);
+
+  getFormData() {
+    return this.data.asObservable();
+  }
+
+  getCurrentValue(): FormDataType {
+    return this.data.value;
+  }
+
+  update(partial: Partial<FormDataType>) {
+    this.data.next({ ...this.data.value, ...partial });
+  }
+}

@@ -31,8 +31,6 @@ export class EntretienFormStep6Component {
 
   constructor(private formProvider: FormProvider) {
     this.form = this.formProvider.getForm();
-
-    // this.form.addControl('formationsPreparationConcours', new FormControl(''));
   }
 
   get registerFormControl() {

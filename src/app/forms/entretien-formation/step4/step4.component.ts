@@ -15,6 +15,7 @@ import { ButtonModule } from 'primeng/button';
 import { FormProvider } from '../../providers/form.provider';
 import { TableModule } from 'primeng/table';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { FormulaireService } from '@forms/services/formulaire.service';
 
 @Component({
   selector: 'app-entretien-form-step4',
@@ -46,6 +47,7 @@ export class EntretienFormStep4Component {
   };
 
   constructor(
+    private formService: FormulaireService,
     private formProvider: FormProvider,
     private fb: FormBuilder,
     private cdref: ChangeDetectorRef,
@@ -53,7 +55,7 @@ export class EntretienFormStep4Component {
     this.form = this.formProvider.getForm();
   }
 
-  initializeFormWithData(formations?: any[]) {
+  initializeFormWithData(bddData?: any[]) {
     if (!this.form.contains('formationsDemandees')) {
       this.form.addControl('formationsDemandees', this.fb.array([]));
     }
@@ -61,17 +63,16 @@ export class EntretienFormStep4Component {
     const array = this.formationsDemandees;
     array.clear();
 
-    if (formations?.length) {
-      formations.forEach(formation => {
-        array.push(
-          this.fb.group({
-            action: [formation.action],
-            nombresHeures: [formation.nombresHeures],
-          }),
-        );
+    const saved = this.formService.getCurrentValue().formationsDemandees;
+
+    const source = saved.length ? saved : bddData;
+
+    if (source?.length) {
+      source.forEach(item => {
+        array.push(this.fb.group({ ...item }));
       });
     } else {
-      this.addLine(); // Ajouter une ligne vide
+      this.addLine();
     }
 
     this.updateColumns();
@@ -83,17 +84,22 @@ export class EntretienFormStep4Component {
   }
 
   addLine() {
-    const formationGroup = this.fb.group({
-      action: [''],
-      nombresHeures: [''],
+    this.formationsDemandees.push(
+      this.fb.group({
+        action: [''],
+        nombresHeures: [''],
+      }),
+    );
+  }
+
+  saveData() {
+    this.formService.update({
+      formationsDemandees: this.form.value.formationsDemandees,
     });
-    this.formationsDemandees.push(formationGroup);
-    this.updateColumns();
   }
 
   removeLine(index: number) {
     if (this.formationsDemandees.length > 1) {
-      // if (index !== 0) {
       this.formationsDemandees.removeAt(index);
     }
   }
@@ -101,7 +107,7 @@ export class EntretienFormStep4Component {
   updateColumns() {
     if (this.formationsDemandees.length > 0) {
       const sampleGroup = this.formationsDemandees.at(0) as FormGroup;
-      this.columns = Object.keys(sampleGroup.controls);
+      this.columns = Object.keys(sampleGroup.controls).filter(k => k !== 'id');
     }
   }
 

@@ -134,6 +134,7 @@
                   formControlName="dateNaissance"
                   [showIcon]="true"
                   [dateFormat]="'dd/mm/yy'"
+                  [showButtonBar]="true"
                   appendTo="body"
                   [class.ng-invalid.ng-dirty]="
                     registerFormControl['personne'].get('dateNaissance')?.invalid &&
@@ -238,6 +239,7 @@
                   formControlName="datePromotion"
                   [showIcon]="true"
                   [dateFormat]="'dd/mm/yy'"
+                  [showButtonBar]="true"
                   appendTo="body"
                   [class.ng-invalid.ng-dirty]="
                     registerFormControl['personne'].get('datePromotion')?.invalid &&

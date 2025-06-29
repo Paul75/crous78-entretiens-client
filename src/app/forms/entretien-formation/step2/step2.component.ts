@@ -36,8 +36,6 @@ import { DatePickerModule } from 'primeng/datepicker';
   styleUrl: './step2.component.scss',
 })
 export class EntretienFormStep2Component {
-  formationsDispenseesDatas: { nom: string; age: number }[] = [];
-
   form: FormGroup;
   columnsFormationsDispensees: string[] = []; // Pour stocker les noms des colonnes dynamiques
   columnTypes: { [key: string]: string } = {
@@ -61,7 +59,7 @@ export class EntretienFormStep2Component {
     this.form = this.formProvider.getForm();
   }
 
-  public initializeFormWithData(formations?: any[]) {
+  public initializeFormWithData(bddData?: any[]) {
     if (!this.form.contains('formationsDispensees')) {
       this.form.addControl('formationsDispensees', this.fb.array([]));
     }
@@ -69,8 +67,22 @@ export class EntretienFormStep2Component {
     const array = this.formationsDispensees;
     array.clear();
 
-    if (formations?.length) {
-      formations.forEach(formation => {
+    const saved = this.formService.getCurrentValue().formationsDispensees;
+
+    const source = saved.length ? saved : bddData;
+
+    if (source?.length) {
+      source.forEach(item => {
+        array.push(this.fb.group({ ...item }));
+      });
+    } else {
+      this.addFormationsDispensees();
+    }
+
+    this.updateColumnsFormationsDispensees();
+    this.cdref.detectChanges();
+
+    /*saved.forEach((formation?: any) => {
         array.push(
           this.fb.group({
             annee: [formation.annee],
@@ -78,27 +90,27 @@ export class EntretienFormStep2Component {
             titreFormation: [formation.titreFormation],
           }),
         );
-      });
-    } else {
-      this.addFormationsDispensees(); // Ajouter une ligne vide
-    }
-
-    this.updateColumnsFormationsDispensees();
-    this.cdref.detectChanges();
+      });*/
   }
 
   get registerFormControl() {
     return this.form.controls;
   }
 
-  addFormationsDispensees() {
-    const formationGroup = this.fb.group({
-      annee: [''],
-      disciplineFormation: [''],
-      titreFormation: [''],
+  saveData() {
+    this.formService.update({
+      formationsDispensees: this.form.value.formationsDispensees,
     });
-    this.formationsDispensees.push(formationGroup);
-    this.updateColumnsFormationsDispensees();
+  }
+
+  addFormationsDispensees() {
+    this.formationsDispensees.push(
+      this.fb.group({
+        annee: [''],
+        disciplineFormation: [''],
+        titreFormation: [''],
+      }),
+    );
   }
 
   removeFormation(index: number) {
@@ -110,7 +122,7 @@ export class EntretienFormStep2Component {
   updateColumnsFormationsDispensees() {
     if (this.formationsDispensees.length > 0) {
       const sampleGroup = this.formationsDispensees.at(0) as FormGroup;
-      this.columnsFormationsDispensees = Object.keys(sampleGroup.controls);
+      this.columnsFormationsDispensees = Object.keys(sampleGroup.controls).filter(k => k !== 'id');
     }
   }
 

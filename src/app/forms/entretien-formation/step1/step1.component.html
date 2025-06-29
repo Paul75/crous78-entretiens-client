@@ -134,6 +134,7 @@
                   formControlName="dateNaissance"
                   [showIcon]="true"
                   [dateFormat]="'dd/mm/yy'"
+                  [showButtonBar]="true"
                   appendTo="body"
                   [class.ng-invalid.ng-dirty]="
                     registerFormControl['personne'].get('dateNaissance')?.invalid &&
@@ -446,6 +447,7 @@
             formControlName="dateEntretien"
             [showIcon]="true"
             [dateFormat]="'dd/mm/yy'"
+            [showButtonBar]="true"
             appendTo="body"
             [class.ng-invalid.ng-dirty]="
               registerFormControl['personne'].get('dateEntretien')?.invalid &&
@@ -462,6 +464,7 @@
             formControlName="dateEntretienPrecedent"
             [showIcon]="true"
             [dateFormat]="'dd/mm/yy'"
+            [showButtonBar]="true"
             appendTo="body"
             [class.ng-invalid.ng-dirty]="
               registerFormControl['personne'].get('dateEntretienPrecedent')?.invalid &&

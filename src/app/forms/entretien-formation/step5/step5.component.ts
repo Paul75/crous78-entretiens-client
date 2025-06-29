@@ -16,6 +16,7 @@ import { FormProvider } from '../../providers/form.provider';
 import { TableModule } from 'primeng/table';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { SelectModule } from 'primeng/select';
+import { FormulaireService } from '@forms/services/formulaire.service';
 
 @Component({
   selector: 'app-entretien-form-step5',
@@ -64,6 +65,7 @@ export class EntretienFormStep5Component {
   };
 
   constructor(
+    private formService: FormulaireService,
     private formProvider: FormProvider,
     private fb: FormBuilder,
     private cdref: ChangeDetectorRef,
@@ -71,7 +73,7 @@ export class EntretienFormStep5Component {
     this.form = this.formProvider.getForm();
   }
 
-  initializeFormContinueWithData(formations?: any[]) {
+  initializeFormContinueWithData(bddData?: any[]) {
     if (!this.form.contains('formationsContinue')) {
       this.form.addControl('formationsContinue', this.fb.array([]));
     }
@@ -79,26 +81,23 @@ export class EntretienFormStep5Component {
     const array = this.formationsContinue;
     array.clear();
 
-    if (formations?.length) {
-      formations.forEach(formation => {
-        array.push(
-          this.fb.group({
-            libelleFormation: [formation.libelleFormation],
-            finalite: [formation.finalite],
-            initiativeDemande: [formation.initiativeDemande],
-            duree: [formation.duree],
-          }),
-        );
+    const saved = this.formService.getCurrentValue().formationsContinue;
+
+    const source = saved.length ? saved : bddData;
+
+    if (source?.length) {
+      source.forEach(item => {
+        array.push(this.fb.group({ ...item }));
       });
     } else {
-      this.addFormationContinue(); // Ajouter une ligne vide
+      this.addFormationContinue();
     }
 
     this.updateColumns();
     this.cdref.detectChanges();
   }
 
-  initializeActionFormDemandeesWithData(formations?: any[]) {
+  initializeActionFormDemandeesWithData(bddData?: any[]) {
     if (!this.form.contains('actionsFormationsDemandees')) {
       this.form.addControl('actionsFormationsDemandees', this.fb.array([]));
     }
@@ -106,17 +105,16 @@ export class EntretienFormStep5Component {
     const array = this.actionsFormationsDemandees;
     array.clear();
 
-    if (formations?.length) {
-      formations.forEach(formation => {
-        array.push(
-          this.fb.group({
-            libelleFormation: [formation.libelleFormation],
-            motivationResponsable: [formation.motivationResponsable],
-          }),
-        );
+    const saved = this.formService.getCurrentValue().actionsFormationsDemandees;
+
+    const source = saved.length ? saved : bddData;
+
+    if (source?.length) {
+      source.forEach(item => {
+        array.push(this.fb.group({ ...item }));
       });
     } else {
-      this.addActionFormationDemandees(); // Ajouter une ligne vide
+      this.addActionFormationDemandees();
     }
 
     this.updateColumnsFormationsDemandees();
@@ -128,14 +126,14 @@ export class EntretienFormStep5Component {
   }
 
   addFormationContinue() {
-    const formationGroup = this.fb.group({
-      libelleFormation: [''],
-      finalite: [''],
-      initiativeDemande: [''],
-      duree: [''],
-    });
-    this.formationsContinue.push(formationGroup);
-    this.updateColumns();
+    this.formationsContinue.push(
+      this.fb.group({
+        libelleFormation: [''],
+        finalite: [''],
+        initiativeDemande: [''],
+        duree: [''],
+      }),
+    );
   }
 
   removeFormation(index: number) {
@@ -148,31 +146,37 @@ export class EntretienFormStep5Component {
   updateColumns() {
     if (this.formationsContinue.length > 0) {
       const sampleGroup = this.formationsContinue.at(0) as FormGroup;
-      this.columns = Object.keys(sampleGroup.controls);
+      this.columns = Object.keys(sampleGroup.controls).filter(k => k !== 'id');
     }
   }
 
   addActionFormationDemandees() {
-    const formationGroup = this.fb.group({
-      libelleFormation: [''],
-      motivationResponsable: [''],
-    });
-    this.actionsFormationsDemandees.push(formationGroup);
-    this.updateColumnsFormationsDemandees();
+    this.actionsFormationsDemandees.push(
+      this.fb.group({
+        libelleFormation: [''],
+        motivationResponsable: [''],
+      }),
+    );
   }
 
   updateColumnsFormationsDemandees() {
     if (this.actionsFormationsDemandees.length > 0) {
       const sampleGroup = this.actionsFormationsDemandees.at(0) as FormGroup;
-      this.columnsFormationsDemandees = Object.keys(sampleGroup.controls);
+      this.columnsFormationsDemandees = Object.keys(sampleGroup.controls).filter(k => k !== 'id');
     }
   }
 
   removeFormationsDemandees(index: number) {
     if (this.actionsFormationsDemandees.length > 1) {
-      // if (index !== 0) {
       this.actionsFormationsDemandees.removeAt(index);
     }
+  }
+
+  saveData() {
+    this.formService.update({
+      formationsContinue: this.form.value.formationsContinue,
+      actionsFormationsDemandees: this.form.value.actionsFormationsDemandees,
+    });
   }
 
   get formationsContinue(): FormArray {

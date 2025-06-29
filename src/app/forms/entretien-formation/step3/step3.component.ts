@@ -16,6 +16,7 @@ import { FormProvider } from '../../providers/form.provider';
 import { TableModule } from 'primeng/table';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { AnneeScolaire } from '@shared/utils/annee-scolaire.util';
+import { FormulaireService } from '@forms/services/formulaire.service';
 
 @Component({
   selector: 'app-entretien-form-step3',
@@ -53,6 +54,7 @@ export class EntretienFormStep3Component {
   formationsRealiseesPeriode = '';
 
   constructor(
+    private formService: FormulaireService,
     private formProvider: FormProvider,
     private fb: FormBuilder,
     private cdref: ChangeDetectorRef,
@@ -65,7 +67,7 @@ export class EntretienFormStep3Component {
       AnneeScolaire.getAnneeScolaireActuelle().endFormat();
   }
 
-  initializeFormWithData(formations?: any[]) {
+  initializeFormWithData(bddData?: any[]) {
     if (!this.form.contains('formationsRealisees')) {
       this.form.addControl('formationsRealisees', this.fb.array([]));
     }
@@ -73,8 +75,15 @@ export class EntretienFormStep3Component {
     const array = this.formationsRealisees;
     array.clear();
 
-    if (formations?.length) {
-      formations.forEach(formation => {
+    const saved = this.formService.getCurrentValue().formationsRealisees;
+
+    const source = saved.length ? saved : bddData;
+
+    if (source?.length) {
+      source.forEach(item => {
+        array.push(this.fb.group({ ...item }));
+      });
+      /*source.forEach((formation?: any) => {
         array.push(
           this.fb.group({
             libelleFormation: [formation.libelleFormation],
@@ -83,9 +92,9 @@ export class EntretienFormStep3Component {
             nombresHeuresSuiviEffectif: [formation.nombresHeuresSuiviEffectif],
           }),
         );
-      });
+      });*/
     } else {
-      this.addFormationRealisees(); // Ajouter une ligne vide
+      this.addFormationRealisees();
     }
 
     this.updateColumns();
@@ -97,14 +106,20 @@ export class EntretienFormStep3Component {
   }
 
   addFormationRealisees() {
-    const formationGroup = this.fb.group({
-      libelleFormation: [''],
-      nombresHeures: [''],
-      nombresHeuresCpf: [''],
-      nombresHeuresSuiviEffectif: [''],
+    this.formationsRealisees.push(
+      this.fb.group({
+        libelleFormation: [''],
+        nombresHeures: [''],
+        nombresHeuresCpf: [''],
+        nombresHeuresSuiviEffectif: [''],
+      }),
+    );
+  }
+
+  saveData() {
+    this.formService.update({
+      formationsRealisees: this.form.value.formationsRealisees,
     });
-    this.formationsRealisees.push(formationGroup);
-    this.updateColumns();
   }
 
   removeFormation(index: number) {
@@ -117,7 +132,7 @@ export class EntretienFormStep3Component {
   updateColumns() {
     if (this.formationsRealisees.length > 0) {
       const sampleGroup = this.formationsRealisees.at(0) as FormGroup;
-      this.columns = Object.keys(sampleGroup.controls);
+      this.columns = Object.keys(sampleGroup.controls).filter(k => k !== 'id');
     }
   }
 

@@ -16,6 +16,7 @@
             [dateFormat]="'dd/mm/yy'"
             appendTo="body"
             [minDate]="minDate"
+            [showButtonBar]="true"
             [class.ng-invalid.ng-dirty]="
               entretienForm.get('dateEntretien')?.invalid &&
               (entretienForm.get('dateEntretien')?.touched ||
