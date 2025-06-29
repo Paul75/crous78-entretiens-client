@@ -130,39 +130,17 @@
           <div class="col-sm-8">
             <div class="row row-cols-sm-auto">
               <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  ngbDatepicker
-                  #d="ngbDatepicker"
+                <p-datePicker
                   formControlName="dateNaissance"
-                  [class.is-invalid]="
+                  [showIcon]="true"
+                  [dateFormat]="'dd/mm/yy'"
+                  appendTo="body"
+                  [class.ng-invalid.ng-dirty]="
                     registerFormControl['personne'].get('dateNaissance')?.invalid &&
                     (registerFormControl['personne'].get('dateNaissance')?.touched ||
                       registerFormControl['personne'].get('dateNaissance')?.dirty)
                   "
                 />
-                <button
-                  class="btn btn-outline-secondary bi bi-calendar3"
-                  (click)="d.toggle()"
-                  type="button"
-                ></button>
-
-                <div
-                  class="invalid-feedback"
-                  *ngIf="
-                    registerFormControl['personne'].get('dateNaissance')?.invalid &&
-                    registerFormControl['personne'].get('dateNaissance')?.touched
-                  "
-                >
-                  <ng-container
-                    *ngIf="
-                      registerFormControl['personne'].get('dateNaissance')?.errors?.['required']
-                    "
-                  >
-                    Le date de naissance est requise
-                  </ng-container>
-                </div>
               </div>
             </div>
           </div>
@@ -464,63 +442,33 @@
       <tr>
         <th>Date de l'entretien de formation :</th>
         <td>
-          <input
-            type="text"
-            ngbDatepicker
-            #dateEntretien="ngbDatepicker"
+          <p-datePicker
             formControlName="dateEntretien"
-            [class.is-invalid]="
-              form.get('dateEntretien')?.invalid &&
-              (form.get('dateEntretien')?.touched || form.get('dateEntretien')?.dirty)
+            [showIcon]="true"
+            [dateFormat]="'dd/mm/yy'"
+            appendTo="body"
+            [class.ng-invalid.ng-dirty]="
+              registerFormControl['personne'].get('dateEntretien')?.invalid &&
+              (registerFormControl['personne'].get('dateEntretien')?.touched ||
+                registerFormControl['personne'].get('dateEntretien')?.dirty)
             "
           />
-          <button
-            class="btn btn-outline-secondary bi bi-calendar3"
-            (click)="dateEntretien.toggle()"
-            type="button"
-          ></button>
-
-          <div
-            class="invalid-feedback"
-            *ngIf="form.get('dateEntretien')?.invalid && form.get('dateEntretien')?.touched"
-          >
-            <ng-container *ngIf="form.get('dateEntretien')?.errors?.['required']">
-              Le date de dateEntretien est requise
-            </ng-container>
-          </div>
         </td>
       </tr>
       <tr>
         <th>Date du précédent entretien de formation :</th>
         <td>
-          <input
-            type="text"
-            ngbDatepicker
-            #dateEntretienPrecedent="ngbDatepicker"
+          <p-datePicker
             formControlName="dateEntretienPrecedent"
-            [class.is-invalid]="
-              form.get('dateEntretienPrecedent')?.invalid &&
-              (form.get('dateEntretienPrecedent')?.touched ||
-                form.get('dateEntretienPrecedent')?.dirty)
+            [showIcon]="true"
+            [dateFormat]="'dd/mm/yy'"
+            appendTo="body"
+            [class.ng-invalid.ng-dirty]="
+              registerFormControl['personne'].get('dateEntretienPrecedent')?.invalid &&
+              (registerFormControl['personne'].get('dateEntretienPrecedent')?.touched ||
+                registerFormControl['personne'].get('dateEntretienPrecedent')?.dirty)
             "
           />
-          <button
-            class="btn btn-outline-secondary bi bi-calendar3"
-            (click)="dateEntretienPrecedent.toggle()"
-            type="button"
-          ></button>
-
-          <div
-            class="invalid-feedback"
-            *ngIf="
-              form.get('dateEntretienPrecedent')?.invalid &&
-              form.get('dateEntretienPrecedent')?.touched
-            "
-          >
-            <ng-container *ngIf="form.get('dateEntretienPrecedent')?.errors?.['required']">
-              Le date de dateEntretienPrecedent est requise
-            </ng-container>
-          </div>
         </td>
       </tr>
       <tr>

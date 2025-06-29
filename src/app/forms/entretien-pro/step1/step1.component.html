@@ -130,39 +130,17 @@
           <div class="col-sm-8">
             <div class="row row-cols-sm-auto">
               <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  ngbDatepicker
-                  #d="ngbDatepicker"
+                <p-datePicker
                   formControlName="dateNaissance"
-                  [class.is-invalid]="
+                  [showIcon]="true"
+                  [dateFormat]="'dd/mm/yy'"
+                  appendTo="body"
+                  [class.ng-invalid.ng-dirty]="
                     registerFormControl['personne'].get('dateNaissance')?.invalid &&
                     (registerFormControl['personne'].get('dateNaissance')?.touched ||
                       registerFormControl['personne'].get('dateNaissance')?.dirty)
                   "
                 />
-                <button
-                  class="btn btn-outline-secondary bi bi-calendar3"
-                  (click)="d.toggle()"
-                  type="button"
-                ></button>
-
-                <div
-                  class="invalid-feedback"
-                  *ngIf="
-                    registerFormControl['personne'].get('dateNaissance')?.invalid &&
-                    registerFormControl['personne'].get('dateNaissance')?.touched
-                  "
-                >
-                  <ng-container
-                    *ngIf="
-                      registerFormControl['personne'].get('dateNaissance')?.errors?.['required']
-                    "
-                  >
-                    Le date de naissance est requise
-                  </ng-container>
-                </div>
               </div>
             </div>
           </div>
@@ -256,34 +234,17 @@
           <div class="col-sm-8">
             <div class="row row-cols-sm-auto">
               <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  ngbDatepicker
-                  #dPromotion="ngbDatepicker"
+                <p-datePicker
                   formControlName="datePromotion"
-                />
-                <button
-                  class="btn btn-outline-secondary bi bi-calendar3"
-                  (click)="dPromotion.toggle()"
-                  type="button"
-                ></button>
-
-                <div
-                  class="invalid-feedback"
-                  *ngIf="
+                  [showIcon]="true"
+                  [dateFormat]="'dd/mm/yy'"
+                  appendTo="body"
+                  [class.ng-invalid.ng-dirty]="
                     registerFormControl['personne'].get('datePromotion')?.invalid &&
-                    registerFormControl['personne'].get('datePromotion')?.touched
+                    (registerFormControl['personne'].get('datePromotion')?.touched ||
+                      registerFormControl['personne'].get('datePromotion')?.dirty)
                   "
-                >
-                  <ng-container
-                    *ngIf="
-                      registerFormControl['personne'].get('datePromotion')?.errors?.['required']
-                    "
-                  >
-                    Le date de promotion est requise
-                  </ng-container>
-                </div>
+                />
               </div>
             </div>
           </div>

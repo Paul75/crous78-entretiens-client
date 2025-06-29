@@ -9,13 +9,14 @@ import {
   FormBuilder,
 } from '@angular/forms';
 
-import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { FormProvider } from '../../providers/form.provider';
 import { TableModule } from 'primeng/table';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { FormulaireService } from '@forms/services/formulaire.service';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-entretien-form-step2',
@@ -23,18 +24,20 @@ import { InputNumberModule } from 'primeng/inputnumber';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbDatepickerModule,
     ButtonModule,
     StepperModule,
     InputNumberModule,
     TableModule,
     ToggleButtonModule,
+    DatePickerModule,
   ],
   providers: [],
   templateUrl: './step2.component.html',
   styleUrl: './step2.component.scss',
 })
 export class EntretienFormStep2Component {
+  formationsDispenseesDatas: { nom: string; age: number }[] = [];
+
   form: FormGroup;
   columnsFormationsDispensees: string[] = []; // Pour stocker les noms des colonnes dynamiques
   columnTypes: { [key: string]: string } = {
@@ -50,6 +53,7 @@ export class EntretienFormStep2Component {
   };
 
   constructor(
+    private formService: FormulaireService,
     private formProvider: FormProvider,
     private fb: FormBuilder,
     private cdref: ChangeDetectorRef,

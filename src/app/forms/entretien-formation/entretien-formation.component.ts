@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { environment } from '@environments/environment';
-import { NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import {
   FormBuilder,
   FormGroup,
@@ -36,6 +35,7 @@ import { EntretienFormStep5Component } from './step5/step5.component';
 import { EntretienFormStep6Component } from './step6/step6.component';
 import { EntretienFormStep7Component } from './step7/step7.component';
 import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-entretien-formation',
@@ -43,9 +43,9 @@ import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbDatepickerModule,
     ButtonModule,
     StepperModule,
+    DatePickerModule,
     DrawerModule,
     EntretienFormStep1Component,
     EntretienFormStep2Component,
@@ -69,11 +69,7 @@ export class EntretienFormationComponent extends FormProvider implements OnChang
   private router = inject(Router);
 
   today = new Date();
-  minDate: NgbDateStruct = {
-    year: this.today.getFullYear(),
-    month: this.today.getMonth() + 1, // Note: months are 1-indexed in NgbDateStruct
-    day: this.today.getDate(),
-  };
+  minDate: Date = new Date(this.today.getFullYear(), this.today.getMonth(), this.today.getDate());
 
   typeForm = 'formation';
 

@@ -17,7 +17,6 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
@@ -36,6 +35,7 @@ import { EntretienService } from '@shared/services/entretiens/entretien.service'
 import { DateService } from '@shared/services/date.service';
 import { environment } from '@environments/environment';
 import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-entretien-pro',
@@ -43,9 +43,9 @@ import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbDatepickerModule,
     ButtonModule,
     StepperModule,
+    DatePickerModule,
     DrawerModule,
     EntretienProStep1Component,
     EntretienProStep2Component,
@@ -71,11 +71,7 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
   displayId = false;
 
   today = new Date();
-  minDate: NgbDateStruct = {
-    year: this.today.getFullYear(),
-    month: this.today.getMonth() + 1, // Note: months are 1-indexed in NgbDateStruct
-    day: this.today.getDate(),
-  };
+  minDate: Date = new Date(this.today.getFullYear(), this.today.getMonth(), this.today.getDate());
 
   typeForm = 'professionnel';
 

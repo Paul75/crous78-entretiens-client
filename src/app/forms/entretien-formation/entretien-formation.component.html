@@ -10,36 +10,18 @@
       <div class="row row-cols-sm-auto">
         <div class="input-group">
           <label for="dateEntretien" class="col-sm-4 col-form-label">Date de l'entretien :</label>
-          <input
-            type="text"
-            class="form-control"
-            ngbDatepicker
-            [minDate]="minDate"
-            #d="ngbDatepicker"
+          <p-datePicker
             formControlName="dateEntretien"
-            [class.is-invalid]="
+            [showIcon]="true"
+            [dateFormat]="'dd/mm/yy'"
+            appendTo="body"
+            [minDate]="minDate"
+            [class.ng-invalid.ng-dirty]="
               entretienForm.get('dateEntretien')?.invalid &&
               (entretienForm.get('dateEntretien')?.touched ||
                 entretienForm.get('dateEntretien')?.dirty)
             "
           />
-          <button
-            class="btn btn-outline-secondary bi bi-calendar3"
-            (click)="d.toggle()"
-            type="button"
-          ></button>
-
-          <div
-            class="invalid-feedback"
-            *ngIf="
-              entretienForm.get('dateEntretien')?.invalid &&
-              entretienForm.get('dateEntretien')?.touched
-            "
-          >
-            <ng-container *ngIf="entretienForm.get('dateEntretien')?.errors?.['required']">
-              Le date de dateEntretien est requise
-            </ng-container>
-          </div>
         </div>
       </div>
       <br />

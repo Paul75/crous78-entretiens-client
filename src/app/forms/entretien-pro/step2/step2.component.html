@@ -81,46 +81,17 @@
             <div class="mb-3 row row-cols-sm-auto">
               <label for="" class="col-sm-2 col-form-label">date d'affectation :</label>
               <div class="col-sm-10">
-                <input
-                  type="text"
-                  ngbDatepicker
-                  #dAffectation="ngbDatepicker"
+                <p-datePicker
                   formControlName="dateAffectation"
-                  [class.is-invalid]="
-                    registerFormControl['dateAffectation'].invalid &&
-                    (registerFormControl['dateAffectation'].touched ||
-                      registerFormControl['dateAffectation'].dirty)
+                  [showIcon]="true"
+                  [dateFormat]="'dd/mm/yy'"
+                  appendTo="body"
+                  [class.ng-invalid.ng-dirty]="
+                    registerFormControl['personne'].get('dateAffectation')?.invalid &&
+                    (registerFormControl['personne'].get('dateAffectation')?.touched ||
+                      registerFormControl['personne'].get('dateAffectation')?.dirty)
                   "
                 />
-                <button
-                  class="btn btn-outline-secondary bi bi-calendar3"
-                  (click)="dAffectation.toggle()"
-                  type="button"
-                ></button>
-
-                <div
-                  class="invalid-feedback"
-                  *ngIf="
-                    registerFormControl['dateAffectation'].invalid &&
-                    registerFormControl['dateAffectation'].touched
-                  "
-                >
-                  <ng-container
-                    *ngIf="registerFormControl['dateAffectation']?.errors?.['required']"
-                  >
-                    La dateAffectation est requise
-                  </ng-container>
-                  <ng-container
-                    *ngIf="registerFormControl['dateAffectation']?.errors?.['minlength']"
-                  >
-                    Minimum 2 charactères
-                  </ng-container>
-                  <ng-container
-                    *ngIf="registerFormControl['dateAffectation']?.errors?.['maxlength']"
-                  >
-                    Maximum de charactères atteint
-                  </ng-container>
-                </div>
               </div>
             </div>
           </div>
