@@ -568,20 +568,41 @@
         <ng-template pTemplate="body" let-formation let-rowIndex="rowIndex">
           <tr [formGroup]="formation">
             <td *ngFor="let column of columnsFormationsDispensees">
-              <input
-                *ngIf="columnTypes[column] === 'string'"
-                type="text"
-                class="form-control"
-                pInputText
-                [formControlName]="column"
-                [placeholder]=""
-              />
-              <p-inputnumber
-                *ngIf="columnTypes[column] === 'number'"
-                [formControlName]="column"
-                [placeholder]=""
-                [useGrouping]="false"
-              />
+              <ng-container *ngIf="columnTypes[column] === 'string'; else isNumber">
+                <input
+                  type="text"
+                  class="form-control"
+                  pInputText
+                  [formControlName]="column"
+                  [placeholder]=""
+                />
+              </ng-container>
+              <ng-template #isNumber>
+                <ng-container *ngIf="columnTypes[column] === 'number'; else isDateYear">
+                  <p-inputnumber
+                    [formControlName]="column"
+                    [placeholder]=""
+                    [useGrouping]="false"
+                  />
+                </ng-container>
+              </ng-template>
+              <ng-template #isDateYear>
+                <ng-container *ngIf="columnTypes[column] === 'dateYear'; else unknownType">
+                  <p-datepicker
+                    [formControlName]="column"
+                    [placeholder]=""
+                    appendTo="body"
+                    view="year"
+                    dateFormat="yy"
+                    [showButtonBar]="true"
+                    [showIcon]="true"
+                  />
+                </ng-container>
+              </ng-template>
+
+              <ng-template #unknownType>
+                <span>Type inconnu pour {{ column }}</span>
+              </ng-template>
             </td>
             <td>
               <p-button

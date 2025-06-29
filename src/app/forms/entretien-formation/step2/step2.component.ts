@@ -39,7 +39,7 @@ export class EntretienFormStep2Component {
   form: FormGroup;
   columnsFormationsDispensees: string[] = []; // Pour stocker les noms des colonnes dynamiques
   columnTypes: { [key: string]: string } = {
-    annee: 'number',
+    annee: 'dateYear',
     disciplineFormation: 'string',
     titreFormation: 'string',
   };
