@@ -42,4 +42,8 @@ export class FormulaireService {
   update(partial: Partial<FormDataType>) {
     this.data.next({ ...this.data.value, ...partial });
   }
+
+  reset() {
+    this.data.next(defaultData);
+  }
 }

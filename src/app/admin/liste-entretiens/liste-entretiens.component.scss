@@ -6,16 +6,18 @@
   text-align: right;
 }
 
-.icon-list-container {
-  padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 5px;
-}
+.memo-step {
+  margin-bottom: 1.5rem;
 
-.icon-list-container .row {
-  margin-bottom: 10px;
-}
+  .separator {
+    height: 2px;
+    background-color: #ced4da; // ou une autre couleur discrète
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+  }
 
-.icon-list-container p-button {
-  margin-right: 10px;
+  .no-click {
+    pointer-events: none;
+    opacity: 1; // évite l’effet grisé
+  }
 }

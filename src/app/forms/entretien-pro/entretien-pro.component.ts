@@ -5,6 +5,7 @@ import {
   Component,
   inject,
   OnChanges,
+  OnInit,
   SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -30,6 +31,7 @@ import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
 import { DatePickerModule } from 'primeng/datepicker';
 import { EntretienProProvider } from '@forms/providers/entretien-pro.provider';
 import { transformDatesToBdd, transformDatesToDisplay } from '@shared/utils/dates.utils';
+import { FormulaireService } from '@forms/services/formulaire.service';
 
 @Component({
   selector: 'app-entretien-pro',
@@ -54,7 +56,10 @@ import { transformDatesToBdd, transformDatesToDisplay } from '@shared/utils/date
   styleUrl: './entretien-pro.component.scss',
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class EntretienProComponent extends FormProvider implements OnChanges, AfterViewInit {
+export class EntretienProComponent
+  extends FormProvider
+  implements OnInit, OnChanges, AfterViewInit
+{
   name = environment.application.name;
   angular = environment.application.angular;
   bootstrap = environment.application.bootstrap;
@@ -73,12 +78,17 @@ export class EntretienProComponent extends FormProvider implements OnChanges, Af
 
   constructor(
     private cdref: ChangeDetectorRef,
+    private formulaireService: FormulaireService,
     private formProvider: EntretienProProvider,
     private entretienService: EntretienService,
     private route: ActivatedRoute,
   ) {
     super();
     this.entretienForm = this.formProvider.getForm();
+  }
+
+  ngOnInit() {
+    this.formulaireService.reset();
   }
 
   ngAfterViewInit(): void {
