@@ -219,6 +219,15 @@ export class EntretienFormationComponent extends FormProvider implements OnChang
     activateCallback(5);
   }
 
+  handleStep5Next(activateCallback: (step: number) => void): void {
+    this.step5ChildComponents.first.saveData();
+    activateCallback(6);
+  }
+
+  /**
+   *
+   * @param child
+   */
   private initializeStep2ChildForm(child: EntretienFormStep2Component) {
     child.initializeFormWithData(this.entretienData!.formationsDispensees);
   }

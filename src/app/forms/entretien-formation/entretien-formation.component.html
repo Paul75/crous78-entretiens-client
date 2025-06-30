@@ -95,7 +95,7 @@
                   <p-button label="RETOUR" severity="secondary" (onClick)="activateCallback(3)" />
                   <p-button
                     label="SUIVANT"
-                    (onClick)="activateCallback(5)"
+                    (onClick)="handleStep4Next(activateCallback)"
                     [disabled]="validStep4()"
                   />
                 </div>
@@ -114,7 +114,7 @@
                   <p-button label="RETOUR" severity="secondary" (onClick)="activateCallback(4)" />
                   <p-button
                     label="SUIVANT"
-                    (onClick)="activateCallback(6)"
+                    (onClick)="handleStep5Next(activateCallback)"
                     [disabled]="validStep5()"
                   />
                 </div>
