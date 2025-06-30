@@ -18,6 +18,7 @@
 
   .no-click {
     pointer-events: none;
-    opacity: 1; // évite l’effet grisé
+    opacity: 1 !important;
+    cursor: default;
   }
 }
