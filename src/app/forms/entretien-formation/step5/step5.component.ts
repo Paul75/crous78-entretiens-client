@@ -131,7 +131,7 @@ export class EntretienFormStep5Component {
         libelleFormation: [''],
         finalite: [''],
         initiativeDemande: [''],
-        duree: [''],
+        duree: [0],
       }),
     );
   }

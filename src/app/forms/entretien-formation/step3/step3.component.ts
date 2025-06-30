@@ -109,9 +109,9 @@ export class EntretienFormStep3Component {
     this.formationsRealisees.push(
       this.fb.group({
         libelleFormation: [''],
-        nombresHeures: [''],
-        nombresHeuresCpf: [''],
-        nombresHeuresSuiviEffectif: [''],
+        nombresHeures: [0],
+        nombresHeuresCpf: [0],
+        nombresHeuresSuiviEffectif: [0],
       }),
     );
   }

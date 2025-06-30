@@ -87,7 +87,7 @@ export class EntretienFormStep4Component {
     this.formationsDemandees.push(
       this.fb.group({
         action: [''],
-        nombresHeures: [''],
+        nombresHeures: [0],
       }),
     );
   }
