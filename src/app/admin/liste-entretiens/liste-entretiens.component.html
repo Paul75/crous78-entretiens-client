@@ -14,6 +14,52 @@
     [globalFilterFields]="['id', 'personne.nom']"
   >
     <ng-template #caption>
+      <div class="container icon-list-container">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="d-flex align-items-center mb-2">
+              <p-button class="mr-2" icon="pi pi-pen-to-square" severity="help" rounded />
+              <span><b>Etape 1</b> : Préparation du formulaire</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex align-items-center mb-2">
+              <p-button icon="pi pi-calendar" severity="secondary" rounded class="mr-2" />
+              <span><b>Etape 2</b> : Prise de rendez-vous</span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="d-flex align-items-center mb-2">
+              <p-button icon="pi pi-plus" severity="success" rounded />
+              <span><b>Etape 3</b> : Remplir le formulaire avec l'agent</span>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="d-flex align-items-center mb-2">
+              <p-button icon="pi pi-pencil" severity="secondary" rounded />
+              <span><b>Etape 4</b> : Signature</span>
+            </div>
+          </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="d-flex align-items-center mb-2">
+              <p-button icon="pi pi-search" severity="secondary" rounded pTooltip="Voir le PDF" />
+
+              <p-button icon="pi pi-download" severity="secondary" rounded />
+              <span>Voir et télécharger le formulaire</span>
+            </div>
+          </div>
+          <div class="col-md-6"></div>
+        </div>
+      </div>
+
       <div class="flex">
         <p-iconfield>
           <input
