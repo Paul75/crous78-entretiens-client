@@ -111,9 +111,14 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
         this.entretien.statut = StatutDemandeEnum.RDV;
 
         // Envoi du Mail
-        this.communicationEmailsService.envoyerMailChangeDateRdv(this.entretien.id).subscribe({
+        this.communicationEmailsService.envoyerMail(this.entretien.id, 'rdv').subscribe({
           next: _ => {
             // console.log('Mail envoyé avec succès !');
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Succès',
+              detail: 'Mail envoyé avec succès !',
+            });
           },
           error: err => {
             console.error("Erreur lors de l'envoi du mail :", err);

@@ -89,9 +89,14 @@ export class SignatureComponent implements AfterViewInit {
         .subscribe({
           next: _ => {
             // Envoi du Mail
-            this.communicationEmailsService.envoyerMailSignature(this.entretienId).subscribe({
+            this.communicationEmailsService.envoyerMail(this.entretienId, 'signature').subscribe({
               next: _ => {
                 // console.log('Mail envoyé avec succès !');
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Succès',
+                  detail: 'Mail envoyé avec succès !',
+                });
               },
               error: err => {
                 console.error("Erreur lors de l'envoi du mail :", err);
