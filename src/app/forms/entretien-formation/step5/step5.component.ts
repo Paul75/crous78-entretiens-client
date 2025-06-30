@@ -137,9 +137,9 @@ export class EntretienFormStep5Component {
   }
 
   removeFormation(index: number) {
-    if (this.formationsContinue.length > 1) {
-      // if (index !== 0) {
-      this.formationsContinue.removeAt(index);
+    this.formationsContinue.removeAt(index);
+    if (this.formationsContinue.length == 0) {
+      this.addFormationContinue();
     }
   }
 
@@ -167,8 +167,9 @@ export class EntretienFormStep5Component {
   }
 
   removeFormationsDemandees(index: number) {
-    if (this.actionsFormationsDemandees.length > 1) {
-      this.actionsFormationsDemandees.removeAt(index);
+    this.actionsFormationsDemandees.removeAt(index);
+    if (this.actionsFormationsDemandees.length == 0) {
+      this.addActionFormationDemandees();
     }
   }
 

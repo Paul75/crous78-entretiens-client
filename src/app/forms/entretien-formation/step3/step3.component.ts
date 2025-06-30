@@ -123,9 +123,9 @@ export class EntretienFormStep3Component {
   }
 
   removeFormation(index: number) {
-    if (this.formationsRealisees.length > 1) {
-      // if (index !== 0) {
-      this.formationsRealisees.removeAt(index);
+    this.formationsRealisees.removeAt(index);
+    if (this.formationsRealisees.length == 0) {
+      this.addFormationRealisees();
     }
   }
 

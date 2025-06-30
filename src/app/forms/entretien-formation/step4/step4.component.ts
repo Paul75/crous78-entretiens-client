@@ -99,8 +99,9 @@ export class EntretienFormStep4Component {
   }
 
   removeLine(index: number) {
-    if (this.formationsDemandees.length > 1) {
-      this.formationsDemandees.removeAt(index);
+    this.formationsDemandees.removeAt(index);
+    if (this.formationsDemandees.length == 0) {
+      this.addLine();
     }
   }
 

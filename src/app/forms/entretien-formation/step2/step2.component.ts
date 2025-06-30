@@ -108,7 +108,7 @@ export class EntretienFormStep2Component {
   addFormationsDispensees() {
     this.formationsDispensees.push(
       this.fb.group({
-        annee: [''],
+        annee: [null],
         disciplineFormation: [''],
         titreFormation: [''],
       }),
@@ -116,8 +116,10 @@ export class EntretienFormStep2Component {
   }
 
   removeFormation(index: number) {
-    if (this.formationsDispensees.length > 1) {
-      this.formationsDispensees.removeAt(index);
+    this.formationsDispensees.removeAt(index);
+
+    if (this.formationsDispensees.length == 0) {
+      this.addFormationsDispensees();
     }
   }
 
