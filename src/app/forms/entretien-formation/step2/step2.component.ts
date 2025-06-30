@@ -17,6 +17,7 @@ import { TableModule } from 'primeng/table';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FormulaireService } from '@forms/services/formulaire.service';
 import { DatePickerModule } from 'primeng/datepicker';
+import { InputMaskModule } from 'primeng/inputmask';
 
 @Component({
   selector: 'app-entretien-form-step2',
@@ -27,6 +28,7 @@ import { DatePickerModule } from 'primeng/datepicker';
     ButtonModule,
     StepperModule,
     InputNumberModule,
+    InputMaskModule,
     TableModule,
     ToggleButtonModule,
     DatePickerModule,
@@ -39,7 +41,7 @@ export class EntretienFormStep2Component {
   form: FormGroup;
   columnsFormationsDispensees: string[] = []; // Pour stocker les noms des colonnes dynamiques
   columnTypes: { [key: string]: string } = {
-    annee: 'dateYear',
+    annee: 'numberYear',
     disciplineFormation: 'string',
     titreFormation: 'string',
   };
