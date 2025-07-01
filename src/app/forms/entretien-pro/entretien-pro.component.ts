@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  inject,
   OnChanges,
   OnInit,
   QueryList,
@@ -92,14 +91,6 @@ export class EntretienProComponent
   @ViewChildren(StepItem) stepItems!: QueryList<StepItem>;
   private fromNextStep = false;
 
-  /*@ViewChild(EntretienProStep1Component) step1Component!: EntretienProStep1Component;
-  @ViewChild(EntretienProStep2Component) step2Component!: EntretienProStep2Component;
-  @ViewChild(EntretienProStep3Component) step3Component!: EntretienProStep3Component;
-  @ViewChild(EntretienProStep4Component) step4Component!: EntretienProStep4Component;
-  @ViewChild(EntretienProStep5Component) step5Component!: EntretienProStep5Component;
-  @ViewChild(EntretienProStep6Component) step6Component!: EntretienProStep6Component;
-  @ViewChild(EntretienProStep7Component) step7Component!: EntretienProStep7Component;*/
-
   constructor(
     private cdref: ChangeDetectorRef,
     private formulaireService: FormulaireService,
@@ -152,32 +143,6 @@ export class EntretienProComponent
     }
   }
 
-  /*saveCurrentStep() {
-    switch (this.currentStepIndex) {
-      case 1:
-        this.step1Component?.saveData();
-        break;
-      case 2:
-        this.step2Component?.saveData();
-        break;
-      case 3:
-        this.step3Component?.saveData();
-        break;
-      case 4:
-        this.step4Component?.saveData();
-        break;
-      case 5:
-        this.step5Component?.saveData();
-        break;
-      case 6:
-        this.step6Component?.saveData();
-        break;
-      case 7:
-        this.step7Component?.saveData();
-        break;
-    }
-  }*/
-
   getEntretienById() {
     this.route.params.subscribe(params => {
       const id = params['id'];
@@ -221,51 +186,6 @@ export class EntretienProComponent
     return this.getForm().get('objectifsFixes') as FormGroup;
   }
 
-  /*validStep1() {
-    return this.getAgent().invalid && this.getSuperieur().invalid;
-  }
-  validStep2() {
-    return this.getPoste().invalid;
-  }
-  validStep3() {
-    const rappelObjectifs = this.getForm().get('rappelObjectifs') as FormGroup;
-    const evenementsSurvenus = this.getForm().get('evenementsSurvenus') as FormGroup;
-    return rappelObjectifs?.invalid || evenementsSurvenus?.invalid;
-  }
-  validStep4() {
-    const caCompetences = this.getForm().get('caCompetences') as FormGroup;
-    const caContribution = this.getForm().get('caContribution') as FormGroup;
-    const caCapacites = this.getForm().get('caCapacites') as FormGroup;
-    const caAptitude = this.getForm().get('caAptitude') as FormGroup;
-
-    // 3.2
-    const agCompetences = this.getForm().get('agCompetences') as FormGroup;
-    const agContribution = this.getForm().get('agContribution') as FormGroup;
-    const agCapacites = this.getForm().get('agCapacites') as FormGroup;
-    const agAptitude = this.getForm().get('agAptitude') as FormGroup;
-
-    const realisationObjectifs = this.getForm().get('realisationObjectifs') as FormGroup;
-    const appreciationLitterale = this.getForm().get('appreciationLitterale') as FormGroup;
-    return (
-      caCompetences?.invalid ||
-      caContribution?.invalid ||
-      caCapacites?.invalid ||
-      caAptitude?.invalid ||
-      agCompetences?.invalid ||
-      agContribution?.invalid ||
-      agCapacites?.invalid ||
-      agAptitude?.invalid ||
-      realisationObjectifs?.invalid ||
-      appreciationLitterale?.invalid
-    );
-  }
-  validStep5() {
-    return this.getAcquisExperiencePro()?.invalid;
-  }
-  validStep6() {
-    return this.getObjectifsFixes()?.invalid;
-  }*/
-
   onSubmit() {
     // console.log(this.entretienForm);
     if (this.entretienForm.invalid) {
@@ -291,7 +211,7 @@ export class EntretienProComponent
             this.messageService.add({
               severity: 'success',
               summary: 'Succès',
-              detail: 'Mail envoyé avec succès !',
+              detail: 'Formulaire enregistré avec succès !',
             });
           }
 

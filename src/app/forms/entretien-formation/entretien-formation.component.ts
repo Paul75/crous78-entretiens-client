@@ -3,11 +3,11 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  inject,
   OnChanges,
   OnInit,
   QueryList,
   SimpleChanges,
+  ViewChild,
   ViewChildren,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -19,7 +19,7 @@ import { FormProvider } from '@forms/providers/form.provider';
 import { Entretien } from '@shared/models/entretien.model';
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
-import { StepperModule } from 'primeng/stepper';
+import { StepItem, StepperModule } from 'primeng/stepper';
 import { EntretienFormStep1Component } from './step1/step1.component';
 import { EntretienFormStep2Component } from './step2/step2.component';
 import { EntretienFormStep3Component } from './step3/step3.component';
@@ -32,6 +32,9 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { EntretienFormProvider } from '@forms/providers/entretien-form.provider';
 import { transformDatesToBdd, transformDatesToDisplay } from '@shared/utils/dates.utils';
 import { FormulaireService } from '@forms/services/formulaire.service';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { ButtonGroupModule } from 'primeng/buttongroup';
 
 @Component({
   selector: 'app-entretien-formation',
@@ -39,10 +42,12 @@ import { FormulaireService } from '@forms/services/formulaire.service';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    ButtonGroupModule,
     ButtonModule,
     StepperModule,
     DatePickerModule,
     DrawerModule,
+    ToastModule,
     EntretienFormStep1Component,
     EntretienFormStep2Component,
     EntretienFormStep3Component,
@@ -52,6 +57,7 @@ import { FormulaireService } from '@forms/services/formulaire.service';
     EntretienFormStep7Component,
   ],
   providers: [
+    MessageService,
     EntretienFormProvider,
     { provide: FormProvider, useExisting: EntretienFormationComponent },
   ],
@@ -67,8 +73,6 @@ export class EntretienFormationComponent
   angular = environment.application.angular;
   bootstrap = environment.application.bootstrap;
   fontawesome = environment.application.fontawesome;
-
-  private router = inject(Router);
 
   today = new Date();
   minDate: Date = new Date(this.today.getFullYear(), this.today.getMonth(), this.today.getDate());
@@ -91,6 +95,13 @@ export class EntretienFormationComponent
   step5ChildComponents!: QueryList<EntretienFormStep5Component>;
 
   entretienForm!: FormGroup;
+
+  stepsCount = 0;
+  currentStepIndex: number = 1;
+  @ViewChild('stepper') stepper: any;
+  @ViewChildren(StepItem) stepItems!: QueryList<StepItem>;
+  private fromNextStep = false;
+
   /**
    *  CODE GENERAL
    */
@@ -101,13 +112,21 @@ export class EntretienFormationComponent
     private formulaireService: FormulaireService,
     private formProvider: EntretienFormProvider,
     private route: ActivatedRoute,
+    private router: Router,
+    private messageService: MessageService,
   ) {
     super();
 
     this.entretienForm = this.formProvider.getForm();
   }
 
+  ngOnInit() {
+    this.currentStepIndex = 1;
+    this.formulaireService.reset();
+  }
+
   ngAfterViewInit(): void {
+    this.stepsCount = this.stepItems.length;
     this.getEntretienById();
     this.cdref.detectChanges();
 
@@ -141,16 +160,34 @@ export class EntretienFormationComponent
     });
   }
 
-  ngOnInit() {
-    this.formulaireService.reset();
-  }
-
   ngOnChanges(changes: SimpleChanges) {
     this.cdref.detectChanges();
   }
 
   ngAfterContentChecked() {
     this.cdref.detectChanges();
+  }
+
+  isLastStep(): boolean {
+    return this.currentStepIndex === this.stepsCount;
+  }
+
+  goToAdminForm() {
+    this.router.navigate(['/admin']);
+  }
+
+  goToPreviousStep() {
+    if (this.currentStepIndex > 1) {
+      this.currentStepIndex--;
+    }
+  }
+  goToNextStep() {
+    if (!this.isLastStep()) {
+      this.fromNextStep = true;
+      this.saveCurrentStep();
+      this.onSubmit();
+      this.currentStepIndex++;
+    }
   }
 
   getEntretienById() {
@@ -209,31 +246,6 @@ export class EntretienFormationComponent
 
   /**
    *
-   * @param activateCallback
-   */
-
-  handleStep2Next(activateCallback: (step: number) => void): void {
-    this.step2ChildComponents.first.saveData();
-    activateCallback(3);
-  }
-
-  handleStep3Next(activateCallback: (step: number) => void): void {
-    this.step3ChildComponents.first.saveData();
-    activateCallback(4);
-  }
-
-  handleStep4Next(activateCallback: (step: number) => void): void {
-    this.step4ChildComponents.first.saveData();
-    activateCallback(5);
-  }
-
-  handleStep5Next(activateCallback: (step: number) => void): void {
-    this.step5ChildComponents.first.saveData();
-    activateCallback(6);
-  }
-
-  /**
-   *
    * @param child
    */
   private initializeStep2ChildForm(child: EntretienFormStep2Component) {
@@ -257,60 +269,27 @@ export class EntretienFormationComponent
     return this.getForm().get('superieur') as FormGroup;
   }
 
-  validStep1() {
-    return this.getAgent()?.invalid || this.getSuperieur()?.invalid;
-  }
-  validStep2() {
-    return false;
-  }
-  validStep3() {
-    const rappelObjectifs = this.getForm().get('rappelObjectifs') as FormGroup;
-    const evenementsSurvenus = this.getForm().get('evenementsSurvenus') as FormGroup;
-    return rappelObjectifs?.invalid || evenementsSurvenus?.invalid;
-  }
-  validStep4() {
-    const caCompetences = this.getForm().get('caCompetences') as FormGroup;
-    const caContribution = this.getForm().get('caContribution') as FormGroup;
-    const caCapacites = this.getForm().get('caCapacites') as FormGroup;
-    const caAptitude = this.getForm().get('caAptitude') as FormGroup;
-
-    // 3.2
-    const agCompetences = this.getForm().get('agCompetences') as FormGroup;
-    const agContribution = this.getForm().get('agContribution') as FormGroup;
-    const agCapacites = this.getForm().get('agCapacites') as FormGroup;
-    const agAptitude = this.getForm().get('agAptitude') as FormGroup;
-
-    const realisationObjectifs = this.getForm().get('realisationObjectifs') as FormGroup;
-    const appreciationLitterale = this.getForm().get('appreciationLitterale') as FormGroup;
-    return (
-      caCompetences?.invalid ||
-      caContribution?.invalid ||
-      caCapacites?.invalid ||
-      caAptitude?.invalid ||
-      agCompetences?.invalid ||
-      agContribution?.invalid ||
-      agCapacites?.invalid ||
-      agAptitude?.invalid ||
-      realisationObjectifs?.invalid ||
-      appreciationLitterale?.invalid
-    );
-  }
-
-  validStep5(): boolean {
-    return false;
-  }
-
-  validStep6(): boolean {
-    return false;
-  }
-
-  validStep7(): boolean {
-    return false;
+  saveCurrentStep() {
+    switch (this.currentStepIndex) {
+      case 2:
+        this.step2ChildComponents.first.saveData();
+        break;
+      case 3:
+        this.step3ChildComponents.first.saveData();
+        break;
+      case 4:
+        this.step4ChildComponents.first.saveData();
+        break;
+      case 5:
+        this.step5ChildComponents.first.saveData();
+        break;
+    }
   }
 
   onSubmit() {
     if (this.entretienForm.invalid) {
       this.entretienForm.markAllAsTouched();
+      this.fromNextStep = false;
       return;
     }
 
@@ -327,10 +306,18 @@ export class EntretienFormationComponent
       .updateEntretien(this.entretienForm.value.id, this.entretienForm.value)
       .subscribe({
         next: (v: any) => {
-          this.router.navigate(['/forms/confirmation']);
+          if (!this.fromNextStep) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Succès',
+              detail: 'Formulaire enregistré avec succès !',
+            });
+          }
+
+          transformDatesToDisplay(this.entretienForm);
+          this.fromNextStep = false;
         },
         error: e => console.error(e),
-        complete: () => console.info('complete'),
       });
   }
 

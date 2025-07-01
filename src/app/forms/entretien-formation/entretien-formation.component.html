@@ -1,4 +1,5 @@
-<div class="container-fluid py-5">
+<p-toast />
+<div class="container-fluid py-5 formPage">
   <div class="row">
     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mb-2">
       <h1 class="h5">ENTRETIEN DE FORMATION</h1>
@@ -27,20 +28,13 @@
       </div>
       <br />
       <div class="card">
-        <p-stepper [value]="1" [linear]="true">
+        <p-stepper #stepper [value]="currentStepIndex" [linear]="true">
           <p-step-item [value]="1">
             <p-step>Informations générales</p-step>
             <p-step-panel>
               <ng-template #content let-activateCallback="activateCallback">
                 <div class="flex flex-col">
                   <app-entretien-form-step1 />
-                </div>
-                <div class="py-6">
-                  <p-button
-                    label="SUIVANT"
-                    (onClick)="activateCallback(2)"
-                    [disabled]="validStep1()"
-                  />
                 </div>
               </ng-template>
             </p-step-panel>
@@ -53,14 +47,6 @@
                 <div class="flex flex-col h-48">
                   <app-entretien-form-step2 />
                 </div>
-                <div class="flex py-6 gap-2">
-                  <p-button label="RETOUR" severity="secondary" (onClick)="activateCallback(1)" />
-                  <p-button
-                    label="SUIVANT"
-                    (onClick)="handleStep2Next(activateCallback)"
-                    [disabled]="validStep2()"
-                  />
-                </div>
               </ng-template>
             </p-step-panel>
           </p-step-item>
@@ -71,14 +57,6 @@
               <ng-template #content let-activateCallback="activateCallback">
                 <div class="flex flex-col h-48">
                   <app-entretien-form-step3 />
-                </div>
-                <div class="py-6">
-                  <p-button label="RETOUR" severity="secondary" (onClick)="activateCallback(2)" />
-                  <p-button
-                    label="SUIVANT"
-                    (onClick)="handleStep3Next(activateCallback)"
-                    [disabled]="validStep3()"
-                  />
                 </div>
               </ng-template>
             </p-step-panel>
@@ -91,14 +69,6 @@
                 <div class="flex flex-col h-48">
                   <app-entretien-form-step4 />
                 </div>
-                <div class="py-6">
-                  <p-button label="RETOUR" severity="secondary" (onClick)="activateCallback(3)" />
-                  <p-button
-                    label="SUIVANT"
-                    (onClick)="handleStep4Next(activateCallback)"
-                    [disabled]="validStep4()"
-                  />
-                </div>
               </ng-template>
             </p-step-panel>
           </p-step-item>
@@ -110,14 +80,6 @@
                 <div class="flex flex-col h-48">
                   <app-entretien-form-step5 />
                 </div>
-                <div class="py-6">
-                  <p-button label="RETOUR" severity="secondary" (onClick)="activateCallback(4)" />
-                  <p-button
-                    label="SUIVANT"
-                    (onClick)="handleStep5Next(activateCallback)"
-                    [disabled]="validStep5()"
-                  />
-                </div>
               </ng-template>
             </p-step-panel>
           </p-step-item>
@@ -128,14 +90,6 @@
               <ng-template #content let-activateCallback="activateCallback">
                 <div class="flex flex-col h-48">
                   <app-entretien-form-step6 />
-                </div>
-                <div class="py-6">
-                  <p-button label="RETOUR" severity="secondary" (onClick)="activateCallback(5)" />
-                  <p-button
-                    label="SUIVANT"
-                    (onClick)="activateCallback(7)"
-                    [disabled]="validStep6()"
-                  />
                 </div>
               </ng-template>
             </p-step-panel>
@@ -150,15 +104,54 @@
                 <div class="flex flex-col h-48">
                   <app-entretien-form-step7 />
                 </div>
-                <div class="py-6">
-                  <p-button label="RETOUR" severity="secondary" (onClick)="activateCallback(6)" />
-                  <p-button [label]="boutonLabelSubmit" severity="success" type="submit" />
-                </div>
               </ng-template>
             </p-step-panel>
           </p-step-item>
         </p-stepper>
       </div>
+    </div>
+
+    <div class="action-bar fixed-bottom bg-white p-3 border-top text-end">
+      <p-buttongroup>
+        <p-button
+          label="Quitter le formulaire"
+          icon="pi pi-times"
+          size="large"
+          severity="contrast"
+          (click)="goToAdminForm()"
+          [rounded]="true"
+          [raised]="true"
+        />
+        <p-button
+          label="Précédent"
+          icon="pi pi-arrow-left"
+          size="large"
+          severity="secondary"
+          (click)="goToPreviousStep()"
+          [rounded]="true"
+          [raised]="true"
+          [disabled]="currentStepIndex === 1"
+        />
+        <p-button
+          label="Suivant"
+          icon="pi pi-arrow-right"
+          size="large"
+          severity="primary"
+          (click)="goToNextStep()"
+          [rounded]="true"
+          [raised]="true"
+          [disabled]="isLastStep()"
+        />
+        <p-button
+          label="ENREGISTRER"
+          icon="pi pi-save"
+          size="large"
+          severity="danger"
+          (click)="onSubmit()"
+          [rounded]="true"
+          [raised]="true"
+        />
+      </p-buttongroup>
     </div>
   </form>
 </div>
