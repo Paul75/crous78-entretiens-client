@@ -5,3 +5,21 @@
 input.form-check-input {
   border: 1px solid black !important;
 }
+
+.formPage {
+  margin-bottom: 70px;
+}
+
+.action-bar {
+  position: fixed;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  padding: 1rem;
+  border-top: 1px solid #ccc;
+  display: flex;
+  justify-content: end;
+  gap: 1rem;
+  z-index: 1000; // pour qu'elle reste au-dessus
+}

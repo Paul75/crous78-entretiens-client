@@ -31,32 +31,13 @@ export class EntretienProStep4Component {
 
   constructor(private formProvider: FormProvider) {
     this.form = this.formProvider.getForm();
-
-    /*
-    // 3
-    // 3.1
-    this.form.addControl('caCompetences', new FormControl(DEFAULT_ENTRETIEN.caCompetences));
-    this.form.addControl('caContribution', new FormControl(DEFAULT_ENTRETIEN.caContribution));
-    this.form.addControl('caCapacites', new FormControl(DEFAULT_ENTRETIEN.caCapacites));
-    this.form.addControl('caAptitude', new FormControl(DEFAULT_ENTRETIEN.caAptitude));
-
-    // 3.2
-    this.form.addControl('agCompetences', new FormControl(DEFAULT_ENTRETIEN.agCompetences));
-    this.form.addControl('agContribution', new FormControl(DEFAULT_ENTRETIEN.agContribution));
-    this.form.addControl('agCapacites', new FormControl(DEFAULT_ENTRETIEN.agCapacites));
-    this.form.addControl('agAptitude', new FormControl(DEFAULT_ENTRETIEN.agAptitude));
-
-    this.form.addControl(
-      'realisationObjectifs',
-      new FormControl(DEFAULT_ENTRETIEN.realisationObjectifs),
-    );
-    this.form.addControl(
-      'appreciationLitterale',
-      new FormControl(DEFAULT_ENTRETIEN.appreciationLitterale),
-    );*/
   }
 
   get registerFormControl() {
     return this.form.controls;
+  }
+
+  saveData() {
+    // Save data for step 4
   }
 }

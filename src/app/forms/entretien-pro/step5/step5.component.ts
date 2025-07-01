@@ -27,12 +27,6 @@ export class EntretienProStep5Component {
 
   constructor(private formProvider: FormProvider) {
     this.form = this.formProvider.getForm();
-
-    /*// 4
-    this.form.addControl(
-      'acquisExperiencePro',
-      new FormControl(DEFAULT_ENTRETIEN.acquisExperiencePro),
-    );*/
   }
 
   get registerFormControl() {
@@ -40,4 +34,8 @@ export class EntretienProStep5Component {
   }
 
   ngOnInit() {}
+
+  saveData() {
+    // Save data for step 5
+  }
 }

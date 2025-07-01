@@ -35,4 +35,8 @@ export class EntretienProStep2Component {
   get registerFormControl() {
     return this.form.controls;
   }
+
+  saveData() {
+    // Save data for step 2
+  }
 }

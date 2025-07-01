@@ -6,13 +6,16 @@ import {
   inject,
   OnChanges,
   OnInit,
+  QueryList,
   SimpleChanges,
+  ViewChild,
+  ViewChildren,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
 
-import { StepperModule } from 'primeng/stepper';
+import { StepItem, StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
 import { FormProvider } from '../providers/form.provider';
@@ -32,6 +35,9 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { EntretienProProvider } from '@forms/providers/entretien-pro.provider';
 import { transformDatesToBdd, transformDatesToDisplay } from '@shared/utils/dates.utils';
 import { FormulaireService } from '@forms/services/formulaire.service';
+import { ButtonGroupModule } from 'primeng/buttongroup';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-entretien-pro',
@@ -39,9 +45,11 @@ import { FormulaireService } from '@forms/services/formulaire.service';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    ButtonGroupModule,
     ButtonModule,
     StepperModule,
     DatePickerModule,
+    ToastModule,
     DrawerModule,
     EntretienProStep1Component,
     EntretienProStep2Component,
@@ -51,7 +59,11 @@ import { FormulaireService } from '@forms/services/formulaire.service';
     EntretienProStep6Component,
     EntretienProStep7Component,
   ],
-  providers: [EntretienProProvider, { provide: FormProvider, useExisting: EntretienProComponent }],
+  providers: [
+    MessageService,
+    EntretienProProvider,
+    { provide: FormProvider, useExisting: EntretienProComponent },
+  ],
   templateUrl: './entretien-pro.component.html',
   styleUrl: './entretien-pro.component.scss',
   changeDetection: ChangeDetectionStrategy.Default,
@@ -65,8 +77,6 @@ export class EntretienProComponent
   bootstrap = environment.application.bootstrap;
   fontawesome = environment.application.fontawesome;
 
-  private router = inject(Router);
-
   displayId = false;
 
   today = new Date();
@@ -76,22 +86,40 @@ export class EntretienProComponent
 
   entretienForm!: FormGroup;
 
+  stepsCount = 0;
+  currentStepIndex: number = 1;
+  @ViewChild('stepper') stepper: any;
+  @ViewChildren(StepItem) stepItems!: QueryList<StepItem>;
+  private fromNextStep = false;
+
+  /*@ViewChild(EntretienProStep1Component) step1Component!: EntretienProStep1Component;
+  @ViewChild(EntretienProStep2Component) step2Component!: EntretienProStep2Component;
+  @ViewChild(EntretienProStep3Component) step3Component!: EntretienProStep3Component;
+  @ViewChild(EntretienProStep4Component) step4Component!: EntretienProStep4Component;
+  @ViewChild(EntretienProStep5Component) step5Component!: EntretienProStep5Component;
+  @ViewChild(EntretienProStep6Component) step6Component!: EntretienProStep6Component;
+  @ViewChild(EntretienProStep7Component) step7Component!: EntretienProStep7Component;*/
+
   constructor(
     private cdref: ChangeDetectorRef,
     private formulaireService: FormulaireService,
     private formProvider: EntretienProProvider,
     private entretienService: EntretienService,
     private route: ActivatedRoute,
+    private router: Router,
+    private messageService: MessageService,
   ) {
     super();
     this.entretienForm = this.formProvider.getForm();
   }
 
   ngOnInit() {
+    this.currentStepIndex = 1;
     this.formulaireService.reset();
   }
 
   ngAfterViewInit(): void {
+    this.stepsCount = this.stepItems.length;
     this.getEntretienById();
   }
 
@@ -102,6 +130,53 @@ export class EntretienProComponent
   ngAfterContentChecked() {
     this.cdref.detectChanges();
   }
+
+  isLastStep(): boolean {
+    return this.currentStepIndex === this.stepsCount;
+  }
+
+  goToAdminForm() {
+    this.router.navigate(['/admin']);
+  }
+
+  goToPreviousStep() {
+    if (this.currentStepIndex > 1) {
+      this.currentStepIndex--;
+    }
+  }
+  goToNextStep() {
+    if (!this.isLastStep()) {
+      this.fromNextStep = true;
+      this.onSubmit();
+      this.currentStepIndex++;
+    }
+  }
+
+  /*saveCurrentStep() {
+    switch (this.currentStepIndex) {
+      case 1:
+        this.step1Component?.saveData();
+        break;
+      case 2:
+        this.step2Component?.saveData();
+        break;
+      case 3:
+        this.step3Component?.saveData();
+        break;
+      case 4:
+        this.step4Component?.saveData();
+        break;
+      case 5:
+        this.step5Component?.saveData();
+        break;
+      case 6:
+        this.step6Component?.saveData();
+        break;
+      case 7:
+        this.step7Component?.saveData();
+        break;
+    }
+  }*/
 
   getEntretienById() {
     this.route.params.subscribe(params => {
@@ -146,7 +221,7 @@ export class EntretienProComponent
     return this.getForm().get('objectifsFixes') as FormGroup;
   }
 
-  validStep1() {
+  /*validStep1() {
     return this.getAgent().invalid && this.getSuperieur().invalid;
   }
   validStep2() {
@@ -189,12 +264,13 @@ export class EntretienProComponent
   }
   validStep6() {
     return this.getObjectifsFixes()?.invalid;
-  }
+  }*/
 
   onSubmit() {
     // console.log(this.entretienForm);
     if (this.entretienForm.invalid) {
       this.entretienForm.markAllAsTouched();
+      this.fromNextStep = false;
       return;
     }
 
@@ -211,10 +287,18 @@ export class EntretienProComponent
       .updateEntretien(this.entretienForm.value.id, this.entretienForm.value)
       .subscribe({
         next: (v: any) => {
-          this.router.navigate(['/forms/confirmation']);
+          if (!this.fromNextStep) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Succès',
+              detail: 'Mail envoyé avec succès !',
+            });
+          }
+
+          transformDatesToDisplay(this.entretienForm);
+          this.fromNextStep = false;
         },
         error: e => console.error(e),
-        complete: () => console.info('complete'),
       });
   }
 

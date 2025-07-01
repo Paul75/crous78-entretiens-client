@@ -36,7 +36,7 @@ export class EntretienProStep6Component {
     this.form.addControl('demarcheEnvisagee', new FormControl(DEFAULT_ENTRETIEN.demarcheEnvisagee));*/
   }
 
-  get registerFormControl() {
-    return this.form.controls;
+  saveData() {
+    // Save data for step 6
   }
 }

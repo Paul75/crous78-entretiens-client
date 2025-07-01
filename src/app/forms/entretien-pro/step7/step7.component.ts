@@ -41,4 +41,8 @@ export class EntretienProStep7Component {
   }
 
   ngOnInit() {}
+
+  saveData() {
+    // Save data for step 7
+  }
 }

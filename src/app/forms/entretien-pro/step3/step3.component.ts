@@ -27,26 +27,13 @@ export class EntretienProStep3Component {
 
   constructor(private formProvider: FormProvider) {
     this.form = this.formProvider.getForm();
-
-    /*this.form.addControl('rappelObjectifs', new FormControl(DEFAULT_ENTRETIEN.rappelObjectifs));
-    this.form.addControl(
-      'evenementsSurvenus',
-      new FormControl(DEFAULT_ENTRETIEN.evenementsSurvenus),
-    );
-
-    // Abonnement aux données
-    this.dataService.currentEntretien.subscribe(entretien => {
-      if (entretien) {
-        // 3. Patch des valeurs APRÈS ajout des contrôles
-        this.form.patchValue({
-          rappelObjectifs: entretien.rappelObjectifs,
-          evenementsSurvenus: entretien.evenementsSurvenus,
-        });
-      }
-    });*/
   }
 
   get registerFormControl() {
     return this.form.controls;
+  }
+
+  saveData() {
+    // Save data for step 3
   }
 }
