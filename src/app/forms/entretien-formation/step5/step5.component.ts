@@ -131,7 +131,7 @@ export class EntretienFormStep5Component {
         libelleFormation: [null],
         finalite: [null],
         initiativeDemande: [null],
-        duree: [0],
+        duree: [null],
       }),
     );
   }
@@ -153,8 +153,8 @@ export class EntretienFormStep5Component {
   addActionFormationDemandees() {
     this.actionsFormationsDemandees.push(
       this.fb.group({
-        libelleFormation: [''],
-        motivationResponsable: [''],
+        libelleFormation: [null],
+        motivationResponsable: [null],
       }),
     );
   }

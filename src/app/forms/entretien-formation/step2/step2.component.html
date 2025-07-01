@@ -295,6 +295,7 @@
                         name="cpeNbAgent"
                         inputId="cpeNbAgent"
                         formControlName="cpeNbAgent"
+                        [allowEmpty]="true"
                         [class.ng-invalid.ng-dirty]="
                           registerFormControl['cpeNbAgent'].invalid &&
                           (registerFormControl['cpeNbAgent'].touched ||
@@ -313,6 +314,7 @@
                             inputId="cpeCategA"
                             formControlName="cpeCategA"
                             fluid
+                            [allowEmpty]="true"
                             [class.ng-invalid.ng-dirty]="
                               registerFormControl['cpeCategA'].invalid &&
                               (registerFormControl['cpeCategA'].touched ||
@@ -329,6 +331,7 @@
                             name="cpeCategB"
                             inputId="cpeCategB"
                             formControlName="cpeCategB"
+                            [allowEmpty]="true"
                             fluid
                             [class.ng-invalid.ng-dirty]="
                               registerFormControl['cpeCategB'].invalid &&
@@ -346,6 +349,7 @@
                             name="cpeCategC"
                             inputId="cpeCategC"
                             formControlName="cpeCategC"
+                            [allowEmpty]="true"
                             fluid
                             [class.ng-invalid.ng-dirty]="
                               registerFormControl['cpeCategC'].invalid &&
@@ -581,8 +585,8 @@
                 <ng-container *ngIf="columnTypes[column] === 'number'; else isNumberYear">
                   <p-inputnumber
                     [formControlName]="column"
-                    [placeholder]=""
                     [useGrouping]="false"
+                    [allowEmpty]="true"
                   />
                 </ng-container>
               </ng-template>

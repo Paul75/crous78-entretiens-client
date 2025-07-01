@@ -9,14 +9,14 @@ export type FormDataType = {
     nombresHeuresCpf: number;
     nombresHeuresSuiviEffectif: number;
   }[];
-  formationsDemandees: { action: string; nombresHeures: number }[];
+  formationsDemandees: { action: string; nombresHeures: string }[];
   formationsContinue: {
     libelleFormation: string;
     finalite: string;
     initiativeDemande: string;
-    duree: string;
+    duree: number;
   }[];
-  actionsFormationsDemandees: { action: string; nombresHeures: number }[];
+  actionsFormationsDemandees: { libelleFormation: string; motivationResponsable: string }[];
 };
 
 const defaultData: FormDataType = {

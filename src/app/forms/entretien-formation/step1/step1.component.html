@@ -481,6 +481,7 @@
             name="soldeCPF"
             inputId="soldeCPF"
             formControlName="soldeCPF"
+            [allowEmpty]="true"
             [class.ng-invalid.ng-dirty]="
               form.get('soldeCPF')?.invalid &&
               (form.get('soldeCPF')?.touched || form.get('soldeCPF')?.dirty)
