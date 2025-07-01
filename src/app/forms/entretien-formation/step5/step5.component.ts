@@ -128,9 +128,9 @@ export class EntretienFormStep5Component {
   addFormationContinue() {
     this.formationsContinue.push(
       this.fb.group({
-        libelleFormation: [''],
-        finalite: [''],
-        initiativeDemande: [''],
+        libelleFormation: [null],
+        finalite: [null],
+        initiativeDemande: [null],
         duree: [0],
       }),
     );

@@ -109,8 +109,8 @@ export class EntretienFormStep2Component {
     this.formationsDispensees.push(
       this.fb.group({
         annee: [null],
-        disciplineFormation: [''],
-        titreFormation: [''],
+        disciplineFormation: [null],
+        titreFormation: [null],
       }),
     );
   }

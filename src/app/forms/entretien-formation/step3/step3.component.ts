@@ -108,7 +108,7 @@ export class EntretienFormStep3Component {
   addFormationRealisees() {
     this.formationsRealisees.push(
       this.fb.group({
-        libelleFormation: [''],
+        libelleFormation: [null],
         nombresHeures: [0],
         nombresHeuresCpf: [0],
         nombresHeuresSuiviEffectif: [0],

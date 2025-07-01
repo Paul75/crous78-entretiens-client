@@ -39,7 +39,7 @@ export class EntretienFormStep4Component {
   columns: string[] = []; // Pour stocker les noms des colonnes dynamiques
   columnTypes: { [key: string]: string } = {
     action: 'string',
-    nombresHeures: 'number',
+    nombresHeures: 'string',
   };
   columnLabels: { [key: string]: string } = {
     action: 'Action de formation',
@@ -86,8 +86,8 @@ export class EntretienFormStep4Component {
   addLine() {
     this.formationsDemandees.push(
       this.fb.group({
-        action: [''],
-        nombresHeures: [0],
+        action: [null],
+        nombresHeures: [null],
       }),
     );
   }
