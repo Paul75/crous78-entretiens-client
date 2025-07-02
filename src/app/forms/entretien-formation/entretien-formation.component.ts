@@ -295,11 +295,13 @@ export class EntretienFormationComponent
 
     transformDatesToBdd(this.entretienForm);
 
-    const statutsExclus = [StatutDemandeEnum.PREPARE, StatutDemandeEnum.RDV];
+    if (!this.fromNextStep) {
+      const statutsExclus = [StatutDemandeEnum.PREPARE, StatutDemandeEnum.RDV];
 
-    const statut = this.entretienForm.value.statut;
-    if (!statutsExclus.includes(statut)) {
-      this.entretienForm.value.statut = StatutDemandeEnum.AGENTSIGN;
+      const statut = this.entretienForm.value.statut;
+      if (!statutsExclus.includes(statut)) {
+        this.entretienForm.value.statut = StatutDemandeEnum.AGENTSIGN;
+      }
     }
 
     this.entretienService
