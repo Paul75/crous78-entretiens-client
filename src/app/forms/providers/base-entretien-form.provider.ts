@@ -48,6 +48,7 @@ export abstract class BaseEntretienFormProvider extends FormProvider {
   ): FormGroup {
     const group = this.fb.group({
       id: [data.id, config.requiredId ? [Validators.required] : []],
+      matricule: [data.matricule],
       nomUsage: [data.nomUsage],
       nom: [data.nom],
       prenom: [data.prenom],
