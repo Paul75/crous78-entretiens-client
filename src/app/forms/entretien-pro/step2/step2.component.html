@@ -266,10 +266,7 @@
               <p-togglebutton formControlName="encadrement" onLabel="Oui" offLabel="Non" />
             </div>
           </div>
-          <div
-            class="d-flex justify-content-center"
-            *ngIf="form.get('conduiteProjet')?.value || form.get('encadrement')?.value"
-          >
+          <div class="d-flex justify-content-center" *ngIf="form.get('encadrement')?.value">
             <div class="card w-50">
               <div class="card-header">
                 <h5>Si OUI :</h5>
