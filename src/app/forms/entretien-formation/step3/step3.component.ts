@@ -40,9 +40,9 @@ export class EntretienFormStep3Component {
   columns: string[] = []; // Pour stocker les noms des colonnes dynamiques
   columnTypes: { [key: string]: string } = {
     libelleFormation: 'string',
-    nombresHeures: 'number',
-    nombresHeuresCpf: 'number',
-    nombresHeuresSuiviEffectif: 'number',
+    nombresHeures: 'string',
+    nombresHeuresCpf: 'string',
+    nombresHeuresSuiviEffectif: 'string',
   };
   columnLabels: { [key: string]: string } = {
     libelleFormation: 'Libellé de la formation',

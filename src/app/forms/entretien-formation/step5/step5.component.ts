@@ -46,7 +46,7 @@ export class EntretienFormStep5Component {
     libelleFormation: 'string',
     finalite: 'string',
     initiativeDemande: 'select',
-    duree: 'number',
+    duree: 'string',
     motivationResponsable: 'string',
   };
 

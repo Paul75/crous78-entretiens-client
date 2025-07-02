@@ -5,16 +5,16 @@ export type FormDataType = {
   formationsDispensees: { annee: number; disciplineFormation: string; titreFormation: string }[];
   formationsRealisees: {
     libelleFormation: string;
-    nombresHeures: number;
-    nombresHeuresCpf: number;
-    nombresHeuresSuiviEffectif: number;
+    nombresHeures: string;
+    nombresHeuresCpf: string;
+    nombresHeuresSuiviEffectif: string;
   }[];
   formationsDemandees: { action: string; nombresHeures: string }[];
   formationsContinue: {
     libelleFormation: string;
     finalite: string;
     initiativeDemande: string;
-    duree: number;
+    duree: string;
   }[];
   actionsFormationsDemandees: { libelleFormation: string; motivationResponsable: string }[];
 };
