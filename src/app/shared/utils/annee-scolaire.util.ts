@@ -31,6 +31,14 @@ export class AnneeScolaire {
     return `${this.anneeDebut}-${this.anneeFin}`;
   }
 
+  getDateFin(): Date {
+    return new Date(this.anneeFin, 7, 31, 23, 59, 59); // 31 août à 23:59
+  }
+
+  getDateDebut(): Date {
+    return new Date(this.anneeDebut, 8, 1); // 1er septembre anneeDebut
+  }
+
   // Méthode statique pour obtenir l'année scolaire actuelle
   static getAnneeScolaireActuelle(date = new Date()) {
     const mois = date.getMonth() + 1;

@@ -41,7 +41,10 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
   @Input()
   entretien!: Entretien;
 
-  minDate: Date = new Date();
+  anneeScolaire = AnneeScolaire.getAnneeScolaireActuelle();
+
+  minDate = this.anneeScolaire.getDateDebut(); // 1er septembre
+  maxDate = this.anneeScolaire.getDateFin(); // 31 août
 
   typeEntretienEnum = TypeEntretien;
   statutDemandeEnum = StatutDemandeEnum;
@@ -101,9 +104,12 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
   }
 
   onDateSelect(event: any) {
+    console.log(event);
+    console.log('onDateSelect : entretienId', this.entretien.id);
+    // return;
     // console.log(formatDate(this.entretien.dateEntretien, 'yyyy-MM-dd', 'fr-FR'));
     this.dateValue = formatDate(this.dateValue, 'yyyy-MM-dd', 'fr-FR');
-    return this.entretienService.saveDateEntretien(this.dateValue, this.entretien.id).subscribe({
+    this.entretienService.saveDateEntretien(this.dateValue, this.entretien.id).subscribe({
       next: _ => {
         // console.log('Date saved successfully!', response);
 
