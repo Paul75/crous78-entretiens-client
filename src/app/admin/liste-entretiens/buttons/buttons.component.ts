@@ -211,7 +211,13 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
   }
 
   get displayButtonPlus(): boolean {
-    const isDateFuture = new Date(this.entretien.dateEntretien) >= new Date();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const dateEntretien = new Date(this.entretien.dateEntretien);
+    dateEntretien.setHours(0, 0, 0, 0);
+
+    const isDateFuture = dateEntretien >= today;
     const isStatutValide = this.displayBtnPlus.includes(this.entretien.statut);
     return isDateFuture && isStatutValide && this.isInCurrentSchoolYear;
   }
