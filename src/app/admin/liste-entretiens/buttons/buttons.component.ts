@@ -17,7 +17,7 @@ import { SignatureComponent } from '@shared/components/dialogs/signature/signatu
 import { TypesSignatureEnum } from '@shared/enums/types.signature.enum';
 import { CommunicationSignatureService } from '@shared/services/communications/communication-signature.service';
 import { CommunicationEmailsService } from '@shared/services/communications/communication-emails.service';
-import { firstValueFrom } from 'rxjs';
+import { finalize } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { AnneeScolaire } from '@shared/utils/annee-scolaire.util';
 
@@ -91,7 +91,6 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
   @ViewChild('signatureDialog') signatureDialog!: SignatureComponent;
 
   ngOnInit(): void {
-    // this.entretien!.dateEntretien = '';
     this.dateValue = '';
 
     this.communicationSignatureService.actionSaveSign$.subscribe(action => {
@@ -104,45 +103,41 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
   }
 
   onDateSelect(event: any) {
-    console.log(event);
-    console.log('onDateSelect : entretienId', this.entretien.id);
-    // return;
-    // console.log(formatDate(this.entretien.dateEntretien, 'yyyy-MM-dd', 'fr-FR'));
     this.dateValue = formatDate(this.dateValue, 'yyyy-MM-dd', 'fr-FR');
     this.entretienService.saveDateEntretien(this.dateValue, this.entretien.id).subscribe({
       next: _ => {
-        // console.log('Date saved successfully!', response);
-
         this.entretien.dateEntretien = this.dateValue;
         this.entretien.statut = StatutDemandeEnum.RDV;
 
         // Envoi du Mail
-        this.communicationEmailsService.envoyerMail(this.entretien.id, 'rdv').subscribe({
-          next: _ => {
-            // console.log('Mail envoyé avec succès !');
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Succès',
-              detail: 'Mail envoyé avec succès !',
-            });
-          },
-          error: err => {
-            console.error("Erreur lors de l'envoi du mail :", err);
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Erreur',
-              detail: "Erreur lors de l'envoi du mail",
-            });
-          },
-        });
-
-        this.op.hide();
+        this.communicationEmailsService
+          .envoyerMail(this.entretien.id, 'rdv')
+          .pipe(
+            finalize(() => {
+              this.dateValue = '';
+              this.op.hide();
+            }),
+          )
+          .subscribe({
+            next: _ => {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Succès',
+                detail: 'Mail envoyé avec succès !',
+              });
+            },
+            error: err => {
+              console.error("Erreur lors de l'envoi du mail :", err);
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Erreur',
+                detail: "Erreur lors de l'envoi du mail",
+              });
+            },
+          });
       },
       error: err => {
         console.error('Error saving date:', err);
-      },
-      complete: () => {
-        this.dateValue = '';
       },
     });
   }
@@ -216,6 +211,8 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
   }
 
   get displayButtonPlus(): boolean {
-    return this.displayBtnPlus.includes(this.entretien.statut) && this.isInCurrentSchoolYear;
+    const isDateFuture = new Date(this.entretien.dateEntretien) >= new Date();
+    const isStatutValide = this.displayBtnPlus.includes(this.entretien.statut);
+    return isDateFuture && isStatutValide && this.isInCurrentSchoolYear;
   }
 }
