@@ -104,21 +104,21 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
 
   onDateSelect(event: any) {
     this.dateValue = formatDate(this.dateValue, 'yyyy-MM-dd', 'fr-FR');
-    this.entretienService.saveDateEntretien(this.dateValue, this.entretien.id).subscribe({
-      next: _ => {
-        this.entretien.dateEntretien = this.dateValue;
-        this.entretien.statut = StatutDemandeEnum.RDV;
+    this.entretienService
+      .saveDateEntretien(this.dateValue, this.entretien.id)
+      .pipe(
+        finalize(() => {
+          this.dateValue = '';
+          this.op.hide();
+        }),
+      )
+      .subscribe({
+        next: _ => {
+          this.entretien.dateEntretien = this.dateValue;
+          this.entretien.statut = StatutDemandeEnum.RDV;
 
-        // Envoi du Mail
-        this.communicationEmailsService
-          .envoyerMail(this.entretien.id, 'rdv')
-          .pipe(
-            finalize(() => {
-              this.dateValue = '';
-              this.op.hide();
-            }),
-          )
-          .subscribe({
+          // Envoi du Mail
+          this.communicationEmailsService.envoyerMail(this.entretien.id, 'rdv').subscribe({
             next: _ => {
               this.messageService.add({
                 severity: 'success',
@@ -135,11 +135,11 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
               });
             },
           });
-      },
-      error: err => {
-        console.error('Error saving date:', err);
-      },
-    });
+        },
+        error: err => {
+          console.error('Error saving date:', err);
+        },
+      });
   }
 
   newEntretien(changeStatus: boolean) {
