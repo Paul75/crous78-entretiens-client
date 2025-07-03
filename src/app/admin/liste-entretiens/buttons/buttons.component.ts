@@ -217,7 +217,7 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
     const dateEntretien = new Date(this.entretien.dateEntretien);
     dateEntretien.setHours(0, 0, 0, 0);
 
-    const isDatePastOrToday = dateEntretien <= today;
+    const isDatePastOrToday = dateEntretien.getTime() <= today.getTime();
     const isStatutValide = this.displayBtnPlus.includes(this.entretien.statut);
     return isDatePastOrToday && isStatutValide && this.isInCurrentSchoolYear;
   }
