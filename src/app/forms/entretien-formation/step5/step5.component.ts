@@ -9,7 +9,6 @@ import {
   FormArray,
 } from '@angular/forms';
 
-import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { FormProvider } from '../../providers/form.provider';
@@ -24,7 +23,6 @@ import { FormulaireService } from '@forms/services/formulaire.service';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbDatepickerModule,
     ButtonModule,
     StepperModule,
     InputNumberModule,

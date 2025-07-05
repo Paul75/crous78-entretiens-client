@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { FormsModule, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
 
-import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { FormProvider } from '../../providers/form.provider';
@@ -16,10 +15,9 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbDatepickerModule,
     ButtonModule,
     RadioButtonModule,
-    StepperModule /*, RouterLink*/,
+    StepperModule,
   ],
   providers: [],
   templateUrl: './step4.component.html',

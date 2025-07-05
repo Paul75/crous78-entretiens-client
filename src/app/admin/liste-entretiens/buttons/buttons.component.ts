@@ -64,6 +64,7 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
    */
 
   private readonly displayBtnViewDownload = [
+    this.statutDemandeEnum.RDV,
     this.statutDemandeEnum.ENCOURS,
     this.statutDemandeEnum.AGENTSIGN,
     this.statutDemandeEnum.CHEFSIGN,

@@ -2,13 +2,12 @@ import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { environment } from '@environments/environment';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { CredentialsService, Personne } from '@core/authentication/credentials.service';
 import { RedirectService } from '@shared/services/redirect.service';
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, RouterModule, NgbDropdownModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
 
-import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { ToggleButtonModule } from 'primeng/togglebutton';
@@ -17,7 +16,6 @@ import { InputNumberModule } from 'primeng/inputnumber';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbDatepickerModule,
     ButtonModule,
     StepperModule,
     DatePickerModule,

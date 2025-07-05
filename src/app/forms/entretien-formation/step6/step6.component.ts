@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 
-import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { FormProvider } from '../../providers/form.provider';
@@ -16,7 +15,6 @@ import { TextareaModule } from 'primeng/textarea';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbDatepickerModule,
     ButtonModule,
     StepperModule,
     TableModule,
