@@ -6,6 +6,7 @@
       (click)="newEntretien(false)"
       severity="help"
       rounded
+      pTooltip="Préparer l'entretien"
     />
 
     <p-button
@@ -22,6 +23,7 @@
       icon="pi pi-download"
       (click)="getPDF()"
       severity="secondary"
+      pTooltip="Télécharger le PDF"
       rounded
     />
 
@@ -30,6 +32,7 @@
       icon="pi pi-calendar"
       (onClick)="op.toggle($event)"
       severity="secondary"
+      pTooltip="Choisir la date de l'entretien"
       rounded
     />
 
@@ -51,6 +54,7 @@
       icon="pi pi-pencil"
       (click)="goSignature()"
       severity="secondary"
+      pTooltip="Signer l'entretien"
       rounded
     />
 
@@ -59,6 +63,7 @@
       icon="pi pi-plus"
       (click)="newEntretien(true)"
       severity="success"
+      pTooltip="Remplir l'entretien avec l'agent"
       rounded
     />
   </ng-container>

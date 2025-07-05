@@ -20,6 +20,7 @@ import { CommunicationEmailsService } from '@shared/services/communications/comm
 import { finalize } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { AnneeScolaire } from '@shared/utils/annee-scolaire.util';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-admin-liste-entretiens-buttons',
@@ -29,6 +30,7 @@ import { AnneeScolaire } from '@shared/utils/annee-scolaire.util';
     ButtonModule,
     ButtonGroupModule,
     DatePickerModule,
+    TooltipModule,
     PopoverModule,
     FormsModule,
     SignatureComponent,
