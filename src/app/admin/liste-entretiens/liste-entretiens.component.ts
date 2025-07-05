@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Table, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -23,6 +23,9 @@ import { PersonnelService } from '@admin/services/personnel.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { Credentials, CredentialsService } from '@core/authentication/credentials.service';
+import { Subject, takeUntil } from 'rxjs';
+import { HttpResponse } from '@angular/common/http';
+import { toBlob } from '@shared/utils/files.util';
 
 export class PersonneImpl {
   id!: string;
@@ -53,7 +56,7 @@ export class PersonneImpl {
   templateUrl: './liste-entretiens.component.html',
   styleUrl: './liste-entretiens.component.scss',
 })
-export class ListeEntretiensComponent implements OnInit {
+export class ListeEntretiensComponent implements OnInit, OnDestroy {
   name = environment.application.name;
   angular = environment.application.angular;
   bootstrap = environment.application.bootstrap;
@@ -79,6 +82,9 @@ export class ListeEntretiensComponent implements OnInit {
   private pdfViewer!: NgxExtendedPdfViewerComponent;
   visibleDetailPdf = false;
   src!: Blob;
+  filename: string = '';
+
+  private destroy = new Subject<void>();
 
   constructor(
     private seoService: SeoService,
@@ -98,18 +104,23 @@ export class ListeEntretiensComponent implements OnInit {
 
     this.seoService.setMetaDescription(content);
     this.seoService.setMetaTitle(title);
-
-    this.communicationService.actionGet$.subscribe(action => {
-      this.getPDF(action);
-    });
-
-    this.communicationService.actionView$.subscribe(action => {
-      this.viewPDF(action);
-    });
   }
 
   ngOnInit(): void {
+    this.communicationService.actionGet$.pipe(takeUntil(this.destroy)).subscribe(action => {
+      this.getPDF(action);
+    });
+
+    this.communicationService.actionView$.pipe(takeUntil(this.destroy)).subscribe(action => {
+      this.viewPDF(action);
+    });
+
     this.refreshDatas();
+  }
+
+  ngOnDestroy() {
+    this.destroy.next();
+    this.destroy.complete();
   }
 
   get isAdmin(): boolean {
@@ -148,11 +159,12 @@ export class ListeEntretiensComponent implements OnInit {
   getPDF(id: number) {
     this.loading = true;
     this.pdfService.downloadPdf(id).subscribe({
-      next: (data: Blob) => {
+      next: (response: HttpResponse<Blob>) => {
+        const { blob, filename } = toBlob(response);
+        const objectUrl = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        const objectUrl = URL.createObjectURL(data);
         a.href = objectUrl;
-        a.download = 'entretien_pro.pdf';
+        a.download = filename;
         a.click();
         URL.revokeObjectURL(objectUrl);
         a.remove();
@@ -166,12 +178,17 @@ export class ListeEntretiensComponent implements OnInit {
   }
 
   viewPDF(id: number) {
+    if (!id) return;
     this.loading = true;
     this.pdfService.downloadPdf(id).subscribe({
-      next: (data: Blob) => {
-        this.src = data;
+      next: (response: HttpResponse<Blob>) => {
+        const { blob, filename } = toBlob(response);
+        this.filename = filename;
 
-        this.visibleDetailPdf = true;
+        if (blob) {
+          this.src = blob;
+          this.visibleDetailPdf = true;
+        }
       },
       error: e => console.error('viewPDF error: ', e),
       complete: () => {

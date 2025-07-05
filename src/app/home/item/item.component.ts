@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ButtonGroupModule } from 'primeng/buttongroup';
@@ -14,6 +14,7 @@ import { CommunicationSignatureService } from '@shared/services/communications/c
 import { AgentCommentaireComponent } from '@shared/components/dialogs/agent-commentaire/agent-commentaire.component';
 import { CommunicationCommentairesService } from '@shared/services/communications/communication-commentaires.service';
 import { CredentialsService } from '@core/authentication/credentials.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-home-item',
@@ -29,7 +30,7 @@ import { CredentialsService } from '@core/authentication/credentials.service';
   templateUrl: './item.component.html',
   styleUrl: './item.component.scss',
 })
-export class HomeItemComponent implements OnInit {
+export class HomeItemComponent implements OnInit, OnDestroy {
   @Input()
   entretien!: Entretien;
 
@@ -64,22 +65,34 @@ export class HomeItemComponent implements OnInit {
     this.statutDemandeEnum.AGENTSIGN,
   ];
 
+  private destroy = new Subject<void>();
+
   ngOnInit(): void {
-    this.communicationPdfService.actionGet$.subscribe(action => {
+    this.communicationPdfService.actionGet$.pipe(takeUntil(this.destroy)).subscribe(action => {
       if (this.entretien.id === action) this.getPDF(action);
     });
 
-    this.communicationPdfService.actionView$.subscribe(action => {
+    this.communicationPdfService.actionView$.pipe(takeUntil(this.destroy)).subscribe(action => {
       if (this.entretien.id === action) this.viewPDF(action);
     });
 
-    this.communicationSignatureService.actionSaveSign$.subscribe(action => {
-      if (this.entretien.id === action) this.entretien.statut = StatutDemandeEnum.CHEFSIGN;
-    });
+    this.communicationSignatureService.actionSaveSign$
+      .pipe(takeUntil(this.destroy))
+      .subscribe(action => {
+        if (this.entretien.id === action) this.entretien.statut = StatutDemandeEnum.CHEFSIGN;
+      });
 
-    this.communicationCommentairesService.actionSaveCommentaire$.subscribe(action => {
-      if (this.entretien.id === action) this.entretien.statut = StatutDemandeEnum.AGENTCOMMENTAIRE;
-    });
+    this.communicationCommentairesService.actionSaveCommentaire$
+      .pipe(takeUntil(this.destroy))
+      .subscribe(action => {
+        if (this.entretien.id === action)
+          this.entretien.statut = StatutDemandeEnum.AGENTCOMMENTAIRE;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
   }
 
   getStatutClasses() {

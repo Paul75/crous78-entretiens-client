@@ -7,6 +7,8 @@ import { DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
 import { NgxExtendedPdfViewerComponent, NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { PdfService } from '@shared/services/pdf/pdf.service';
+import { HttpResponse } from '@angular/common/http';
+import { toBlob } from '@shared/utils/files.util';
 
 @Component({
   selector: 'app-home-dialog-pdf',
@@ -32,35 +34,45 @@ export class ViewPdfComponent implements AfterViewInit {
 
   private messageService = inject(MessageService);
   private pdfService = inject(PdfService);
+  filename: string = '';
 
   ngAfterViewInit(): void {}
 
   getPDF(id: number) {
     if (!id) return;
     this.pdfService.downloadPdf(id).subscribe({
-      next: (data: Blob) => {
+      next: (response: HttpResponse<Blob>) => {
+        const { blob, filename } = toBlob(response);
+        const objectUrl = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        const objectUrl = URL.createObjectURL(data);
         a.href = objectUrl;
-        a.download = 'entretien_pro.pdf';
+        a.download = filename;
         a.click();
         URL.revokeObjectURL(objectUrl);
         a.remove();
       },
       error: e => console.error('downloadPdf error: ', e),
+      complete: () => {
+        this.pdfService.resetCache(id);
+      },
     });
   }
 
   viewPDF(id: number) {
     if (!id) return;
     this.pdfService.downloadPdf(id).subscribe({
-      next: (data: Blob) => {
-        this.src = data;
-
-        // this.visibleDetailPdf = true;
-        this.display = true;
+      next: (response: HttpResponse<Blob>) => {
+        const { blob, filename } = toBlob(response);
+        this.filename = filename;
+        if (blob) {
+          this.src = blob;
+          this.display = true;
+        }
       },
       error: e => console.error('viewPDF error: ', e),
+      complete: () => {
+        this.pdfService.resetCache(id);
+      },
     });
   }
 

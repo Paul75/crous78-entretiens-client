@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule, formatDate } from '@angular/common';
 import { Entretien } from '@shared/models/entretien.model';
 
@@ -17,7 +17,7 @@ import { SignatureComponent } from '@shared/components/dialogs/signature/signatu
 import { TypesSignatureEnum } from '@shared/enums/types.signature.enum';
 import { CommunicationSignatureService } from '@shared/services/communications/communication-signature.service';
 import { CommunicationEmailsService } from '@shared/services/communications/communication-emails.service';
-import { finalize } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { AnneeScolaire } from '@shared/utils/annee-scolaire.util';
 import { TooltipModule } from 'primeng/tooltip';
@@ -39,7 +39,7 @@ import { TooltipModule } from 'primeng/tooltip';
   templateUrl: './buttons.component.html',
   styleUrl: './buttons.component.scss',
 })
-export class AdminListeEntretiensButtonsComponent implements OnInit {
+export class AdminListeEntretiensButtonsComponent implements OnInit, OnDestroy {
   @Input()
   entretien!: Entretien;
 
@@ -60,6 +60,8 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
   private communicationService = inject(CommunicationPdfService);
   private communicationSignatureService = inject(CommunicationSignatureService);
   private communicationEmailsService = inject(CommunicationEmailsService);
+
+  private destroy = new Subject<void>();
 
   /**
    * Configuration des BOUTONS
@@ -96,9 +98,16 @@ export class AdminListeEntretiensButtonsComponent implements OnInit {
   ngOnInit(): void {
     this.dateValue = '';
 
-    this.communicationSignatureService.actionSaveSign$.subscribe(action => {
-      if (this.entretien.id === action) this.afterSign(action);
-    });
+    this.communicationSignatureService.actionSaveSign$
+      .pipe(takeUntil(this.destroy))
+      .subscribe(action => {
+        if (this.entretien.id === action) this.afterSign(action);
+      });
+  }
+
+  ngOnDestroy() {
+    this.destroy.next();
+    this.destroy.complete();
   }
 
   afterSign(entretienId: number) {

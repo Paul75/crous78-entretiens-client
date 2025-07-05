@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
 import { catchError, Observable, shareReplay, throwError } from 'rxjs';
@@ -11,7 +11,23 @@ export class PdfService {
   private backendUrl = environment.backend;
   private cacheMap = new Map<number, Observable<any>>();
 
-  downloadPdf(entretienId: number): Observable<any> {
+  downloadPdf(entretienId: number): Observable<HttpResponse<Blob>> {
+    if (!this.cacheMap.has(entretienId)) {
+      this.cacheMap.set(
+        entretienId,
+        this.http
+          .get(this.backendUrl + '/pdfs/' + entretienId, {
+            responseType: 'blob',
+            observe: 'response',
+          })
+          .pipe(shareReplay({ bufferSize: 1, refCount: true }))
+          .pipe(catchError(this.handleError('downloadPdf', {}))),
+      );
+    }
+    return this.cacheMap.get(entretienId)!;
+  }
+
+  downloadPdf2(entretienId: number): Observable<any> {
     if (!this.cacheMap.has(entretienId)) {
       this.cacheMap.set(
         entretienId,
