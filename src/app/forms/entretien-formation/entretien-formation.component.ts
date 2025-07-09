@@ -316,58 +316,24 @@ export class EntretienFormationComponent
     }
   }
 
-  /*onSubmit() {
-    if (this.entretienForm.invalid) {
-      this.entretienForm.markAllAsTouched();
-      this.fromNextStep = false;
-      return;
-    }
-
-    transformDatesToBdd(this.entretienForm);
-
-    if (!this.fromNextStep) {
-      const statutsExclus = [StatutDemandeEnum.PREPARE, StatutDemandeEnum.RDV];
-
-      const statut = this.entretienForm.value.statut;
-      if (!statutsExclus.includes(statut)) {
-        this.entretienForm.value.statut = StatutDemandeEnum.AGENTSIGN;
-      }
-    }
-
-    if (this.entretienForm.value.formationsDispensees?.length === 0) {
-      delete this.entretienForm.value.formationsDispensees;
-    }
-    if (this.entretienForm.value.formationsRealisees?.length === 0) {
-      delete this.entretienForm.value.formationsRealisees;
-    }
-    if (this.entretienForm.value.formationsDemandees?.length === 0) {
-      delete this.entretienForm.value.formationsDemandees;
-    }
-    if (this.entretienForm.value.formationsContinue?.length === 0) {
-      delete this.entretienForm.value.formationsContinue;
-    }
-    if (this.entretienForm.value.actionsFormationsDemandees?.length === 0) {
-      delete this.entretienForm.value.actionsFormationsDemandees;
-    }
-
-    this.entretienService
-      .updateEntretien(this.entretienForm.value.id, this.entretienForm.value)
-      .subscribe({
-        next: (v: any) => {
-          if (!this.fromNextStep) {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Succès',
-              detail: 'Formulaire enregistré avec succès !',
-            });
-          }
-
-          transformDatesToDisplay(this.entretienForm);
-          this.fromNextStep = false;
-        },
-        error: e => console.error(e),
+  goSaveStep() {
+    this.saveCurrentStep()
+      .then(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sauvegarde réussie',
+          detail: 'Les données ont été sauvegardées avec succès.',
+        });
+      })
+      .catch(error => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur de sauvegarde',
+          detail: 'Une erreur est survenue lors de la sauvegarde des données.',
+        });
+        console.error('Erreur de sauvegarde:', error);
       });
-  }*/
+  }
 
   get boutonLabelSubmit(): string {
     const statut = this.entretienForm.value.statut;

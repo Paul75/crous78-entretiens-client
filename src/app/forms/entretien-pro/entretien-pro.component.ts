@@ -222,7 +222,6 @@ export class EntretienProComponent
   async saveCurrentStep() {
     switch (this.currentStepIndex) {
       case 1:
-        // this.step1ChildComponents.first.saveDatas();
         await this.step1ChildComponents.first.saveDatas();
         transformDatesToDisplay(this.entretienForm);
         break;
@@ -248,43 +247,24 @@ export class EntretienProComponent
     }
   }
 
-  /*onSubmit() {
-    // console.log(this.entretienForm);
-    if (this.entretienForm.invalid) {
-      this.entretienForm.markAllAsTouched();
-      this.fromNextStep = false;
-      return;
-    }
-
-    transformDatesToBdd(this.entretienForm);
-
-    if (!this.fromNextStep) {
-      const statutsExclus = [StatutDemandeEnum.PREPARE, StatutDemandeEnum.RDV];
-      const statut = this.entretienForm.value.statut;
-
-      if (!statutsExclus.includes(statut)) {
-        this.entretienForm.value.statut = StatutDemandeEnum.AGENTSIGN;
-      }
-    }
-
-    this.entretienService
-      .updateEntretien(this.entretienForm.value.id, this.entretienForm.value)
-      .subscribe({
-        next: (v: any) => {
-          if (!this.fromNextStep) {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Succès',
-              detail: 'Formulaire enregistré avec succès !',
-            });
-          }
-
-          transformDatesToDisplay(this.entretienForm);
-          this.fromNextStep = false;
-        },
-        error: e => console.error(e),
+  goSaveStep() {
+    this.saveCurrentStep()
+      .then(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sauvegarde réussie',
+          detail: 'Les données ont été sauvegardées avec succès.',
+        });
+      })
+      .catch(error => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur de sauvegarde',
+          detail: 'Une erreur est survenue lors de la sauvegarde des données.',
+        });
+        console.error('Erreur de sauvegarde:', error);
       });
-  }*/
+  }
 
   get boutonLabelSubmit(): string {
     const statut = this.entretienForm.value.statut;
