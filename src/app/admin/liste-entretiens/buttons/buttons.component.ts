@@ -79,7 +79,15 @@ export class AdminListeEntretiensButtonsComponent implements OnInit, OnDestroy {
 
   private readonly displayBtnSign = [this.statutDemandeEnum.CHEFSIGN];
 
-  private readonly displayBtnPlus = [this.statutDemandeEnum.RDV, this.statutDemandeEnum.ENCOURS];
+  private readonly displayBtnPlus = [
+    this.statutDemandeEnum.RDV,
+    this.statutDemandeEnum.ENCOURS,
+    this.statutDemandeEnum.AGENTCOMMENTAIRE,
+  ];
+  private readonly displayBtnAgentSign = [
+    this.statutDemandeEnum.RDV,
+    this.statutDemandeEnum.ENCOURS,
+  ];
 
   private readonly displayBtnEnPreparation = [
     this.statutDemandeEnum.PREPARE,
@@ -163,7 +171,7 @@ export class AdminListeEntretiensButtonsComponent implements OnInit, OnDestroy {
       this.router.navigate([path, this.entretien.id]);
     };
 
-    if (!changeStatus) {
+    if (!changeStatus || this.entretien.statut === this.statutDemandeEnum.AGENTCOMMENTAIRE) {
       navigateToEntretien();
     } else {
       this.entretienService
@@ -175,6 +183,39 @@ export class AdminListeEntretiensButtonsComponent implements OnInit, OnDestroy {
           },
         });
     }
+  }
+
+  sendToSign() {
+    if (!this.entretien) return;
+    this.entretienService
+      .changeStatut(this.statutDemandeEnum.AGENTSIGN, this.entretien.id)
+      .subscribe({
+        next: _ => {
+          this.entretien.statut = StatutDemandeEnum.AGENTSIGN;
+
+          // Envoi du Mail
+          this.communicationEmailsService.envoyerMail(this.entretien.id, 'signature').subscribe({
+            next: _ => {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Succès',
+                detail: 'Mail envoyé avec succès !',
+              });
+            },
+            error: err => {
+              console.error("Erreur lors de l'envoi du mail :", err);
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Erreur',
+                detail: "Erreur lors de l'envoi du mail",
+              });
+            },
+          });
+        },
+        error: err => {
+          console.error('Error saving date:', err);
+        },
+      });
   }
 
   getPDF() {
@@ -232,5 +273,10 @@ export class AdminListeEntretiensButtonsComponent implements OnInit, OnDestroy {
     const isDatePastOrToday = dateEntretien.getTime() <= today.getTime();
     const isStatutValide = this.displayBtnPlus.includes(this.entretien.statut);
     return isDatePastOrToday && isStatutValide && this.isInCurrentSchoolYear;
+  }
+
+  get displayButtonAgentSign(): boolean {
+    //displayBtnAgentSign
+    return this.displayBtnAgentSign.includes(this.entretien.statut);
   }
 }

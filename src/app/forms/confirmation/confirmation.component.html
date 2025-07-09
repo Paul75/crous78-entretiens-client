@@ -1,9 +1,25 @@
-<div class="container">
-  <div class="row">
-    <div class="col"><h2>Confirmation</h2></div>
+<div class="confirmation-wrapper">
+  <div class="confirmation-container">
+    <i class="pi pi-check-circle icon-success"></i>
+    <h2>Votre entretien a bien été enregistré !</h2>
+    <p>Vous pouvez consulter le PDF récapitulatif ou revenir à l’administration.</p>
+
+    <div class="actions">
+      <p-button
+        label="Voir le PDF"
+        [rounded]="true"
+        [raised]="true"
+        severity="secondary"
+        (click)="viewPDF(entretienId)"
+      />
+      <p-button
+        label="Retour à l'administration"
+        [rounded]="true"
+        [raised]="true"
+        severity="success"
+        routerLink="/admin"
+      />
+    </div>
   </div>
-
-  <h2>La saisie du formulaire est terminée.</h2>
-
-  <div><a routerLink="/">RETOUR</a></div>
 </div>
+<app-home-dialog-pdf #pdfDialog />

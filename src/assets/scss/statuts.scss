@@ -1,34 +1,41 @@
-.preparation {
-  background-color: #cabf1d; /* Couleur pour 'En préparation' */
-  color: #0c0000;
-}
+.status {
+  padding: 0.25rem 0.6rem; // Espacement interne
+  font-size: 0.875rem; // Taille de texte lisible (14px)
+  font-weight: 500; // Texte bien visible
+  white-space: nowrap;
 
-.rendez-vous {
-  background-color: #f8683c; /* Couleur pour 'Rendez-vous pris' */
-  color: #0c0000;
-}
+  &.preparation {
+    background-color: #f1c40f; // Jaune vif avec meilleur contraste
+    color: #000000; // Texte noir
+  }
 
-.saisie {
-  background-color: #87e431; /* Couleur pour 'En cours de saisie' */
-  color: #0c0000;
-}
+  &.rendez-vous {
+    background-color: #e67e22; // Orange plus foncé et accessible
+    color: #ffffff; // Texte blanc pour meilleur contraste
+  }
 
-.commentaires-personne {
-  background-color: #cccccc; /* Couleur pour 'En cours de saisie' */
-  color: #0c0000;
-}
+  &.saisie {
+    background-color: #28a745; // Vert accessible
+    color: #ffffff; // Texte blanc pour bon contraste
+  }
 
-.signe-personne {
-  background-color: #009ad6; /* Couleur pour 'A signer (agent)' */
-  color: #0c0000;
-}
+  &.commentaires-personne {
+    background-color: #b0b0b0; // Gris plus contrasté
+    color: #000000; // Texte noir franc
+  }
 
-.signe-chef {
-  background-color: #8f02b9; /* Couleur pour 'A signer (chef)' */
-  color: #0c0000;
-}
+  &.signe-personne {
+    background-color: #009ad6; // Bleu agent
+    color: #ffffff; // Texte blanc pour bon contraste
+  }
 
-.valide {
-  background-color: #b90019; /* Couleur pour 'Entretien validé' */
-  color: #0c0000;
+  &.signe-chef {
+    background-color: #8f02b9; // Violet chef
+    color: #ffffff; // Texte blanc pour bon contraste
+  }
+
+  &.valide {
+    background-color: #d32f2f; // rouge sombre
+    color: #fff; // texte blanc
+  }
 }

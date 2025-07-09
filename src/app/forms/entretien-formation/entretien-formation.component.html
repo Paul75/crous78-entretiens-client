@@ -6,7 +6,7 @@
     </div>
   </div>
 
-  <form [formGroup]="entretienForm" (ngSubmit)="onSubmit()" novalidate *ngIf="entretienForm">
+  <form [formGroup]="entretienForm" novalidate *ngIf="entretienForm">
     <div class="container">
       <div class="row row-cols-sm-auto">
         <div class="input-group">
@@ -107,6 +107,17 @@
               </ng-template>
             </p-step-panel>
           </p-step-item>
+
+          <p-step-item [value]="8">
+            <p-step>ENTRETIEN TERMINE</p-step>
+            <p-step-panel>
+              <ng-template #content let-activateCallback="activateCallback">
+                <div class="flex flex-col h-48">
+                  <app-entretien-form-step8 />
+                </div>
+              </ng-template>
+            </p-step-panel>
+          </p-step-item>
         </p-stepper>
       </div>
     </div>
@@ -141,15 +152,6 @@
         [rounded]="true"
         [raised]="true"
         [disabled]="isLastStep()"
-      />
-      <p-button
-        label="ENREGISTRER"
-        icon="pi pi-save"
-        size="large"
-        severity="success"
-        (click)="onSubmit()"
-        [rounded]="true"
-        [raised]="true"
       />
     </div>
   </form>

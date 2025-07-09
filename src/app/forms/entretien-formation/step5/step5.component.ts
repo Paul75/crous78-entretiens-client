@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {
@@ -9,13 +9,14 @@ import {
   FormArray,
 } from '@angular/forms';
 
-import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { FormProvider } from '../../providers/form.provider';
 import { TableModule } from 'primeng/table';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { SelectModule } from 'primeng/select';
 import { FormulaireService } from '@forms/services/formulaire.service';
+import { EntretienStepsService } from '@shared/services/entretiens/entretien-steps.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-entretien-form-step5',
@@ -24,7 +25,6 @@ import { FormulaireService } from '@forms/services/formulaire.service';
     FormsModule,
     ReactiveFormsModule,
     ButtonModule,
-    StepperModule,
     InputNumberModule,
     TableModule,
     SelectModule,
@@ -61,6 +61,8 @@ export class EntretienFormStep5Component {
     libelleFormation: 'Libellé de la formation',
     motivationResponsable: "Motivation du responsable conduisant l'entretien (si avis défavorable)",
   };
+
+  private entretienStepsService = inject(EntretienStepsService);
 
   constructor(
     private formService: FormulaireService,
@@ -171,18 +173,27 @@ export class EntretienFormStep5Component {
     }
   }
 
-  saveData() {
-    this.formService.update({
-      formationsContinue: this.form.value.formationsContinue,
-      actionsFormationsDemandees: this.form.value.actionsFormationsDemandees,
-    });
-  }
-
   get formationsContinue(): FormArray {
     return this.form.get('formationsContinue') as FormArray;
   }
 
   get actionsFormationsDemandees(): FormArray {
     return this.form.get('actionsFormationsDemandees') as FormArray;
+  }
+
+  async saveDatas(): Promise<void> {
+    this.formService.update({
+      formationsContinue: this.form.value.formationsContinue,
+      actionsFormationsDemandees: this.form.value.actionsFormationsDemandees,
+    });
+
+    const { id, formationsContinue, actionsFormationsDemandees } = this.form.value;
+
+    const step5Payload = {
+      formationsContinue,
+      actionsFormationsDemandees,
+    };
+
+    await firstValueFrom(this.entretienStepsService.updateEntretienStep5(id, step5Payload));
   }
 }

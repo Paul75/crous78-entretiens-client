@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 
 import { FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
 
-import { StepItem, StepperModule } from 'primeng/stepper';
+import { StepItem, Stepper, StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
 import { FormProvider } from '../providers/form.provider';
@@ -25,6 +25,7 @@ import { EntretienProStep4Component } from './step4/step4.component';
 import { EntretienProStep5Component } from './step5/step5.component';
 import { EntretienProStep6Component } from './step6/step6.component';
 import { EntretienProStep7Component } from './step7/step7.component';
+import { EntretienProStep8Component } from './step8/step8.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Entretien } from '@shared/models/entretien.model';
 import { EntretienService } from '@shared/services/entretiens/entretien.service';
@@ -32,7 +33,7 @@ import { environment } from '@environments/environment';
 import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
 import { DatePickerModule } from 'primeng/datepicker';
 import { EntretienProProvider } from '@forms/providers/entretien-pro.provider';
-import { transformDatesToBdd, transformDatesToDisplay } from '@shared/utils/dates.utils';
+import { transformDatesToDisplay } from '@shared/utils/dates.utils';
 import { FormulaireService } from '@forms/services/formulaire.service';
 import { ButtonGroupModule } from 'primeng/buttongroup';
 import { ToastModule } from 'primeng/toast';
@@ -57,6 +58,7 @@ import { MessageService } from 'primeng/api';
     EntretienProStep5Component,
     EntretienProStep6Component,
     EntretienProStep7Component,
+    EntretienProStep8Component,
   ],
   providers: [
     MessageService,
@@ -83,11 +85,33 @@ export class EntretienProComponent
 
   typeForm = 'professionnel';
 
+  // Utilisez ViewChildren au lieu de ViewChild
+  @ViewChildren(EntretienProStep1Component)
+  step1ChildComponents!: QueryList<EntretienProStep1Component>;
+
+  @ViewChildren(EntretienProStep2Component)
+  step2ChildComponents!: QueryList<EntretienProStep2Component>;
+
+  @ViewChildren(EntretienProStep3Component)
+  step3ChildComponents!: QueryList<EntretienProStep3Component>;
+
+  @ViewChildren(EntretienProStep4Component)
+  step4ChildComponents!: QueryList<EntretienProStep4Component>;
+
+  @ViewChildren(EntretienProStep5Component)
+  step5ChildComponents!: QueryList<EntretienProStep5Component>;
+
+  @ViewChildren(EntretienProStep6Component)
+  step6ChildComponents!: QueryList<EntretienProStep6Component>;
+
+  @ViewChildren(EntretienProStep7Component)
+  step7ChildComponents!: QueryList<EntretienProStep7Component>;
+
   entretienForm!: FormGroup;
 
   stepsCount = 0;
   currentStepIndex: number = 1;
-  @ViewChild('stepper') stepper: any;
+  @ViewChild('stepper') stepper!: Stepper;
   @ViewChildren(StepItem) stepItems!: QueryList<StepItem>;
   private fromNextStep = false;
 
@@ -112,6 +136,7 @@ export class EntretienProComponent
   ngAfterViewInit(): void {
     this.stepsCount = this.stepItems.length;
     this.getEntretienById();
+    this.cdref.detectChanges();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -135,11 +160,16 @@ export class EntretienProComponent
       this.currentStepIndex--;
     }
   }
-  goToNextStep() {
+  async goToNextStep() {
     if (!this.isLastStep()) {
-      this.fromNextStep = true;
-      this.onSubmit();
-      this.currentStepIndex++;
+      try {
+        this.fromNextStep = true;
+        await this.saveCurrentStep();
+        this.currentStepIndex++;
+      } catch (e) {
+        console.error('Erreur lors de la sauvegarde', e);
+        // éventuellement afficher un message à l'utilisateur
+      }
     }
   }
 
@@ -155,6 +185,9 @@ export class EntretienProComponent
   getEntretien(id: number): void {
     if (id !== 0) {
       this.entretienService.getEntretien(id).subscribe((item: Entretien) => {
+        if (new Date(item.dateEntretien) < this.minDate) {
+          item.dateEntretien = this.minDate.toDateString();
+        }
         this.setForm(item);
         this.cdref.detectChanges();
       });
@@ -186,7 +219,36 @@ export class EntretienProComponent
     return this.getForm().get('objectifsFixes') as FormGroup;
   }
 
-  onSubmit() {
+  async saveCurrentStep() {
+    switch (this.currentStepIndex) {
+      case 1:
+        // this.step1ChildComponents.first.saveDatas();
+        await this.step1ChildComponents.first.saveDatas();
+        transformDatesToDisplay(this.entretienForm);
+        break;
+      case 2:
+        await this.step2ChildComponents.first.saveDatas();
+        transformDatesToDisplay(this.entretienForm);
+        break;
+      case 3:
+        await this.step3ChildComponents.first.saveDatas();
+        break;
+      case 4:
+        await this.step4ChildComponents.first.saveDatas();
+        break;
+      case 5:
+        await this.step5ChildComponents.first.saveDatas();
+        break;
+      case 6:
+        await this.step6ChildComponents.first.saveDatas();
+        break;
+      case 7:
+        await this.step7ChildComponents.first.saveDatas();
+        break;
+    }
+  }
+
+  /*onSubmit() {
     // console.log(this.entretienForm);
     if (this.entretienForm.invalid) {
       this.entretienForm.markAllAsTouched();
@@ -222,7 +284,7 @@ export class EntretienProComponent
         },
         error: e => console.error(e),
       });
-  }
+  }*/
 
   get boutonLabelSubmit(): string {
     const statut = this.entretienForm.value.statut;

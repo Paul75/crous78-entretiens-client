@@ -28,13 +28,15 @@ export const routes: Routes = [
                 mod => mod.EntretienFormationComponent,
               ),
           },
+          {
+            path: 'confirmation/:id',
+            canActivate: [AuthenticationGuard],
+            loadComponent: () =>
+              import('./confirmation/confirmation.component').then(
+                mod => mod.ConfirmationComponent,
+              ),
+          },
         ],
-      },
-      {
-        path: 'confirmation',
-        canActivate: [AuthenticationGuard],
-        loadComponent: () =>
-          import('./confirmation/confirmation.component').then(mod => mod.ConfirmationComponent),
       },
 
       { path: '**', component: NotFoundComponent },

@@ -4,7 +4,10 @@
       <div class="col" *ngIf="displayDate">
         {{ getDateEntretien() | date: 'dd/MM/yyyy' }}
       </div>
-      <div class="col badge text-wrap lineEntretien text-nowrap" [ngClass]="getStatutClasses()">
+      <div
+        class="col badge text-wrap lineEntretien text-nowrap status"
+        [ngClass]="getStatutClasses()"
+      >
         {{ getEntretienStatut() }}
       </div>
       <div class="col-2" style="width: 5rem; padding: 0; margin: 0" *ngIf="buttons">

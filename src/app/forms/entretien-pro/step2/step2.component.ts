@@ -1,13 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
 
-import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { FormProvider } from '../../providers/form.provider';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { DatePickerModule } from 'primeng/datepicker';
+import { EntretienStepsService } from '@shared/services/entretiens/entretien-steps.service';
+import { firstValueFrom } from 'rxjs';
+import { transformDatesToBdd } from '@shared/utils/dates.utils';
 
 @Component({
   selector: 'app-entretien-pro-step2',
@@ -15,10 +17,8 @@ import { DatePickerModule } from 'primeng/datepicker';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    StepperModule,
     ButtonModule,
     ToggleButtonModule,
-    StepperModule,
     DatePickerModule,
   ],
   providers: [],
@@ -28,6 +28,8 @@ import { DatePickerModule } from 'primeng/datepicker';
 export class EntretienProStep2Component {
   form: FormGroup;
 
+  private entretienStepsService = inject(EntretienStepsService);
+
   constructor(private formProvider: FormProvider) {
     this.form = this.formProvider.getForm();
   }
@@ -36,7 +38,42 @@ export class EntretienProStep2Component {
     return this.form.controls;
   }
 
-  saveData() {
-    // Save data for step 2
+  async saveDatas(): Promise<void> {
+    transformDatesToBdd(this.form);
+
+    const {
+      id,
+      structure,
+      intitulePoste,
+      dateAffectation,
+      emploiType,
+      positionPoste,
+      quotiteAffectation,
+      missions,
+      conduiteProjet,
+      encadrement,
+      cpeNbAgent,
+      cpeCategA,
+      cpeCategB,
+      cpeCategC,
+    } = this.form.value;
+
+    const step2Payload = {
+      structure,
+      intitulePoste,
+      dateAffectation,
+      emploiType,
+      positionPoste,
+      quotiteAffectation,
+      missions,
+      conduiteProjet,
+      encadrement,
+      cpeNbAgent,
+      cpeCategA,
+      cpeCategB,
+      cpeCategC,
+    };
+
+    await firstValueFrom(this.entretienStepsService.updateEntretienStep2(id, step2Payload));
   }
 }

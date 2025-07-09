@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {
@@ -9,13 +9,14 @@ import {
   FormArray,
 } from '@angular/forms';
 
-import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { FormProvider } from '../../providers/form.provider';
 import { TableModule } from 'primeng/table';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { AnneeScolaire } from '@shared/utils/annee-scolaire.util';
 import { FormulaireService } from '@forms/services/formulaire.service';
+import { EntretienStepsService } from '@shared/services/entretiens/entretien-steps.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-entretien-form-step3',
@@ -24,7 +25,6 @@ import { FormulaireService } from '@forms/services/formulaire.service';
     FormsModule,
     ReactiveFormsModule,
     ButtonModule,
-    StepperModule,
     InputNumberModule,
     TableModule,
   ],
@@ -50,6 +50,8 @@ export class EntretienFormStep3Component {
   };
 
   formationsRealiseesPeriode = '';
+
+  private entretienStepsService = inject(EntretienStepsService);
 
   constructor(
     private formService: FormulaireService,
@@ -114,12 +116,6 @@ export class EntretienFormStep3Component {
     );
   }
 
-  saveData() {
-    this.formService.update({
-      formationsRealisees: this.form.value.formationsRealisees,
-    });
-  }
-
   removeFormation(index: number) {
     this.formationsRealisees.removeAt(index);
     if (this.formationsRealisees.length == 0) {
@@ -136,5 +132,19 @@ export class EntretienFormStep3Component {
 
   get formationsRealisees(): FormArray {
     return this.form.get('formationsRealisees') as FormArray;
+  }
+
+  async saveDatas(): Promise<void> {
+    this.formService.update({
+      formationsRealisees: this.form.value.formationsRealisees,
+    });
+
+    const { id, formationsRealisees } = this.form.value;
+
+    const step3Payload = {
+      formationsRealisees,
+    };
+
+    await firstValueFrom(this.entretienStepsService.updateEntretienStep3(id, step3Payload));
   }
 }

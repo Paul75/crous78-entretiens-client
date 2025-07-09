@@ -132,9 +132,6 @@ export class ListeEntretiensComponent implements OnInit, OnDestroy {
   }
 
   refreshDatas() {
-    // const employeNumber = 1043637;
-    //const employeNumber = 1072989;
-
     this.personnelService.getPersonnels(this._currentUser).subscribe({
       next: (entretiens: PersonneImpl[]) => {
         this.liste = entretiens;

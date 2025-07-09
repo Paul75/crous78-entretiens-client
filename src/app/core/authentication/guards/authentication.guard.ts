@@ -28,7 +28,7 @@ export class AuthenticationGuard implements CanActivate {
       catchError((err: any) => {
         console.debug('Not authenticated, redirecting...');
         this.router.navigate(['/messages/401'], { replaceUrl: true });
-        return [false];
+        return of(false);
       }),
     );
   }

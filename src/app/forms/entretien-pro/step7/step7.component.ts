@@ -1,21 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
 
-import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { FormProvider } from '../../providers/form.provider';
+import { EntretienStepsService } from '@shared/services/entretiens/entretien-steps.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-entretien-pro-step7',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonModule, StepperModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonModule],
   providers: [],
   templateUrl: './step7.component.html',
   styleUrl: './step7.component.scss',
 })
 export class EntretienProStep7Component {
   form: FormGroup;
+
+  private entretienStepsService = inject(EntretienStepsService);
 
   constructor(private formProvider: FormProvider) {
     this.form = this.formProvider.getForm();
@@ -25,9 +28,14 @@ export class EntretienProStep7Component {
     return this.form.controls;
   }
 
-  ngOnInit() {}
+  async saveDatas(): Promise<void> {
+    const { id, evolutionActivites, evolutionCarriere } = this.form.value;
 
-  saveData() {
-    // Save data for step 7
+    const step7Payload = {
+      evolutionActivites,
+      evolutionCarriere,
+    };
+
+    await firstValueFrom(this.entretienStepsService.updateEntretienStep7(id, step7Payload));
   }
 }

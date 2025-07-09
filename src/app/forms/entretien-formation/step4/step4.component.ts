@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {
@@ -9,12 +9,13 @@ import {
   FormArray,
 } from '@angular/forms';
 
-import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { FormProvider } from '../../providers/form.provider';
 import { TableModule } from 'primeng/table';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FormulaireService } from '@forms/services/formulaire.service';
+import { EntretienStepsService } from '@shared/services/entretiens/entretien-steps.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-entretien-form-step4',
@@ -23,7 +24,6 @@ import { FormulaireService } from '@forms/services/formulaire.service';
     FormsModule,
     ReactiveFormsModule,
     ButtonModule,
-    StepperModule,
     InputNumberModule,
     TableModule,
   ],
@@ -43,6 +43,8 @@ export class EntretienFormStep4Component {
     action: 'Action de formation',
     nombresHeures: "Nombre d'heures",
   };
+
+  private entretienStepsService = inject(EntretienStepsService);
 
   constructor(
     private formService: FormulaireService,
@@ -90,12 +92,6 @@ export class EntretienFormStep4Component {
     );
   }
 
-  saveData() {
-    this.formService.update({
-      formationsDemandees: this.form.value.formationsDemandees,
-    });
-  }
-
   removeLine(index: number) {
     this.formationsDemandees.removeAt(index);
     if (this.formationsDemandees.length == 0) {
@@ -112,5 +108,19 @@ export class EntretienFormStep4Component {
 
   get formationsDemandees(): FormArray {
     return this.form.get('formationsDemandees') as FormArray;
+  }
+
+  async saveDatas(): Promise<void> {
+    this.formService.update({
+      formationsDemandees: this.form.value.formationsDemandees,
+    });
+
+    const { id, formationsDemandees } = this.form.value;
+
+    const step4Payload = {
+      formationsDemandees,
+    };
+
+    await firstValueFrom(this.entretienStepsService.updateEntretienStep4(id, step4Payload));
   }
 }

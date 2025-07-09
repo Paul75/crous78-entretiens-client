@@ -76,6 +76,10 @@ export class ViewPdfComponent implements AfterViewInit {
     });
   }
 
+  open(id: number) {
+    this.viewPDF(id);
+  }
+
   onActivatePdfTab() {
     setTimeout(() => (this.showViewer = true), 100);
   }

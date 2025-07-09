@@ -1,7 +1,73 @@
-.infos_title {
-  font-weight: bold;
+.confirmation-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  animation: fadeIn 0.6s ease forwards;
+
+  .confirmation-container {
+    text-align: center;
+    margin-top: 3rem;
+    max-width: 600px;
+    padding: 1rem;
+
+    .icon-success {
+      font-size: 3.5rem;
+      color: #28a745;
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      margin-bottom: 1rem;
+      color: #2e7d32;
+      font-weight: 600;
+    }
+
+    p {
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+      color: #4a4a4a;
+    }
+
+    .actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  }
 }
 
-input.form-check-input {
-  border: 1px solid black !important;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+p-button ::ng-deep button:hover {
+  transform: scale(1.05);
+  transition: transform 0.25s ease-in-out;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .confirmation-wrapper {
+    min-height: 70vh;
+    padding: 0 1rem;
+  }
+
+  .confirmation-container {
+    max-width: 100%;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
 }

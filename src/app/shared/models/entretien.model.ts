@@ -56,4 +56,6 @@ export interface Entretien {
   formationsDemandees?: FormationsDemandees[];
   formationsContinue?: FormationsContinue[];
   actionsFormationsDemandees?: ActionsFormationsDemandees[];
+  formationsPreparationConcours?: string;
+  formationsConstruireProjet?: string;
 }

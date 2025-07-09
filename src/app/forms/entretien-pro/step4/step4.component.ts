@@ -1,24 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
 
-import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { FormProvider } from '../../providers/form.provider';
 import { AppreciationGeneraleEnum } from '@shared/enums/appreciation_generale.enum';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { EntretienStepsService } from '@shared/services/entretiens/entretien-steps.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-entretien-pro-step4',
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ButtonModule,
-    RadioButtonModule,
-    StepperModule,
-  ],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonModule, RadioButtonModule],
   providers: [],
   templateUrl: './step4.component.html',
   styleUrl: './step4.component.scss',
@@ -26,6 +20,8 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 export class EntretienProStep4Component {
   appreciationGenerale: typeof AppreciationGeneraleEnum = AppreciationGeneraleEnum;
   form: FormGroup;
+
+  private entretienStepsService = inject(EntretienStepsService);
 
   constructor(private formProvider: FormProvider) {
     this.form = this.formProvider.getForm();
@@ -35,7 +31,34 @@ export class EntretienProStep4Component {
     return this.form.controls;
   }
 
-  saveData() {
-    // Save data for step 4
+  async saveDatas(): Promise<void> {
+    const {
+      id,
+      caCompetences,
+      caContribution,
+      caCapacites,
+      caAptitude,
+      agCompetences,
+      agContribution,
+      agCapacites,
+      agAptitude,
+      realisationObjectifs,
+      appreciationLitterale,
+    } = this.form.value;
+
+    const step4Payload = {
+      caCompetences,
+      caContribution,
+      caCapacites,
+      caAptitude,
+      agCompetences,
+      agContribution,
+      agCapacites,
+      agAptitude,
+      realisationObjectifs,
+      appreciationLitterale,
+    };
+
+    await firstValueFrom(this.entretienStepsService.updateEntretienStep4(id, step4Payload));
   }
 }

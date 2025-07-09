@@ -66,6 +66,15 @@
       pTooltip="Remplir l'entretien avec l'agent"
       rounded
     />
+
+    <p-button
+      *ngIf="displayButtonAgentSign"
+      icon="pi pi-user-edit"
+      (click)="sendToSign()"
+      severity="warn"
+      pTooltip="Envoyer pour signature à l'agent"
+      rounded
+    />
   </ng-container>
 </p-buttongroup>
 

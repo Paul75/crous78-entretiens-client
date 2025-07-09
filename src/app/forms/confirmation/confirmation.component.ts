@@ -1,17 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
+import { ViewPdfComponent } from '@shared/components/dialogs/pdf/view-pdf.component';
 
 @Component({
   selector: 'app-form-confirm',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, ButtonModule, ViewPdfComponent],
   templateUrl: './confirmation.component.html',
   styleUrl: './confirmation.component.scss',
 })
 export class ConfirmationComponent {
-  constructor() {}
+  entretienId!: number;
 
-  ngOnInit() {}
+  // PDF
+  @ViewChild('pdfDialog') pdfDialog!: ViewPdfComponent;
+
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit() {
+    this.entretienId = Number(this.route.snapshot.paramMap.get('id'));
+  }
 
   ngAfterContentChecked() {}
+
+  viewPDF(id: number) {
+    if (!id) return;
+    this.pdfDialog.open(id);
+  }
 }

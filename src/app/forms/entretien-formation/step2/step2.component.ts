@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {
@@ -9,7 +9,6 @@ import {
   FormBuilder,
 } from '@angular/forms';
 
-import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { FormProvider } from '../../providers/form.provider';
@@ -18,6 +17,9 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { FormulaireService } from '@forms/services/formulaire.service';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputMaskModule } from 'primeng/inputmask';
+import { firstValueFrom } from 'rxjs';
+import { EntretienStepsService } from '@shared/services/entretiens/entretien-steps.service';
+import { transformDatesToBdd } from '@shared/utils/dates.utils';
 
 @Component({
   selector: 'app-entretien-form-step2',
@@ -26,7 +28,6 @@ import { InputMaskModule } from 'primeng/inputmask';
     FormsModule,
     ReactiveFormsModule,
     ButtonModule,
-    StepperModule,
     InputNumberModule,
     InputMaskModule,
     TableModule,
@@ -51,6 +52,8 @@ export class EntretienFormStep2Component {
     disciplineFormation: 'Discipline de formation',
     titreFormation: 'Titre de la (des) formation(s) animée(s) et organisme(s) concerné(s)',
   };
+
+  private entretienStepsService = inject(EntretienStepsService);
 
   constructor(
     private formService: FormulaireService,
@@ -99,12 +102,6 @@ export class EntretienFormStep2Component {
     return this.form.controls;
   }
 
-  saveData() {
-    this.formService.update({
-      formationsDispensees: this.form.value.formationsDispensees,
-    });
-  }
-
   addFormationsDispensees() {
     this.formationsDispensees.push(
       this.fb.group({
@@ -132,5 +129,57 @@ export class EntretienFormStep2Component {
 
   get formationsDispensees(): FormArray {
     return this.form.get('formationsDispensees') as FormArray;
+  }
+
+  async saveDatas(): Promise<void> {
+    transformDatesToBdd(this.form);
+    this.formService.update({
+      formationsDispensees: this.form.value.formationsDispensees,
+    });
+
+    const {
+      id,
+      structure,
+      intitulePoste,
+      dateAffectation,
+      emploiType,
+      positionPoste,
+      quotiteAffectation,
+      missions,
+      conduiteProjet,
+      encadrement,
+      cpeNbAgent,
+      cpeCategA,
+      cpeCategB,
+      cpeCategC,
+      competenceTransferFormateur,
+      competenceTransferTuteur,
+      competenceTransferPresident,
+      competenceTransferMembre,
+      formationsDispensees,
+    } = this.form.value;
+
+    const step2Payload = {
+      structure,
+      intitulePoste,
+      dateAffectation,
+      emploiType,
+      positionPoste,
+      quotiteAffectation,
+      missions,
+      conduiteProjet,
+      encadrement,
+      cpeNbAgent,
+      cpeCategA,
+      cpeCategB,
+      cpeCategC,
+      competenceTransferFormateur,
+      competenceTransferTuteur,
+      competenceTransferPresident,
+      competenceTransferMembre,
+      formationsDispensees,
+    };
+
+    await firstValueFrom(this.entretienStepsService.updateEntretienStep2(id, step2Payload));
   }
 }

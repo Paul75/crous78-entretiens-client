@@ -30,8 +30,12 @@
           <span><b>Etape 3</b> : Remplir le formulaire avec l'agent</span>
         </div>
         <div class="d-flex align-items-center">
+          <p-button icon="pi pi-user-edit" severity="warn" rounded class="me-2 no-click" />
+          <span><b>Etape 4</b> : Envoyer pour signer à l'agent</span>
+        </div>
+        <div class="d-flex align-items-center">
           <p-button icon="pi pi-pencil" severity="secondary" rounded class="me-2 no-click" />
-          <span><b>Etape 4</b> : Signature</span>
+          <span><b>Etape 5</b> : Signatures (Agent puis Chef)</span>
         </div>
 
         <!-- Barre séparatrice -->
@@ -62,26 +66,6 @@
         <th class="text-center equal-width-column">Entretiens pro</th>
         <th class="text-center equal-width-column">Entretiens formation</th>
       </tr>
-      <!-- <tr>
-        <th>
-          <p-columnFilter
-            type="text"
-            field="id"
-            placeholder="Recherche par matricule"
-            ariaLabel="Matricule filtre"
-          ></p-columnFilter>
-        </th>
-        <th>
-          <p-columnFilter
-            type="text"
-            field="personne.nom"
-            placeholder="Recherche par personne"
-            ariaLabel="personne filtre"
-          ></p-columnFilter>
-        </th>
-        <th></th>
-        <th></th>
-      </tr>-->
     </ng-template>
     <ng-template #body let-item>
       <tr>

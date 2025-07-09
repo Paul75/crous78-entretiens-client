@@ -77,7 +77,7 @@ export class EntretienService {
 
   changeStatut(statut: StatutDemandeEnum, entretienId: number): Observable<any> {
     return this.http
-      .put(`${this.backendUrl}/entretien/${entretienId}`, {
+      .put(`${this.backendUrl}/entretien/statut/${entretienId}`, {
         statut,
       })
       .pipe(catchError(this.handleError('changeStatut', DEFAULT_ENTRETIEN)));
@@ -85,7 +85,7 @@ export class EntretienService {
 
   saveDateEntretien(dateEntretien: string, entretienId: number): Observable<any> {
     return this.http
-      .put(`${this.backendUrl}/entretien/${entretienId}`, {
+      .put(`${this.backendUrl}/entretien/date/${entretienId}`, {
         dateEntretien,
         statut: StatutDemandeEnum.RDV,
       })
@@ -123,7 +123,7 @@ export class EntretienService {
     };
 
     return this.http
-      .put(`${this.backendUrl}/entretien/${entretienId}`, datas)
+      .put(`${this.backendUrl}/entretien/signature/${entretienId}`, datas)
       .pipe(catchError(this.handleError('saveDateEntretien', DEFAULT_ENTRETIEN)))
       .pipe(tap(() => this.pdfService.resetCache(entretienId)));
   }
