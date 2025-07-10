@@ -70,7 +70,7 @@ export class EntretienService {
     datas: Partial<Entretien>,
   ): Observable<Entretien> {
     return this.http
-      .put<Entretien>(`${this.backendUrl}/entretien/${entretienId}`, datas)
+      .put<Entretien>(`${this.backendUrl}/entretien/commentaire/${entretienId}`, datas)
       .pipe(catchError(this.handleError<Entretien>('updateCommentaireEntretien')))
       .pipe(tap(() => this.pdfService.resetCache(entretienId)));
   }
