@@ -1,6 +1,6 @@
-FROM node:22
+FROM node:lts-alpine
 
-RUN apt-get update && apt-get install -y netcat-traditional
+RUN apk add --no-cache bash
 
 WORKDIR /app
 
