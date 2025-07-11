@@ -8,10 +8,9 @@ COPY package*.json ./
 
 COPY . .
 
-COPY wait-for .
-RUN chmod +x ./wait-for
+COPY wait-for-it.sh .
+RUN chmod +x ./wait-for-it.sh
 
-RUN npm install -g npm
 RUN npm install
 
 EXPOSE 4200
