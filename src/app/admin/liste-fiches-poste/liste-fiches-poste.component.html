@@ -1,9 +1,10 @@
-<div class="container-fluid">
-  <p-toast />
-  <h2>Liste des fiches de poste</h2>
-
-  <p-splitter [panelSizes]="[40, 60]" [style]="{ height: '100%' }">
-    <ng-template #panel>
+<p-toast />
+<h2>Liste des fiches de poste</h2>
+<div class="columns-container row g-0">
+  <!-- Colonne gauche -->
+  <div class="col-5 col-gauche">
+    <!-- Contenu scrollable -->
+    <div class="content-scroll">
       <p-table
         #dt
         [value]="personnes"
@@ -17,9 +18,10 @@
         [scrollable]="true"
         [paginator]="true"
         [rows]="10"
-        [tableStyle]="{ width: '100%' }"
+        [tableStyle]="{ width: '100%', height: '100%' }"
         [rowsPerPageOptions]="[5, 10, 15]"
         [globalFilterFields]="['matricule', 'nom', 'prenom', 'email']"
+        scrollHeight="flex"
       >
         <ng-template pTemplate="header">
           <tr>
@@ -40,232 +42,252 @@
           </tr>
         </ng-template>
       </p-table>
-    </ng-template>
-    <ng-template #panel>
+    </div>
+  </div>
+  <!-- Colonne droite -->
+  <div class="col-7 col-droite">
+    <div class="content-scroll">
       <ng-container *ngIf="ficheSelectionnee">
-        <form #form="ngForm" (ngSubmit)="onSubmit(form)">
-          <div class="panel-droite">
-            <h2>Fiche de poste</h2>
-            <br /><br />
+        <ng-container
+          *ngIf="ficheSelectionnee.postes && ficheSelectionnee.postes.length > 0; else noPoste"
+        >
+          <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+            <!-- Barre fixe en haut -->
+            <p-toolbar class="toolbar-fixe" [style]="{ width: '100%' }">
+              <ng-template #start></ng-template>
+              <ng-template #center></ng-template>
+              <ng-template #end>
+                <button pButton type="submit">Enregistrer</button>
+              </ng-template>
+            </p-toolbar>
 
-            <ng-container *ngIf="premierPoste as poste">
-              <input type="hidden" name="id" [ngModel]="poste.id" />
-            </ng-container>
+            <!-- Contenu scrollable en dessous -->
+            <div class="contenu-scrollable">
+              <h2>Fiche de poste</h2>
+              <br /><br />
 
-            <table>
-              <tr>
-                <th class="minimal withTitre" colspan="1">Fonctions :</th>
-                <td colspan="3">
-                  <ng-container *ngIf="premierPoste as poste">
-                    <input pInputText name="fonction" [(ngModel)]="poste.fonction" fluid />
-                  </ng-container>
-                </td>
-              </tr>
-              <tr>
-                <th class="minimal withTitre" colspan="1">Métier ou emploi type<sup>*</sup> :</th>
-                <td colspan="3">
-                  <ng-container *ngIf="premierPoste as poste">
-                    <input pInputText name="emploiType" [(ngModel)]="poste.emploiType" fluid />
-                  </ng-container>
-                </td>
-              </tr>
-              <tr>
-                <th colspan="4" class="titre">Fiche descriptive du poste</th>
-              </tr>
-              <tr>
-                <th class="minimal withTitre" colspan="1">Catégorie :</th>
-                <td colspan="3">
-                  <ng-container *ngIf="premierPoste as poste">
-                    <input pInputText name="fdpCategorie" [(ngModel)]="poste.fdpCategorie" fluid />
-                  </ng-container>
-                </td>
-              </tr>
-              <tr>
-                <th class="minimal withTitre" colspan="1">Corps :</th>
-                <td colspan="3">
-                  <ng-container *ngIf="premierPoste as poste">
-                    <input pInputText name="fdpCorps" [(ngModel)]="poste.fdpCorps" fluid />
-                  </ng-container>
-                </td>
-              </tr>
-              <tr>
-                <th colspan="4" class="titre">Affectation</th>
-              </tr>
-              <tr>
-                <th class="minimal withTitre" colspan="2">Administrative :</th>
-                <td colspan="2">
-                  <ng-container *ngIf="premierPoste as poste">
+              <input type="hidden" name="id" [ngModel]="ficheSelectionnee.postes[0].id" />
+
+              <table>
+                <tr>
+                  <th class="minimal withTitre" colspan="1">Fonctions :</th>
+                  <td colspan="3">
+                    <input
+                      pInputText
+                      name="fonction"
+                      [(ngModel)]="ficheSelectionnee.postes[0].fonction"
+                      fluid
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th class="minimal withTitre" colspan="1">Métier ou emploi type<sup>*</sup> :</th>
+                  <td colspan="3">
+                    <input
+                      pInputText
+                      name="emploiType"
+                      [(ngModel)]="ficheSelectionnee.postes[0].emploiType"
+                      fluid
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th colspan="4" class="titre">Fiche descriptive du poste</th>
+                </tr>
+                <tr>
+                  <th class="minimal withTitre" colspan="1">Catégorie :</th>
+                  <td colspan="3">
+                    <input
+                      pInputText
+                      name="fdpCategorie"
+                      [(ngModel)]="ficheSelectionnee.postes[0].fdpCategorie"
+                      fluid
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th class="minimal withTitre" colspan="1">Corps :</th>
+                  <td colspan="3">
+                    <input
+                      pInputText
+                      name="fdpCorps"
+                      [(ngModel)]="ficheSelectionnee.postes[0].fdpCorps"
+                      fluid
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th colspan="4" class="titre">Affectation</th>
+                </tr>
+                <tr>
+                  <th class="minimal withTitre" colspan="2">Administrative :</th>
+                  <td colspan="2">
                     <input
                       pInputText
                       name="affectationAdministrative"
-                      [(ngModel)]="poste.affectationAdministrative"
+                      [(ngModel)]="ficheSelectionnee.postes[0].affectationAdministrative"
                       fluid
                     />
-                  </ng-container>
-                </td>
-              </tr>
-              <tr>
-                <th class="minimal withTitre" colspan="2">Géographique :</th>
-                <td colspan="2">
-                  <ng-container *ngIf="premierPoste as poste">
+                  </td>
+                </tr>
+                <tr>
+                  <th class="minimal withTitre" colspan="2">Géographique :</th>
+                  <td colspan="2">
                     <input
                       pInputText
                       name="affectationGeographique"
-                      [(ngModel)]="poste.affectationGeographique"
+                      [(ngModel)]="ficheSelectionnee.postes[0].affectationGeographique"
                       fluid
                     />
-                  </ng-container>
-                </td>
-              </tr>
-              <tr>
-                <th colspan="4" class="titre">Missions</th>
-              </tr>
-              <tr>
-                <td class="minimal" colspan="4">
-                  <p>Activités principales :</p>
-                  <p>
-                    <ng-container *ngIf="premierPoste as poste">
+                  </td>
+                </tr>
+                <tr>
+                  <th colspan="4" class="titre">Missions</th>
+                </tr>
+                <tr>
+                  <td class="minimal" colspan="4">
+                    <p>Activités principales :</p>
+                    <p>
                       <p-editor
                         #content="ngModel"
-                        [(ngModel)]="poste.missions"
+                        [(ngModel)]="ficheSelectionnee.postes[0].missions"
                         name="missions"
                         [style]="{ height: '320px' }"
                         fluid
                       />
-                    </ng-container>
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td>Encadrement :</td>
-                <td style="width: 140px">
-                  <ng-container *ngIf="premierPoste as poste">
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Encadrement :</td>
+                  <td style="width: 140px">
                     <p-selectbutton
                       [options]="yesNoOptions"
                       name="encadrement"
-                      [(ngModel)]="poste.encadrement"
+                      [(ngModel)]="ficheSelectionnee.postes[0].encadrement"
                       optionLabel="label"
                       optionValue="value"
                       aria-labelledby="basic"
                     />
-                  </ng-container>
-                </td>
-                <td class="minimal" style="width: 270px">Nb agents encadrés par catégorie :</td>
-                <td>
-                  <ul>
-                    <li>
-                      <ng-container *ngIf="premierPoste as poste">
+                  </td>
+                  <td class="minimal" style="width: 270px">Nb agents encadrés par catégorie :</td>
+                  <td>
+                    <ul class="li-inline">
+                      <li>
                         <p-inputnumber
                           inputId="integeronly"
                           size="small"
                           name="cpeCategA"
-                          [(ngModel)]="poste.cpeCategA"
+                          [(ngModel)]="ficheSelectionnee.postes[0].cpeCategA"
                         />
-                      </ng-container>
-                      A
-                    </li>
-                    <li>
-                      <ng-container *ngIf="premierPoste as poste">
+                        A
+                      </li>
+                      <li>
                         <p-inputnumber
                           inputId="integeronly"
                           size="small"
                           name="cpeCategB"
-                          [(ngModel)]="poste.cpeCategB"
+                          [(ngModel)]="ficheSelectionnee.postes[0].cpeCategB"
                         />
-                      </ng-container>
-                      B
-                    </li>
-                    <li>
-                      <ng-container *ngIf="premierPoste as poste">
+                        B
+                      </li>
+                      <li>
                         <p-inputnumber
                           inputId="integeronly"
                           size="small"
                           name="cpeCategC"
-                          [(ngModel)]="poste.cpeCategC"
+                          [(ngModel)]="ficheSelectionnee.postes[0].cpeCategC"
                         />
-                      </ng-container>
-                      C
-                    </li>
-                  </ul>
-                </td>
-              </tr>
-              <tr>
-                <td>Conduite de projet :</td>
-                <td style="width: 140px">
-                  <ng-container *ngIf="premierPoste as poste">
+                        C
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Conduite de projet :</td>
+                  <td style="width: 140px">
                     <p-selectbutton
                       [options]="yesNoOptions"
                       name="conduiteProjet"
-                      [(ngModel)]="poste.conduiteProjet"
+                      [(ngModel)]="ficheSelectionnee.postes[0].conduiteProjet"
                       optionLabel="label"
                       optionValue="value"
                       aria-labelledby="basic"
                     />
-                  </ng-container>
-                </td>
-                <td colspan="2"></td>
-              </tr>
+                  </td>
+                  <td colspan="2"></td>
+                </tr>
 
-              <tr>
-                <th class="titre" colspan="4">Compétences*</th>
-              </tr>
-              <tr>
-                <td class="minimal" colspan="4">
-                  <p>Connaissance, savoir :</p>
-                  <p>
-                    <ng-container *ngIf="premierPoste as poste">
+                <tr>
+                  <th class="titre" colspan="4">Compétences*</th>
+                </tr>
+                <tr>
+                  <td class="minimal" colspan="4">
+                    <p>Connaissance, savoir :</p>
+                    <p>
                       <p-editor
                         #content="ngModel"
-                        [(ngModel)]="poste.competencesConnaissances"
+                        [(ngModel)]="ficheSelectionnee.postes[0].competencesConnaissances"
                         name="competencesConnaissances"
                         [style]="{ height: '320px' }"
                         fluid
                       />
-                    </ng-container>
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td class="minimal" colspan="4">
-                  <p>Savoir faire :</p>
-                  <p>
-                    <ng-container *ngIf="premierPoste as poste">
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="minimal" colspan="4">
+                    <p>Savoir faire :</p>
+                    <p>
                       <p-editor
                         #content="ngModel"
-                        [(ngModel)]="poste.competencesSavoirFaire"
+                        [(ngModel)]="ficheSelectionnee.postes[0].competencesSavoirFaire"
                         name="competencesSavoirFaire"
                         [style]="{ height: '320px' }"
                         fluid
                       />
-                    </ng-container>
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td class="minimal" colspan="4">
-                  <p>Savoir être :</p>
-                  <p>
-                    <ng-container *ngIf="premierPoste as poste">
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="minimal" colspan="4">
+                    <p>Savoir être :</p>
+                    <p>
                       <p-editor
                         #content="ngModel"
-                        [(ngModel)]="poste.competencesSavoirEtre"
+                        [(ngModel)]="ficheSelectionnee.postes[0].competencesSavoirEtre"
                         name="competencesSavoirEtre"
                         [style]="{ height: '320px' }"
                         fluid
                       />
-                    </ng-container>
-                  </p>
-                </td>
-              </tr>
-            </table>
-
-            <button pButton type="submit">Enregistrer</button>
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </form>
+        </ng-container>
+        <ng-template #noPoste>
+          <div class="confirmation-wrapper">
+            <div class="confirmation-container">
+              <p>Il n'y a pas de fiche de poste</p>
+              <button
+                pButton
+                type="button"
+                label="Ajouter un poste"
+                (click)="ajouterPoste()"
+              ></button>
+            </div>
           </div>
-        </form>
+        </ng-template>
       </ng-container>
       <ng-container *ngIf="!ficheSelectionnee">
-        <p>Sélectionnez une fiche pour voir le détail</p>
+        <div class="confirmation-wrapper">
+          <div class="confirmation-container">
+            <p>Sélectionnez une fiche pour voir le détail</p>
+          </div>
+        </div>
       </ng-container>
-    </ng-template>
-  </p-splitter>
+    </div>
+  </div>
 </div>

@@ -13,7 +13,6 @@ import { TagModule } from 'primeng/tag';
 import { SelectModule } from 'primeng/select';
 import { ToastModule } from 'primeng/toast';
 import { InputMaskModule } from 'primeng/inputmask';
-import { SplitterModule } from 'primeng/splitter';
 import { MessageService } from 'primeng/api';
 import { InputIconModule } from 'primeng/inputicon';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -23,6 +22,7 @@ import { Credentials, CredentialsService } from '@core/authentication/credential
 import { Router } from '@angular/router';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { EditorModule } from 'primeng/editor';
+import { ToolbarModule } from 'primeng/toolbar';
 import { Poste } from '@shared/models/poste.model';
 
 @Component({
@@ -43,8 +43,8 @@ import { Poste } from '@shared/models/poste.model';
     InputIconModule,
     InputMaskModule,
     ToggleButtonModule,
-    SplitterModule,
     EditorModule,
+    ToolbarModule,
     FormsModule,
   ],
   providers: [MessageService, PersonnesService],
@@ -93,7 +93,7 @@ export class AdminListeFichesPosteComponent implements OnInit {
     });
   }
 
-  get premierPoste() {
+  /*get premierPoste() {
     if (!this.ficheSelectionnee) return null;
     if (!this.ficheSelectionnee.postes) {
       this.ficheSelectionnee.postes = [{} as Poste];
@@ -102,10 +102,31 @@ export class AdminListeFichesPosteComponent implements OnInit {
       this.ficheSelectionnee.postes.push({} as Poste);
     }
     return this.ficheSelectionnee.postes[0];
-  }
+  }*/
 
-  afficherDetails(fiche: any) {
-    this.ficheSelectionnee = fiche;
+  afficherDetails(fiche: Personne | Personne[] | null | undefined) {
+    if (!fiche) {
+      // Aucun élément sélectionné
+      return;
+    }
+
+    // Si sélection multiple, prends le premier
+    this.ficheSelectionnee = Array.isArray(fiche) ? (fiche[0] ?? null) : fiche;
+
+    // Initialisation du tableau postes
+    /*if (!this.ficheSelectionnee?.postes) {
+      this.ficheSelectionnee.postes = [{} as Poste];
+    } else if (this.ficheSelectionnee.postes.length === 0) {
+      this.ficheSelectionnee.postes.push({} as Poste);
+    }*/
+  }
+  ajouterPoste() {
+    if (this.ficheSelectionnee) {
+      if (!this.ficheSelectionnee.postes) {
+        this.ficheSelectionnee.postes = [];
+      }
+      this.ficheSelectionnee.postes.push({} as Poste);
+    }
   }
 
   onSubmit(form: NgForm) {

@@ -1,5 +1,5 @@
-<div class="app-container">
-  <div class="sidebar">
+<div class="app-layout">
+  <nav class="sidebar">
     <div class="text-center p-3">
       <img
         [src]="'images/' + appInfo.logo + '.png'"
@@ -8,20 +8,27 @@
         class="logo img-fluid"
       />
     </div>
-    <nav class="nav flex-column">
-      <a class="nav-link active" routerLink="/admin/entretiens" routerLinkActive="active-link">
-        <i class="pi pi-list"></i>Liste des entretiens
-      </a>
-      <a class="nav-link active" routerLink="/admin/fiches-poste" routerLinkActive="active-link">
-        <i class="pi pi-list"></i>Liste des fiches de poste
-      </a>
-      <a class="nav-link" routerLink="/admin/personnes" routerLinkActive="active-link">
-        <i class="pi pi-users"></i>
-        Liste des personnes</a
-      >
-    </nav>
-  </div>
-  <div class="main-content">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link active" routerLink="/admin/entretiens" routerLinkActive="active-link">
+          <i class="pi pi-list"></i>Liste des entretiens
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" routerLink="/admin/fiches-poste" routerLinkActive="active-link">
+          <i class="pi pi-list"></i>Liste des fiches de poste
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/admin/personnes" routerLinkActive="active-link">
+          <i class="pi pi-users"></i>
+          Liste des personnes</a
+        >
+      </li>
+    </ul>
+  </nav>
+
+  <main class="main-content">
     <router-outlet></router-outlet>
-  </div>
+  </main>
 </div>
