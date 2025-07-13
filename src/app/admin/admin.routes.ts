@@ -30,6 +30,14 @@ export const routes: Routes = [
             mod => mod.AdminListePersonnesComponent,
           ),
       },
+      {
+        path: 'fiches-poste',
+        canActivate: [AuthenticationGuard, AdminOrRhGuard],
+        loadComponent: () =>
+          import(`./liste-fiches-poste/liste-fiches-poste.component`).then(
+            mod => mod.AdminListeFichesPosteComponent,
+          ),
+      },
     ],
   },
 

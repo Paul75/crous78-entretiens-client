@@ -1,6 +1,6 @@
-export const URL_PERSONNES = 'personnes';
+export const URL_POSTES = 'postes';
 
-export const DEFAULT_PERSONNE = {
+export const DEFAULT_POSTE = {
   id: 0,
   matricule: '',
   nomUsage: '',
@@ -16,5 +16,4 @@ export const DEFAULT_PERSONNE = {
   ville: '',
   isNew: false,
   isActif: true,
-  poste: null,
 };

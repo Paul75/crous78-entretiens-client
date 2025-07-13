@@ -1,3 +1,5 @@
+import { Poste } from './poste.model';
+
 export interface Personne {
   id: number;
   matricule: string;
@@ -14,4 +16,5 @@ export interface Personne {
   ville: string;
   isNew?: boolean;
   isActif?: boolean;
+  postes?: Poste[] | null;
 }
