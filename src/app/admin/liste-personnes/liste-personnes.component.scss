@@ -1,0 +1,72 @@
+h2 {
+  text-align: center;
+  width: 100%;
+}
+
+.content-scroll {
+  flex: 1 1 0;
+  min-height: 0; /* indispensable pour que le scroll fonctionne en flexbox */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  button {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  table {
+    width: 100%;
+    table-layout: auto;
+
+    p {
+      margin: 0;
+      padding: 0;
+    }
+
+    tr {
+      border: 1px solid black;
+
+      th,
+      td {
+        text-align: left;
+        margin: 0;
+        padding: 0;
+        padding: 10px;
+
+        &.withTitre {
+          width: 150px;
+        }
+      }
+
+      th {
+        &.minimal {
+          white-space: nowrap;
+        }
+
+        &.titre {
+          background-color: #5255551c;
+          text-align: center;
+        }
+      }
+
+      td {
+        &.minimal {
+          white-space: nowrap;
+        }
+
+        ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+
+          &.li-inline li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+          }
+        }
+      }
+    }
+  }
+}

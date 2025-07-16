@@ -6,16 +6,14 @@ import { ButtonGroupModule } from 'primeng/buttongroup';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { PanelModule } from 'primeng/panel';
-import { DialogModule } from 'primeng/dialog';
+import { Dialog, DialogModule } from 'primeng/dialog';
 import { TooltipModule } from 'primeng/tooltip';
-import { Entretien } from '@shared/models/entretien.model';
 import { PdfService } from '@shared/services/pdf/pdf.service';
 import { NgxExtendedPdfViewerComponent, NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { environment } from '@environments/environment';
 import { SeoService } from '@core/services/seo/seo.service';
 import { CommunicationPdfService } from '@shared/services/communications/communication-pdf.service';
 import { TypeEntretien } from '@shared/enums/type-entretien.enum';
-import { Personne } from '@shared/models/personne.model';
 import { Router, RouterModule } from '@angular/router';
 import { AdminListeEntretiensHeaderComponent } from './header/header.component';
 import { AdminListeEntretiensContentComponent } from './content/content.component';
@@ -26,13 +24,18 @@ import { Credentials, CredentialsService } from '@core/authentication/credential
 import { Subject, takeUntil } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { toBlob } from '@shared/utils/files.util';
-
-export class PersonneImpl {
-  id!: string;
-  personne!: Personne | null;
-  entretienPro!: Entretien[] | null;
-  entretienForm!: Entretien[] | null;
-}
+import { PersonneImpl } from '@admin/admin.component';
+import { Poste } from '@shared/models/poste.model';
+import { ToolbarModule } from 'primeng/toolbar';
+import { PostesService } from '@shared/services/postes/postes.service';
+import { FormsModule, NgForm } from '@angular/forms';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { SelectModule } from 'primeng/select';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { EditorModule } from 'primeng/editor';
+import { InputMaskModule } from 'primeng/inputmask';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 
 @Component({
   selector: 'app-admin',
@@ -44,11 +47,20 @@ export class PersonneImpl {
     ButtonModule,
     ButtonGroupModule,
     IconFieldModule,
-    InputIconModule,
     DialogModule,
     ToastModule,
     TooltipModule,
     PanelModule,
+    ToolbarModule,
+    SelectButtonModule,
+    SelectModule,
+    InputTextModule,
+    InputNumberModule,
+    InputIconModule,
+    InputMaskModule,
+    ToggleButtonModule,
+    EditorModule,
+    FormsModule,
     AdminListeEntretiensHeaderComponent,
     AdminListeEntretiensContentComponent,
   ],
@@ -68,6 +80,7 @@ export class ListeEntretiensComponent implements OnInit, OnDestroy {
   private communicationService = inject(CommunicationPdfService);
   private personnelService = inject(PersonnelService);
   private pdfService = inject(PdfService);
+  private postesService = inject(PostesService);
   public showViewer = false;
 
   private _currentUser!: number;
@@ -83,6 +96,15 @@ export class ListeEntretiensComponent implements OnInit, OnDestroy {
   visibleDetailPdf = false;
   src!: Blob;
   filename: string = '';
+
+  @ViewChild('form') form!: NgForm;
+  @ViewChild('dialogFormPoste') dialogFormPoste!: Dialog;
+  ficheSelectionnee: Poste | null = null;
+  visibleDialogForm: boolean = false;
+  yesNoOptions: any[] = [
+    { label: 'OUI', value: true },
+    { label: 'NON', value: false },
+  ];
 
   private destroy = new Subject<void>();
 
@@ -108,11 +130,11 @@ export class ListeEntretiensComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.communicationService.actionGet$.pipe(takeUntil(this.destroy)).subscribe(action => {
-      this.getPDF(action);
+      this.getEntretienPDF(action);
     });
 
     this.communicationService.actionView$.pipe(takeUntil(this.destroy)).subscribe(action => {
-      this.viewPDF(action);
+      this.viewEntretienPDF(action);
     });
 
     this.refreshDatas();
@@ -153,9 +175,9 @@ export class ListeEntretiensComponent implements OnInit, OnDestroy {
     // console.log(ligne);
   }
 
-  getPDF(id: number) {
+  getEntretienPDF(id: number) {
     this.loading = true;
-    this.pdfService.downloadPdf(id).subscribe({
+    this.pdfService.downloadEntretienPdf(id).subscribe({
       next: (response: HttpResponse<Blob>) => {
         const { blob, filename } = toBlob(response);
         const objectUrl = URL.createObjectURL(blob);
@@ -166,7 +188,7 @@ export class ListeEntretiensComponent implements OnInit, OnDestroy {
         URL.revokeObjectURL(objectUrl);
         a.remove();
       },
-      error: e => console.error('downloadPdf error: ', e),
+      error: e => console.error('getEntretienPDF error: ', e),
       complete: () => {
         this.pdfService.resetCache(id);
         this.loading = false;
@@ -174,10 +196,10 @@ export class ListeEntretiensComponent implements OnInit, OnDestroy {
     });
   }
 
-  viewPDF(id: number) {
+  viewEntretienPDF(id: number) {
     if (!id) return;
     this.loading = true;
-    this.pdfService.downloadPdf(id).subscribe({
+    this.pdfService.downloadEntretienPdf(id).subscribe({
       next: (response: HttpResponse<Blob>) => {
         const { blob, filename } = toBlob(response);
         this.filename = filename;
@@ -187,9 +209,50 @@ export class ListeEntretiensComponent implements OnInit, OnDestroy {
           this.visibleDetailPdf = true;
         }
       },
-      error: e => console.error('viewPDF error: ', e),
+      error: e => console.error('viewEntretienPDF error: ', e),
       complete: () => {
         this.pdfService.resetCache(id);
+        this.loading = false;
+      },
+    });
+  }
+
+  viewFicheDePostePDF(posteId: number) {
+    if (!posteId) return;
+    this.loading = true;
+    this.pdfService.downloadFicheDePostePdf(posteId).subscribe({
+      next: (response: HttpResponse<Blob>) => {
+        const { blob, filename } = toBlob(response);
+        this.filename = filename;
+
+        if (blob) {
+          this.src = blob;
+          this.visibleDetailPdf = true;
+        }
+      },
+      error: e => console.error('viewFicheDePostePDF error: ', e),
+      complete: () => {
+        this.pdfService.resetCache(posteId);
+        this.loading = false;
+      },
+    });
+  }
+
+  getFicheDePostePDF(posteId: number) {
+    this.pdfService.downloadFicheDePostePdf(posteId).subscribe({
+      next: (response: HttpResponse<Blob>) => {
+        const { blob, filename } = toBlob(response);
+        const objectUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = objectUrl;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(objectUrl);
+        a.remove();
+      },
+      error: e => console.error('getFicheDePostePDF error: ', e),
+      complete: () => {
+        this.pdfService.resetCache(posteId);
         this.loading = false;
       },
     });
@@ -201,11 +264,105 @@ export class ListeEntretiensComponent implements OnInit, OnDestroy {
 
   onDialogHide() {
     this.showViewer = false;
-    this.pdfViewer.ngOnDestroy();
+    // this.pdfViewer.ngOnDestroy();
   }
 
   applyFilterGlobal(event: Event, table: Table): void {
     const value = (event.target as HTMLInputElement).value;
     table.filterGlobal(value, 'contains');
+  }
+
+  ajouterPoste(personneId: number) {
+    this.ficheSelectionnee = { nouveau: true, personneId: personneId } as Poste;
+
+    this.visibleDialogForm = true;
+  }
+
+  annulerAjoutPoste() {
+    if (this.ficheSelectionnee) {
+      delete this.ficheSelectionnee.nouveau;
+
+      this.visibleDialogForm = false;
+    }
+  }
+
+  closeDialog() {
+    this.ficheSelectionnee = null;
+    // this.ficheSelectionneeBack = null;
+
+    this.visibleDialogForm = false;
+  }
+
+  buttonSubmit() {
+    this.onSubmit(this.form);
+  }
+
+  onSubmit(form: NgForm) {
+    if (form.valid) {
+      const today = new Date().toISOString().split('T')[0]; // "2025-07-13"
+
+      if (this.ficheSelectionnee) {
+        this.ficheSelectionnee.dateAffectation = today;
+      }
+
+      if (this.ficheSelectionnee?.nouveau) {
+        this.postesService.createPoste(this.ficheSelectionnee as Poste).subscribe({
+          next: (newPoste: Poste) => {
+            newPoste.nouveau = false;
+
+            const index = this.liste.findIndex(p => p.personne!.id === newPoste.personne!.id);
+            if (index !== -1) {
+              this.liste[index].fichePoste = newPoste;
+            }
+
+            this.closeDialog();
+
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'La ligne a été créée',
+            });
+          },
+          error: e => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Erreur',
+              detail: 'Impossible de créer la ligne',
+            });
+          },
+          complete: () => {
+            this.loading = false;
+          },
+        });
+      } else {
+        this.postesService.savePoste(this.ficheSelectionnee as Poste).subscribe({
+          next: (p: Poste) => {
+            p.nouveau = false;
+
+            this.ficheSelectionnee = p;
+
+            this.closeDialog();
+
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'La ligne a été modifiée',
+            });
+          },
+          error: e => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Erreur',
+              detail: 'Impossible de modifier la ligne',
+            });
+          },
+          complete: () => {
+            this.loading = false;
+          },
+        });
+      }
+    } else {
+      form.control.markAllAsTouched(); // pour afficher les erreurs
+    }
   }
 }

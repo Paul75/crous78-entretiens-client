@@ -1,3 +1,5 @@
+import { Personne } from './personne.model';
+
 export interface Poste {
   id?: number;
   dateAffectation: string;
@@ -21,4 +23,9 @@ export interface Poste {
   competencesConnaissances?: string;
   competencesSavoirFaire?: string;
   competencesSavoirEtre?: string;
+
+  personne?: Personne;
+  personneId?: number;
+
+  nouveau?: boolean; // Indique si le poste est nouveau
 }

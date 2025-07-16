@@ -1,293 +1,403 @@
 <p-toast />
-<h2>Liste des fiches de poste</h2>
-<div class="columns-container row g-0">
-  <!-- Colonne gauche -->
-  <div class="col-5 col-gauche">
-    <!-- Contenu scrollable -->
-    <div class="content-scroll">
-      <p-table
-        #dt
-        [value]="personnes"
-        selectionMode="single"
-        [(selection)]="ficheSelectionnee"
-        (onRowSelect)="afficherDetails($event.data)"
-        showGridlines
-        stripedRows
-        dataKey="id"
-        [loading]="loading"
-        [scrollable]="true"
-        [paginator]="true"
-        [rows]="10"
-        [tableStyle]="{ width: '100%', height: '100%' }"
-        [rowsPerPageOptions]="[5, 10, 15]"
-        [globalFilterFields]="['matricule', 'nom', 'prenom', 'email']"
-        scrollHeight="flex"
-      >
-        <ng-template pTemplate="header">
-          <tr>
-            <th>MATRICULE</th>
-            <th>NOM</th>
-            <th>PRENOM</th>
-          </tr>
-        </ng-template>
-        <ng-template #body let-personne let-ri="rowIndex">
-          <tr [pEditableRow]="personne" [pSelectableRow]="personne">
-            <td class="text-nowrap">{{ personne.matricule }}</td>
-            <td class="text-nowrap">
-              {{ personne.nom }}
-            </td>
-            <td class="text-nowrap">
-              {{ personne.prenom }}
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </div>
-  </div>
-  <!-- Colonne droite -->
-  <div class="col-7 col-droite">
-    <div class="content-scroll">
-      <ng-container *ngIf="ficheSelectionnee">
-        <ng-container
-          *ngIf="ficheSelectionnee.postes && ficheSelectionnee.postes.length > 0; else noPoste"
-        >
-          <form #form="ngForm" (ngSubmit)="onSubmit(form)">
-            <!-- Barre fixe en haut -->
-            <p-toolbar class="toolbar-fixe" [style]="{ width: '100%' }">
-              <ng-template #start></ng-template>
-              <ng-template #center></ng-template>
-              <ng-template #end>
-                <button pButton type="submit">Enregistrer</button>
+<div class="content-scroll flex-grow-1 d-flex flex-column">
+  <h2>Liste des fiches de poste</h2>
+  <p-table
+    #dtPersonnes
+    [value]="personnes"
+    showGridlines
+    stripedRows
+    dataKey="id"
+    [loading]="loading"
+    [scrollable]="true"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[5, 10, 15]"
+    [globalFilterFields]="['matricule', 'nom', 'prenom', 'email']"
+    [expandedRowKeys]="expandedRows"
+    (onRowExpand)="onRowExpand($event)"
+    (onRowCollapse)="onRowCollapse($event)"
+    scrollHeight="flex"
+    [style]="{ width: '100%' }"
+  >
+    <ng-template pTemplate="caption">
+      <input
+        pInputText
+        type="text"
+        (input)="dtPersonnes.filterGlobal($any($event.target)?.value || '', 'contains')"
+        placeholder="Rechercher..."
+      />
+      <div class="flex flex-wrap justify-end gap-2">
+        <p-button label="Expand All" icon="pi pi-plus" text (onClick)="expandAll()" />
+        <p-button label="Collapse All" icon="pi pi-minus" text (onClick)="collapseAll()" />
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 5rem"></th>
+        <th>MATRICULE</th>
+        <th>NOM</th>
+        <th>PRENOM</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-personne let-ri="rowIndex" let-expanded="expanded">
+      <tr>
+        <td>
+          <p-button
+            type="button"
+            pRipple
+            [pRowToggler]="personne"
+            [text]="true"
+            severity="secondary"
+            [rounded]="true"
+            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+          />
+        </td>
+        <td class="text-nowrap">{{ personne.matricule }}</td>
+        <td class="text-nowrap">
+          {{ personne.nom }}
+        </td>
+        <td class="text-nowrap">
+          {{ personne.prenom }}
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #expandedrow let-personne>
+      <tr>
+        <td colspan="4">
+          <div class="p-4">
+            <p-table
+              #dtPostes
+              [value]="personne.postes"
+              dataKey="id"
+              [scrollable]="true"
+              [paginator]="true"
+              [rows]="10"
+              scrollHeight="300px"
+              selectionMode="single"
+              [(selection)]="ficheSelectionnee"
+              (onRowSelect)="afficherDetails($event.data)"
+              [globalFilterFields]="['dateAffectation', 'fonction']"
+            >
+              <ng-template #caption>
+                <div class="d-flex align-items-center justify-content-between">
+                  <p class="me-3">
+                    <input
+                      pInputText
+                      type="text"
+                      (input)="dtPostes.filterGlobal($any($event.target)?.value || '', 'contains')"
+                      placeholder="Rechercher..."
+                    />
+                  </p>
+                  <span class="text-xl font-bold mx-auto mb-0 text-center flex-grow-1">
+                    <h5>Fiches de poste pour {{ personne.prenom }} {{ personne.nom }}</h5>
+                  </span>
+
+                  <p-button
+                    class="ms-3"
+                    icon="pi pi-plus"
+                    (click)="ajouterPoste(personne.id)"
+                    rounded
+                    raised
+                  />
+                </div>
+                <div class="text-end pb-4"></div>
               </ng-template>
-            </p-toolbar>
+              <ng-template #header>
+                <tr>
+                  <th>Date d'affectation</th>
+                  <th>Fonction</th>
+                  <th></th>
+                </tr>
+              </ng-template>
 
-            <!-- Contenu scrollable en dessous -->
-            <div class="contenu-scrollable">
-              <h2>Fiche de poste</h2>
-              <br /><br />
-
-              <input type="hidden" name="id" [ngModel]="ficheSelectionnee.postes[0].id" />
-
-              <table>
+              <ng-template pTemplate="emptymessage">
                 <tr>
-                  <th class="minimal withTitre" colspan="1">Fonctions :</th>
-                  <td colspan="3">
-                    <input
-                      pInputText
-                      name="fonction"
-                      [(ngModel)]="ficheSelectionnee.postes[0].fonction"
-                      fluid
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <th class="minimal withTitre" colspan="1">Métier ou emploi type<sup>*</sup> :</th>
-                  <td colspan="3">
-                    <input
-                      pInputText
-                      name="emploiType"
-                      [(ngModel)]="ficheSelectionnee.postes[0].emploiType"
-                      fluid
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <th colspan="4" class="titre">Fiche descriptive du poste</th>
-                </tr>
-                <tr>
-                  <th class="minimal withTitre" colspan="1">Catégorie :</th>
-                  <td colspan="3">
-                    <input
-                      pInputText
-                      name="fdpCategorie"
-                      [(ngModel)]="ficheSelectionnee.postes[0].fdpCategorie"
-                      fluid
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <th class="minimal withTitre" colspan="1">Corps :</th>
-                  <td colspan="3">
-                    <input
-                      pInputText
-                      name="fdpCorps"
-                      [(ngModel)]="ficheSelectionnee.postes[0].fdpCorps"
-                      fluid
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <th colspan="4" class="titre">Affectation</th>
-                </tr>
-                <tr>
-                  <th class="minimal withTitre" colspan="2">Administrative :</th>
                   <td colspan="2">
-                    <input
-                      pInputText
-                      name="affectationAdministrative"
-                      [(ngModel)]="ficheSelectionnee.postes[0].affectationAdministrative"
-                      fluid
-                    />
+                    <p>Il n'y a pas de fiche de poste</p>
+                    <button
+                      pButton
+                      type="button"
+                      label="Ajouter un poste"
+                      (click)="ajouterPoste(personne.id)"
+                    ></button>
                   </td>
                 </tr>
-                <tr>
-                  <th class="minimal withTitre" colspan="2">Géographique :</th>
-                  <td colspan="2">
-                    <input
-                      pInputText
-                      name="affectationGeographique"
-                      [(ngModel)]="ficheSelectionnee.postes[0].affectationGeographique"
-                      fluid
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <th colspan="4" class="titre">Missions</th>
-                </tr>
-                <tr>
-                  <td class="minimal" colspan="4">
-                    <p>Activités principales :</p>
-                    <p>
-                      <p-editor
-                        #content="ngModel"
-                        [(ngModel)]="ficheSelectionnee.postes[0].missions"
-                        name="missions"
-                        [style]="{ height: '320px' }"
-                        fluid
-                      />
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Encadrement :</td>
-                  <td style="width: 140px">
-                    <p-selectbutton
-                      [options]="yesNoOptions"
-                      name="encadrement"
-                      [(ngModel)]="ficheSelectionnee.postes[0].encadrement"
-                      optionLabel="label"
-                      optionValue="value"
-                      aria-labelledby="basic"
-                    />
-                  </td>
-                  <td class="minimal" style="width: 270px">Nb agents encadrés par catégorie :</td>
+              </ng-template>
+              <ng-template #body let-poste>
+                <tr [pSelectableRow]="poste">
+                  <td class="text-nowrap">{{ poste.dateAffectation | date: 'dd/MM/yyyy' }}</td>
+                  <td class="text-nowrap">{{ poste.fonction }}</td>
                   <td>
-                    <ul class="li-inline">
-                      <li>
-                        <p-inputnumber
-                          inputId="integeronly"
-                          size="small"
-                          name="cpeCategA"
-                          [(ngModel)]="ficheSelectionnee.postes[0].cpeCategA"
-                        />
-                        A
-                      </li>
-                      <li>
-                        <p-inputnumber
-                          inputId="integeronly"
-                          size="small"
-                          name="cpeCategB"
-                          [(ngModel)]="ficheSelectionnee.postes[0].cpeCategB"
-                        />
-                        B
-                      </li>
-                      <li>
-                        <p-inputnumber
-                          inputId="integeronly"
-                          size="small"
-                          name="cpeCategC"
-                          [(ngModel)]="ficheSelectionnee.postes[0].cpeCategC"
-                        />
-                        C
-                      </li>
-                    </ul>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Conduite de projet :</td>
-                  <td style="width: 140px">
-                    <p-selectbutton
-                      [options]="yesNoOptions"
-                      name="conduiteProjet"
-                      [(ngModel)]="ficheSelectionnee.postes[0].conduiteProjet"
-                      optionLabel="label"
-                      optionValue="value"
-                      aria-labelledby="basic"
+                    <p-button
+                      icon="pi pi-search"
+                      (click)="viewFicheDePostePDF(poste.id)"
+                      severity="secondary"
+                      rounded
+                      pTooltip="Voir le PDF"
+                    />
+
+                    <p-button
+                      icon="pi pi-download"
+                      (click)="getFicheDePostePDF(poste.id)"
+                      severity="secondary"
+                      pTooltip="Télécharger le PDF"
+                      rounded
                     />
                   </td>
-                  <td colspan="2"></td>
                 </tr>
-
-                <tr>
-                  <th class="titre" colspan="4">Compétences*</th>
-                </tr>
-                <tr>
-                  <td class="minimal" colspan="4">
-                    <p>Connaissance, savoir :</p>
-                    <p>
-                      <p-editor
-                        #content="ngModel"
-                        [(ngModel)]="ficheSelectionnee.postes[0].competencesConnaissances"
-                        name="competencesConnaissances"
-                        [style]="{ height: '320px' }"
-                        fluid
-                      />
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="minimal" colspan="4">
-                    <p>Savoir faire :</p>
-                    <p>
-                      <p-editor
-                        #content="ngModel"
-                        [(ngModel)]="ficheSelectionnee.postes[0].competencesSavoirFaire"
-                        name="competencesSavoirFaire"
-                        [style]="{ height: '320px' }"
-                        fluid
-                      />
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="minimal" colspan="4">
-                    <p>Savoir être :</p>
-                    <p>
-                      <p-editor
-                        #content="ngModel"
-                        [(ngModel)]="ficheSelectionnee.postes[0].competencesSavoirEtre"
-                        name="competencesSavoirEtre"
-                        [style]="{ height: '320px' }"
-                        fluid
-                      />
-                    </p>
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </form>
-        </ng-container>
-        <ng-template #noPoste>
-          <div class="confirmation-wrapper">
-            <div class="confirmation-container">
-              <p>Il n'y a pas de fiche de poste</p>
-              <button
-                pButton
-                type="button"
-                label="Ajouter un poste"
-                (click)="ajouterPoste()"
-              ></button>
-            </div>
+              </ng-template>
+            </p-table>
           </div>
-        </ng-template>
-      </ng-container>
-      <ng-container *ngIf="!ficheSelectionnee">
-        <div class="confirmation-wrapper">
-          <div class="confirmation-container">
-            <p>Sélectionnez une fiche pour voir le détail</p>
-          </div>
-        </div>
-      </ng-container>
-    </div>
-  </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>
+
+<p-dialog
+  [header]="'Fiche de poste'"
+  [(visible)]="visibleDetailPdf"
+  [modal]="true"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  [style]="{ width: '75vw', 'max-width': '90vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  [maximizable]="true"
+  (onShow)="onActivatePdfTab()"
+  (onHide)="onDialogHide()"
+>
+  @if (showViewer) {
+    <ngx-extended-pdf-viewer
+      [src]="src"
+      [height]="'auto'"
+      [textLayer]="true"
+      [showHandToolButton]="true"
+      [filenameForDownload]="filename"
+    >
+    </ngx-extended-pdf-viewer>
+  }
+</p-dialog>
+<p-dialog
+  #dialogFormPoste
+  [(visible)]="visibleDialogForm"
+  [modal]="true"
+  [style]="{ width: '80%' }"
+  (onHide)="onDialogHide()"
+>
+  <ng-template #header>
+    <ng-container *ngIf="ficheSelectionnee">
+      <p-toolbar class="toolbar-fixe" [style]="{ width: '100%' }">
+        <ng-template #start></ng-template>
+        <ng-template #center></ng-template>
+        <ng-template #end>
+          <button
+            pButton
+            type="button"
+            label="Annuler"
+            class="p-button-danger"
+            (click)="annulerAjoutPoste()"
+          ></button>
+          <button pButton type="button" (click)="buttonSubmit()">Enregistrer</button>
+        </ng-template>
+      </p-toolbar>
+    </ng-container>
+  </ng-template>
+
+  <ng-container *ngIf="ficheSelectionnee">
+    <div class="content-scroll flex-grow-1 d-flex flex-column">
+      <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+        <h2>Fiche de poste</h2>
+        <br /><br />
+
+        <input type="hidden" name="id" [(ngModel)]="ficheSelectionnee.id" />
+
+        <table>
+          <tr>
+            <th class="minimal withTitre" colspan="1">Fonctions :</th>
+            <td colspan="3">
+              <input pInputText name="fonction" [(ngModel)]="ficheSelectionnee.fonction" fluid />
+            </td>
+          </tr>
+          <tr>
+            <th class="minimal withTitre" colspan="1">Métier ou emploi type<sup>*</sup> :</th>
+            <td colspan="3">
+              <input
+                pInputText
+                name="emploiType"
+                [(ngModel)]="ficheSelectionnee.emploiType"
+                fluid
+              />
+            </td>
+          </tr>
+          <tr>
+            <th colspan="4" class="titre">Fiche descriptive du poste</th>
+          </tr>
+          <tr>
+            <th class="minimal withTitre" colspan="1">Catégorie :</th>
+            <td colspan="3">
+              <input
+                pInputText
+                name="fdpCategorie"
+                [(ngModel)]="ficheSelectionnee.fdpCategorie"
+                fluid
+              />
+            </td>
+          </tr>
+          <tr>
+            <th class="minimal withTitre" colspan="1">Corps :</th>
+            <td colspan="3">
+              <input pInputText name="fdpCorps" [(ngModel)]="ficheSelectionnee.fdpCorps" fluid />
+            </td>
+          </tr>
+          <tr>
+            <th colspan="4" class="titre">Affectation</th>
+          </tr>
+          <tr>
+            <th class="minimal withTitre" colspan="2">Administrative :</th>
+            <td colspan="2">
+              <input
+                pInputText
+                name="affectationAdministrative"
+                [(ngModel)]="ficheSelectionnee.affectationAdministrative"
+                fluid
+              />
+            </td>
+          </tr>
+          <tr>
+            <th class="minimal withTitre" colspan="2">Géographique :</th>
+            <td colspan="2">
+              <input
+                pInputText
+                name="affectationGeographique"
+                [(ngModel)]="ficheSelectionnee.affectationGeographique"
+                fluid
+              />
+            </td>
+          </tr>
+          <tr>
+            <th colspan="4" class="titre">Missions</th>
+          </tr>
+          <tr>
+            <td class="minimal" colspan="4">
+              <p>Activités principales :</p>
+              <p>
+                <p-editor
+                  #content="ngModel"
+                  [(ngModel)]="ficheSelectionnee.missions"
+                  name="missions"
+                  [style]="{ height: '320px' }"
+                  fluid
+                />
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td>Encadrement :</td>
+            <td style="width: 140px">
+              <p-selectbutton
+                [options]="yesNoOptions"
+                name="encadrement"
+                [(ngModel)]="ficheSelectionnee.encadrement"
+                optionLabel="label"
+                optionValue="value"
+                aria-labelledby="basic"
+              />
+            </td>
+            <td class="minimal" style="width: 270px">Nb agents encadrés par catégorie :</td>
+            <td>
+              <ul class="li-inline">
+                <li>
+                  <p-inputnumber
+                    inputId="integeronly"
+                    size="small"
+                    name="cpeCategA"
+                    [(ngModel)]="ficheSelectionnee.cpeCategA"
+                  />
+                  A
+                </li>
+                <li>
+                  <p-inputnumber
+                    inputId="integeronly"
+                    size="small"
+                    name="cpeCategB"
+                    [(ngModel)]="ficheSelectionnee.cpeCategB"
+                  />
+                  B
+                </li>
+                <li>
+                  <p-inputnumber
+                    inputId="integeronly"
+                    size="small"
+                    name="cpeCategC"
+                    [(ngModel)]="ficheSelectionnee.cpeCategC"
+                  />
+                  C
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td>Conduite de projet :</td>
+            <td style="width: 140px">
+              <p-selectbutton
+                [options]="yesNoOptions"
+                name="conduiteProjet"
+                [(ngModel)]="ficheSelectionnee.conduiteProjet"
+                optionLabel="label"
+                optionValue="value"
+                aria-labelledby="basic"
+              />
+            </td>
+            <td colspan="2"></td>
+          </tr>
+
+          <tr>
+            <th class="titre" colspan="4">Compétences*</th>
+          </tr>
+          <tr>
+            <td class="minimal" colspan="4">
+              <p>Connaissance, savoir :</p>
+              <p>
+                <p-editor
+                  #content="ngModel"
+                  [(ngModel)]="ficheSelectionnee.competencesConnaissances"
+                  name="competencesConnaissances"
+                  [style]="{ height: '320px' }"
+                  fluid
+                />
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td class="minimal" colspan="4">
+              <p>Savoir faire :</p>
+              <p>
+                <p-editor
+                  #content="ngModel"
+                  [(ngModel)]="ficheSelectionnee.competencesSavoirFaire"
+                  name="competencesSavoirFaire"
+                  [style]="{ height: '320px' }"
+                  fluid
+                />
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td class="minimal" colspan="4">
+              <p>Savoir être :</p>
+              <p>
+                <p-editor
+                  #content="ngModel"
+                  [(ngModel)]="ficheSelectionnee.competencesSavoirEtre"
+                  name="competencesSavoirEtre"
+                  [style]="{ height: '320px' }"
+                  fluid
+                />
+              </p>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </ng-container>
+</p-dialog>

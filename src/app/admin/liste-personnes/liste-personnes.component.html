@@ -1,7 +1,7 @@
-<div class="container-fluid">
-  <p-toast />
-  <h2>Liste des personnes</h2>
-
+<p-toast />
+<h2>Liste des personnes</h2>
+<!-- Autres éléments éventuels (titre, toolbar, etc.) -->
+<div class="content-scroll flex-grow-1 d-flex flex-column">
   <p-table
     #dt
     [value]="personnes"
@@ -14,8 +14,10 @@
     [paginator]="true"
     [rows]="5"
     [tableStyle]="{ 'min-width': '50rem' }"
+    [style]="{ width: '100%' }"
     [rowsPerPageOptions]="[5, 10, 15]"
     [globalFilterFields]="['matricule', 'nom', 'prenom', 'email']"
+    scrollHeight="flex"
   >
     <ng-template #caption>
       <div class="d-flex align-items-center justify-content-between">

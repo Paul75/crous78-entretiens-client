@@ -1,34 +1,47 @@
-<div class="app-layout">
-  <nav class="sidebar">
-    <div class="text-center p-3">
-      <img
-        [src]="'images/' + appInfo.logo + '.png'"
-        [srcset]="'images/' + appInfo.logo + '.png, images/' + appInfo.logo + '@2x.png 2x'"
-        [alt]="appInfo.name + ' Logo'"
-        class="logo img-fluid"
-      />
+<div class="container-fluid h-100">
+  <div class="row h-100">
+    <div class="col-2 p-0">
+      <nav class="sidebar h-100 d-flex flex-column">
+        <div class="text-center p-3">
+          <img
+            [src]="'images/' + appInfo.logo + '.png'"
+            [srcset]="'images/' + appInfo.logo + '.png, images/' + appInfo.logo + '@2x.png 2x'"
+            [alt]="appInfo.name + ' Logo'"
+            class="logo img-fluid"
+          />
+        </div>
+        <ul class="nav flex-column flex-grow-1">
+          <li class="nav-item">
+            <a
+              class="nav-link active"
+              routerLink="/admin/entretiens"
+              routerLinkActive="active-link"
+            >
+              <i class="pi pi-list"></i>Liste des entretiens
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link active"
+              routerLink="/admin/fiches-poste"
+              routerLinkActive="active-link"
+            >
+              <i class="pi pi-list"></i>Liste des fiches de poste
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin/personnes" routerLinkActive="active-link">
+              <i class="pi pi-users"></i>
+              Liste des personnes</a
+            >
+          </li>
+        </ul>
+      </nav>
     </div>
-    <ul class="nav flex-column">
-      <li class="nav-item">
-        <a class="nav-link active" routerLink="/admin/entretiens" routerLinkActive="active-link">
-          <i class="pi pi-list"></i>Liste des entretiens
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link active" routerLink="/admin/fiches-poste" routerLinkActive="active-link">
-          <i class="pi pi-list"></i>Liste des fiches de poste
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/admin/personnes" routerLinkActive="active-link">
-          <i class="pi pi-users"></i>
-          Liste des personnes</a
-        >
-      </li>
-    </ul>
-  </nav>
-
-  <main class="main-content">
-    <router-outlet></router-outlet>
-  </main>
+    <div class="col-10 p-0">
+      <div class="main-content h-100 d-flex flex-column">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
 </div>

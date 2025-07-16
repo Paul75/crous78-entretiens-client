@@ -18,6 +18,22 @@ export class PostesService {
     return this.http.get<Poste[]>(url).pipe(catchError(this.handleError<Poste[]>('getPostes')));
   }
 
+  createPoste(poste: Poste): Observable<Poste> {
+    const url = `${this.backendUrl}/${URL_POSTES}`;
+
+    return this.http
+      .post<Poste>(url, poste)
+      .pipe(catchError(this.handleError<Poste>('createPoste')));
+  }
+
+  savePoste(poste: Poste): Observable<Poste> {
+    const url = `${this.backendUrl}/${URL_POSTES}`;
+
+    return this.http
+      .put<Poste>(url + '/' + poste.id, poste)
+      .pipe(catchError(this.handleError<Poste>('savePoste')));
+  }
+
   private handleError<T>(operation = 'operation', result: T = {} as T) {
     return (error: HttpErrorResponse): Observable<T> => {
       console.error(`${operation} failed: ${error.message}`);

@@ -11,7 +11,7 @@ export class PdfService {
   private backendUrl = environment.backend;
   private cacheMap = new Map<number, Observable<any>>();
 
-  downloadPdf(entretienId: number): Observable<HttpResponse<Blob>> {
+  downloadEntretienPdf(entretienId: number): Observable<HttpResponse<Blob>> {
     if (!this.cacheMap.has(entretienId)) {
       this.cacheMap.set(
         entretienId,
@@ -27,26 +27,20 @@ export class PdfService {
     return this.cacheMap.get(entretienId)!;
   }
 
-  downloadPdf2(entretienId: number): Observable<any> {
-    if (!this.cacheMap.has(entretienId)) {
+  downloadFicheDePostePdf(posteId: number): Observable<HttpResponse<Blob>> {
+    if (!this.cacheMap.has(posteId)) {
       this.cacheMap.set(
-        entretienId,
+        posteId,
         this.http
-          .get(this.backendUrl + '/pdfs/' + entretienId, {
+          .get(this.backendUrl + '/pdfs/ficheposte/' + posteId, {
             responseType: 'blob',
+            observe: 'response',
           })
           .pipe(shareReplay({ bufferSize: 1, refCount: true }))
-          .pipe(catchError(this.handleError('downloadPdf', {}))),
+          .pipe(catchError(this.handleError('downloadFicheDePostePdf', {}))),
       );
     }
-    return this.cacheMap.get(entretienId)!;
-
-    /*return this.http
-      .get(this.backendUrl + '/pdfs/' + entretienId, {
-        responseType: 'blob',
-      })
-      .pipe(shareReplay(1))
-      .pipe(catchError(this.handleError('downloadPdf', {})));*/
+    return this.cacheMap.get(posteId)!;
   }
 
   resetCache(param: number) {

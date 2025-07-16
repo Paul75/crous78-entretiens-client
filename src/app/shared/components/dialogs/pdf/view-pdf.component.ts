@@ -40,7 +40,7 @@ export class ViewPdfComponent implements AfterViewInit {
 
   getPDF(id: number) {
     if (!id) return;
-    this.pdfService.downloadPdf(id).subscribe({
+    this.pdfService.downloadEntretienPdf(id).subscribe({
       next: (response: HttpResponse<Blob>) => {
         const { blob, filename } = toBlob(response);
         const objectUrl = URL.createObjectURL(blob);
@@ -60,7 +60,7 @@ export class ViewPdfComponent implements AfterViewInit {
 
   viewPDF(id: number) {
     if (!id) return;
-    this.pdfService.downloadPdf(id).subscribe({
+    this.pdfService.downloadEntretienPdf(id).subscribe({
       next: (response: HttpResponse<Blob>) => {
         const { blob, filename } = toBlob(response);
         this.filename = filename;

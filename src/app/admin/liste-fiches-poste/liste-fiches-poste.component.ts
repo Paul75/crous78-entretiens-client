@@ -1,7 +1,7 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TableModule } from 'primeng/table';
+import { TableModule, TableRowCollapseEvent, TableRowExpandEvent } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ButtonGroupModule } from 'primeng/buttongroup';
 import { PopoverModule } from 'primeng/popover';
@@ -24,6 +24,12 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { EditorModule } from 'primeng/editor';
 import { ToolbarModule } from 'primeng/toolbar';
 import { Poste } from '@shared/models/poste.model';
+import { Dialog, DialogModule } from 'primeng/dialog';
+import { PostesService } from '@shared/services/postes/postes.service';
+import { PdfService } from '@shared/services/pdf/pdf.service';
+import { HttpResponse } from '@angular/common/http';
+import { toBlob } from '@shared/utils/files.util';
+import { NgxExtendedPdfViewerComponent, NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
 @Component({
   selector: 'app-admin-liste-personnes',
@@ -45,7 +51,9 @@ import { Poste } from '@shared/models/poste.model';
     ToggleButtonModule,
     EditorModule,
     ToolbarModule,
+    DialogModule,
     FormsModule,
+    NgxExtendedPdfViewerModule,
   ],
   providers: [MessageService, PersonnesService],
   templateUrl: './liste-fiches-poste.component.html',
@@ -53,6 +61,9 @@ import { Poste } from '@shared/models/poste.model';
 })
 export class AdminListeFichesPosteComponent implements OnInit {
   private personnesService = inject(PersonnesService);
+  private postesService = inject(PostesService);
+
+  private pdfService = inject(PdfService);
 
   private messageService = inject(MessageService);
   private credentialsService = inject(CredentialsService);
@@ -62,12 +73,27 @@ export class AdminListeFichesPosteComponent implements OnInit {
 
   personnes!: Personne[];
 
-  ficheSelectionnee: Personne | null = null;
+  ficheSelectionnee: Poste | null = null;
+  ficheSelectionneeBack: Poste | null = null;
+
+  visibleDialogForm: boolean = false;
 
   yesNoOptions: any[] = [
     { label: 'OUI', value: true },
     { label: 'NON', value: false },
   ];
+
+  expandedRows = {};
+
+  @ViewChild('form') form!: NgForm;
+  @ViewChild('dialogFormPoste') dialogFormPoste!: Dialog;
+
+  @ViewChild(NgxExtendedPdfViewerComponent, { static: false })
+  private pdfViewer!: NgxExtendedPdfViewerComponent;
+  visibleDetailPdf = false;
+  src!: Blob;
+  filename: string = '';
+  public showViewer = false;
 
   constructor(public router: Router) {
     this._credentials = this.credentialsService.credentials;
@@ -93,18 +119,33 @@ export class AdminListeFichesPosteComponent implements OnInit {
     });
   }
 
-  /*get premierPoste() {
-    if (!this.ficheSelectionnee) return null;
-    if (!this.ficheSelectionnee.postes) {
-      this.ficheSelectionnee.postes = [{} as Poste];
-    }
-    if (this.ficheSelectionnee.postes.length === 0) {
-      this.ficheSelectionnee.postes.push({} as Poste);
-    }
-    return this.ficheSelectionnee.postes[0];
-  }*/
+  expandAll() {
+    this.expandedRows = this.personnes.reduce((acc: any, p) => (acc[p.id] = true) && acc, {});
+  }
 
-  afficherDetails(fiche: Personne | Personne[] | null | undefined) {
+  collapseAll() {
+    this.expandedRows = {};
+  }
+
+  onRowExpand(event: TableRowExpandEvent) {
+    /*this.messageService.add({
+      severity: 'info',
+      summary: 'Product Expanded',
+      detail: event.data.name,
+      life: 3000,
+    });*/
+  }
+
+  onRowCollapse(event: TableRowCollapseEvent) {
+    /*this.messageService.add({
+      severity: 'success',
+      summary: 'Product Collapsed',
+      detail: event.data.name,
+      life: 3000,
+    });*/
+  }
+
+  afficherDetails(fiche: Poste | null | undefined) {
     if (!fiche) {
       // Aucun élément sélectionné
       return;
@@ -113,51 +154,163 @@ export class AdminListeFichesPosteComponent implements OnInit {
     // Si sélection multiple, prends le premier
     this.ficheSelectionnee = Array.isArray(fiche) ? (fiche[0] ?? null) : fiche;
 
-    // Initialisation du tableau postes
-    /*if (!this.ficheSelectionnee?.postes) {
-      this.ficheSelectionnee.postes = [{} as Poste];
-    } else if (this.ficheSelectionnee.postes.length === 0) {
-      this.ficheSelectionnee.postes.push({} as Poste);
-    }*/
+    this.ficheSelectionneeBack = this.ficheSelectionnee;
+
+    this.visibleDialogForm = true;
   }
-  ajouterPoste() {
+
+  onDialogHide() {
+    this.ficheSelectionnee = null;
+    this.ficheSelectionneeBack = null;
+  }
+
+  ajouterPoste(personneId: number) {
+    this.ficheSelectionnee = { nouveau: true, personneId: personneId } as Poste;
+
+    this.visibleDialogForm = true;
+  }
+
+  remplacerParNouveauPoste() {
     if (this.ficheSelectionnee) {
-      if (!this.ficheSelectionnee.postes) {
-        this.ficheSelectionnee.postes = [];
-      }
-      this.ficheSelectionnee.postes.push({} as Poste);
+      this.ficheSelectionnee = { nouveau: true } as Poste;
     }
+  }
+
+  annulerAjoutPoste() {
+    if (this.ficheSelectionnee) {
+      delete this.ficheSelectionnee.nouveau;
+      this.ficheSelectionnee = this.ficheSelectionneeBack;
+
+      this.visibleDialogForm = false;
+    }
+  }
+
+  closeDialog() {
+    this.ficheSelectionnee = null;
+    this.ficheSelectionneeBack = null;
+
+    this.visibleDialogForm = false;
+  }
+
+  buttonSubmit() {
+    this.onSubmit(this.form);
   }
 
   onSubmit(form: NgForm) {
     if (form.valid) {
       const today = new Date().toISOString().split('T')[0]; // "2025-07-13"
 
-      if (this.ficheSelectionnee?.postes?.[0]) {
-        this.ficheSelectionnee.postes[0].dateAffectation = today;
+      if (this.ficheSelectionnee) {
+        this.ficheSelectionnee.dateAffectation = today;
       }
 
-      this.personnesService.savePersonne(this.ficheSelectionnee as Personne).subscribe({
-        next: (p: Personne) => {
-          this.ficheSelectionnee = p;
+      if (this.ficheSelectionnee?.nouveau) {
+        this.postesService.createPoste(this.ficheSelectionnee as Poste).subscribe({
+          next: (newPoste: Poste) => {
+            newPoste.nouveau = false;
 
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'La ligne a été modifiée',
-          });
-        },
-        error: e => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Erreur',
-            detail: 'Impossible de modifier la ligne',
-          });
-        },
-        complete: () => {
-          this.loading = false;
-        },
-      });
+            const index = this.personnes.findIndex(p => p.id === newPoste.personne!.id);
+            if (index !== -1) {
+              if (!this.personnes[index].postes) {
+                this.personnes[index].postes = [];
+              }
+              this.personnes[index].postes.unshift(newPoste);
+              this.personnes[index] = { ...this.personnes[index] }; // déclenche changement
+            }
+
+            this.closeDialog();
+
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'La ligne a été créée',
+            });
+          },
+          error: e => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Erreur',
+              detail: 'Impossible de créer la ligne',
+            });
+          },
+          complete: () => {
+            this.loading = false;
+          },
+        });
+      } else {
+        this.postesService.savePoste(this.ficheSelectionnee as Poste).subscribe({
+          next: (p: Poste) => {
+            p.nouveau = false;
+
+            this.ficheSelectionnee = p;
+
+            this.closeDialog();
+
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'La ligne a été modifiée',
+            });
+          },
+          error: e => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Erreur',
+              detail: 'Impossible de modifier la ligne',
+            });
+          },
+          complete: () => {
+            this.loading = false;
+          },
+        });
+      }
+    } else {
+      form.control.markAllAsTouched(); // pour afficher les erreurs
     }
+  }
+
+  viewFicheDePostePDF(posteId: number) {
+    if (!posteId) return;
+    this.loading = true;
+    this.pdfService.downloadFicheDePostePdf(posteId).subscribe({
+      next: (response: HttpResponse<Blob>) => {
+        const { blob, filename } = toBlob(response);
+        this.filename = filename;
+
+        if (blob) {
+          this.src = blob;
+          this.visibleDetailPdf = true;
+        }
+      },
+      error: e => console.error('viewPDF error: ', e),
+      complete: () => {
+        this.pdfService.resetCache(posteId);
+        this.loading = false;
+      },
+    });
+  }
+
+  getFicheDePostePDF(posteId: number) {
+    this.pdfService.downloadFicheDePostePdf(posteId).subscribe({
+      next: (response: HttpResponse<Blob>) => {
+        const { blob, filename } = toBlob(response);
+        const objectUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = objectUrl;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(objectUrl);
+        a.remove();
+      },
+      error: e => console.error('downloadFicheDePostePdf error: ', e),
+      complete: () => {
+        this.pdfService.resetCache(posteId);
+        this.loading = false;
+      },
+    });
+  }
+
+  onActivatePdfTab() {
+    setTimeout(() => (this.showViewer = true), 100);
   }
 }

@@ -7,12 +7,14 @@ import { Personne } from '@shared/models/personne.model';
 import { Router, RouterModule } from '@angular/router';
 import { Credentials, CredentialsService } from '@core/authentication/credentials.service';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { Poste } from '@shared/models/poste.model';
 
 export class PersonneImpl {
   id!: string;
   personne!: Personne | null;
   entretienPro!: Entretien[] | null;
   entretienForm!: Entretien[] | null;
+  fichePoste!: Poste | null;
 }
 
 @Component({
