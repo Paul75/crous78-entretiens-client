@@ -108,9 +108,9 @@
           <ng-template #noStatut></ng-template>
         </td>
 
-        <td class="text-center">
-          <ng-container *ngIf="item.fichePoste; else noFichePoste">
-            <div class="d-flex justify-content-center align-items-center">
+        <td>
+          <div class="d-flex justify-content-center align-items-center gap-2">
+            <ng-container *ngIf="item.fichePoste; else noFichePoste">
               <p-buttongroup>
                 <p-button
                   icon="pi pi-search"
@@ -130,19 +130,18 @@
                   rounded
                 />
               </p-buttongroup>
-            </div>
-          </ng-container>
-          <ng-template #noFichePoste>
-            <p-button
-              class="ms-3"
-              icon="pi pi-plus"
-              (click)="ajouterPoste(item.personne.id)"
-              pTooltip="Ajouter une fiche de poste"
-              tooltipPosition="left"
-              rounded
-              raised
-            />
-          </ng-template>
+            </ng-container>
+            <ng-template #noFichePoste>
+              <p-button
+                icon="pi pi-plus"
+                (click)="ajouterPoste(item.personne.id)"
+                pTooltip="Ajouter une fiche de poste"
+                tooltipPosition="left"
+                rounded
+                raised
+              />
+            </ng-template>
+          </div>
         </td>
       </tr>
     </ng-template>
