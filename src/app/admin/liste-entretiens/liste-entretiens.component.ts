@@ -4,7 +4,6 @@ import { Table, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ButtonGroupModule } from 'primeng/buttongroup';
 import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
 import { PanelModule } from 'primeng/panel';
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { TooltipModule } from 'primeng/tooltip';
@@ -26,16 +25,9 @@ import { HttpResponse } from '@angular/common/http';
 import { toBlob } from '@shared/utils/files.util';
 import { PersonneImpl } from '@admin/admin.component';
 import { Poste } from '@shared/models/poste.model';
-import { ToolbarModule } from 'primeng/toolbar';
 import { PostesService } from '@shared/services/postes/postes.service';
 import { FormsModule, NgForm } from '@angular/forms';
-import { SelectButtonModule } from 'primeng/selectbutton';
-import { SelectModule } from 'primeng/select';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { EditorModule } from 'primeng/editor';
-import { InputMaskModule } from 'primeng/inputmask';
-import { ToggleButtonModule } from 'primeng/togglebutton';
+import { DialogFichePosteComponent } from '@shared/components/dialogs/dialog-fiche-poste/dialog-fiche-poste.component';
 
 @Component({
   selector: 'app-admin',
@@ -44,25 +36,17 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     RouterModule,
     NgxExtendedPdfViewerModule,
     TableModule,
-    ButtonModule,
     ButtonGroupModule,
+    ButtonModule,
     IconFieldModule,
     DialogModule,
     ToastModule,
     TooltipModule,
     PanelModule,
-    ToolbarModule,
-    SelectButtonModule,
-    SelectModule,
-    InputTextModule,
-    InputNumberModule,
-    InputIconModule,
-    InputMaskModule,
-    ToggleButtonModule,
-    EditorModule,
     FormsModule,
     AdminListeEntretiensHeaderComponent,
     AdminListeEntretiensContentComponent,
+    DialogFichePosteComponent,
   ],
   providers: [MessageService, PersonnelService],
   templateUrl: './liste-entretiens.component.html',
@@ -97,14 +81,8 @@ export class ListeEntretiensComponent implements OnInit, OnDestroy {
   src!: Blob;
   filename: string = '';
 
-  @ViewChild('form') form!: NgForm;
-  @ViewChild('dialogFormPoste') dialogFormPoste!: Dialog;
   ficheSelectionnee: Poste | null = null;
   visibleDialogForm: boolean = false;
-  yesNoOptions: any[] = [
-    { label: 'OUI', value: true },
-    { label: 'NON', value: false },
-  ];
 
   private destroy = new Subject<void>();
 
@@ -293,12 +271,10 @@ export class ListeEntretiensComponent implements OnInit, OnDestroy {
     this.visibleDialogForm = false;
   }
 
-  buttonSubmit() {
-    this.onSubmit(this.form);
-  }
+  enregistrerFiche(datasForm: Poste | null | undefined) {
+    if (datasForm) {
+      this.ficheSelectionnee = datasForm;
 
-  onSubmit(form: NgForm) {
-    if (form.valid) {
       const today = new Date().toISOString().split('T')[0]; // "2025-07-13"
 
       if (this.ficheSelectionnee) {
@@ -361,8 +337,6 @@ export class ListeEntretiensComponent implements OnInit, OnDestroy {
           },
         });
       }
-    } else {
-      form.control.markAllAsTouched(); // pour afficher les erreurs
     }
   }
 }

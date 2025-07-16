@@ -171,7 +171,31 @@
     }
   </p-dialog>
 
-  <p-dialog
+  <app-dialog-fiche-poste
+    [visible]="visibleDialogForm"
+    [ficheSelectionnee]="ficheSelectionnee"
+    (submit)="enregistrerFiche($event)"
+    (cancel)="annulerAjoutPoste()"
+    (hide)="onDialogHide()"
+  >
+    <!-- Personnalisation des boutons -->
+    <ng-container dialog-actions>
+      <!-- Ces boutons sont propres à ce composant -->
+      <button
+        pButton
+        type="button"
+        label="Annuler"
+        class="p-button-danger"
+        (click)="annulerAjoutPoste()"
+      ></button>
+
+      <button pButton type="button" (click)="enregistrerFiche(ficheSelectionnee)">
+        Enregistrer
+      </button>
+    </ng-container>
+  </app-dialog-fiche-poste>
+
+  <!-- <p-dialog
     #dialogFormPoste
     [(visible)]="visibleDialogForm"
     [modal]="true"
@@ -394,5 +418,5 @@
         </form>
       </div>
     </ng-container>
-  </p-dialog>
+  </p-dialog>-->
 </div>

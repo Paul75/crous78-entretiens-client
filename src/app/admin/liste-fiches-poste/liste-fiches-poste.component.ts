@@ -3,33 +3,21 @@ import { CommonModule } from '@angular/common';
 
 import { TableModule, TableRowCollapseEvent, TableRowExpandEvent } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import { ButtonGroupModule } from 'primeng/buttongroup';
-import { PopoverModule } from 'primeng/popover';
-import { DatePickerModule } from 'primeng/datepicker';
 import { PersonnesService } from '@shared/services/personnes/personnes.service';
 import { Personne } from '@shared/models/personne.model';
-import { InputTextModule } from 'primeng/inputtext';
-import { TagModule } from 'primeng/tag';
-import { SelectModule } from 'primeng/select';
 import { ToastModule } from 'primeng/toast';
-import { InputMaskModule } from 'primeng/inputmask';
 import { MessageService } from 'primeng/api';
-import { InputIconModule } from 'primeng/inputicon';
 import { FormsModule, NgForm } from '@angular/forms';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { ToggleButtonModule } from 'primeng/togglebutton';
 import { Credentials, CredentialsService } from '@core/authentication/credentials.service';
 import { Router } from '@angular/router';
-import { SelectButtonModule } from 'primeng/selectbutton';
-import { EditorModule } from 'primeng/editor';
-import { ToolbarModule } from 'primeng/toolbar';
 import { Poste } from '@shared/models/poste.model';
-import { Dialog, DialogModule } from 'primeng/dialog';
+import { DialogModule } from 'primeng/dialog';
 import { PostesService } from '@shared/services/postes/postes.service';
 import { PdfService } from '@shared/services/pdf/pdf.service';
 import { HttpResponse } from '@angular/common/http';
 import { toBlob } from '@shared/utils/files.util';
 import { NgxExtendedPdfViewerComponent, NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { DialogFichePosteComponent } from '@shared/components/dialogs/dialog-fiche-poste/dialog-fiche-poste.component';
 
 @Component({
   selector: 'app-admin-liste-personnes',
@@ -37,23 +25,11 @@ import { NgxExtendedPdfViewerComponent, NgxExtendedPdfViewerModule } from 'ngx-e
     CommonModule,
     TableModule,
     ButtonModule,
-    ButtonGroupModule,
-    DatePickerModule,
-    PopoverModule,
     ToastModule,
-    TagModule,
-    SelectModule,
-    SelectButtonModule,
-    InputTextModule,
-    InputNumberModule,
-    InputIconModule,
-    InputMaskModule,
-    ToggleButtonModule,
-    EditorModule,
-    ToolbarModule,
     DialogModule,
     FormsModule,
     NgxExtendedPdfViewerModule,
+    DialogFichePosteComponent,
   ],
   providers: [MessageService, PersonnesService],
   templateUrl: './liste-fiches-poste.component.html',
@@ -78,15 +54,7 @@ export class AdminListeFichesPosteComponent implements OnInit {
 
   visibleDialogForm: boolean = false;
 
-  yesNoOptions: any[] = [
-    { label: 'OUI', value: true },
-    { label: 'NON', value: false },
-  ];
-
   expandedRows = {};
-
-  @ViewChild('form') form!: NgForm;
-  @ViewChild('dialogFormPoste') dialogFormPoste!: Dialog;
 
   @ViewChild(NgxExtendedPdfViewerComponent, { static: false })
   private pdfViewer!: NgxExtendedPdfViewerComponent;
@@ -192,12 +160,10 @@ export class AdminListeFichesPosteComponent implements OnInit {
     this.visibleDialogForm = false;
   }
 
-  buttonSubmit() {
-    this.onSubmit(this.form);
-  }
+  enregistrerFiche(datasForm: Poste | null | undefined) {
+    if (datasForm) {
+      this.ficheSelectionnee = datasForm;
 
-  onSubmit(form: NgForm) {
-    if (form.valid) {
       const today = new Date().toISOString().split('T')[0]; // "2025-07-13"
 
       if (this.ficheSelectionnee) {
@@ -264,8 +230,6 @@ export class AdminListeFichesPosteComponent implements OnInit {
           },
         });
       }
-    } else {
-      form.control.markAllAsTouched(); // pour afficher les erreurs
     }
   }
 
