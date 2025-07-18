@@ -11,7 +11,6 @@ import { PdfService } from '@shared/services/pdf/pdf.service';
 import { NgxExtendedPdfViewerComponent, NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { environment } from '@environments/environment';
 import { SeoService } from '@core/services/seo/seo.service';
-import { CommunicationPdfService } from '@shared/services/communications/communication-pdf.service';
 import { TypeEntretien } from '@shared/enums/type-entretien.enum';
 import { Router, RouterModule } from '@angular/router';
 import { AdminListeEntretiensHeaderComponent } from './header/header.component';
@@ -61,7 +60,6 @@ export class ListeEntretiensComponent implements OnInit, OnDestroy {
   private credentialsService = inject(CredentialsService);
   private _credentials!: Credentials | null;
   private messageService = inject(MessageService);
-  private communicationService = inject(CommunicationPdfService);
   private personnelService = inject(PersonnelService);
   private pdfService = inject(PdfService);
   private postesService = inject(PostesService);
@@ -107,13 +105,13 @@ export class ListeEntretiensComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.communicationService.actionGet$.pipe(takeUntil(this.destroy)).subscribe(action => {
+    /*this.communicationService.actionGet$.pipe(takeUntil(this.destroy)).subscribe(action => {
       this.getEntretienPDF(action);
     });
 
     this.communicationService.actionView$.pipe(takeUntil(this.destroy)).subscribe(action => {
       this.viewEntretienPDF(action);
-    });
+    });*/
 
     this.refreshDatas();
   }
@@ -172,6 +170,14 @@ export class ListeEntretiensComponent implements OnInit, OnDestroy {
         this.loading = false;
       },
     });
+  }
+
+  handleGetPdf(id: number) {
+    this.getEntretienPDF(id);
+  }
+
+  handleViewPdf(id: number) {
+    this.viewEntretienPDF(id);
   }
 
   viewEntretienPDF(id: number) {
@@ -288,7 +294,7 @@ export class ListeEntretiensComponent implements OnInit, OnDestroy {
 
             const index = this.liste.findIndex(p => p.personne!.id === newPoste.personne!.id);
             if (index !== -1) {
-              this.liste[index].fichePoste = newPoste;
+              this.liste[index].fichePoste!.unshift(newPoste);
             }
 
             this.closeDialog();

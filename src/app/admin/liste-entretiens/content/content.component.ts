@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Entretien } from '@shared/models/entretien.model';
 
@@ -24,4 +24,17 @@ import { AdminListeEntretiensButtonsComponent } from '../buttons/buttons.compone
 export class AdminListeEntretiensContentComponent {
   @Input()
   entretiens!: Entretien[];
+
+  @Output() getPdf = new EventEmitter<number>();
+  @Output() viewPdf = new EventEmitter<number>();
+
+  handleGetPdf(id: number) {
+    if (!id) return;
+    this.getPdf.emit(id);
+  }
+
+  handleViewPdf(id: number) {
+    if (!id) return;
+    this.viewPdf.emit(id);
+  }
 }

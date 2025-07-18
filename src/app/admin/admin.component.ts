@@ -14,7 +14,7 @@ export class PersonneImpl {
   personne!: Personne | null;
   entretienPro!: Entretien[] | null;
   entretienForm!: Entretien[] | null;
-  fichePoste!: Poste | null;
+  fichePoste!: Poste[] | null;
 }
 
 @Component({

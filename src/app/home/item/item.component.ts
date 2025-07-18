@@ -2,7 +2,6 @@ import { Component, inject, Input, OnDestroy, OnInit, ViewChild } from '@angular
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ButtonGroupModule } from 'primeng/buttongroup';
-import { CommunicationPdfService } from '@shared/services/communications/communication-pdf.service';
 import { TypeEntretien } from '@shared/enums/type-entretien.enum';
 import { Entretien } from '@shared/models/entretien.model';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
@@ -45,7 +44,6 @@ export class HomeItemComponent implements OnInit, OnDestroy {
   typeEntretienEnum = TypeEntretien;
   statutDemandeEnum = StatutDemandeEnum;
 
-  private communicationPdfService = inject(CommunicationPdfService);
   private communicationSignatureService = inject(CommunicationSignatureService);
   private communicationCommentairesService = inject(CommunicationCommentairesService);
   private credentialsService = inject(CredentialsService);
@@ -68,14 +66,6 @@ export class HomeItemComponent implements OnInit, OnDestroy {
   private destroy = new Subject<void>();
 
   ngOnInit(): void {
-    this.communicationPdfService.actionGet$.pipe(takeUntil(this.destroy)).subscribe(action => {
-      if (this.entretien.id === action) this.getPDF(action);
-    });
-
-    this.communicationPdfService.actionView$.pipe(takeUntil(this.destroy)).subscribe(action => {
-      if (this.entretien.id === action) this.viewPDF(action);
-    });
-
     this.communicationSignatureService.actionSaveSign$
       .pipe(takeUntil(this.destroy))
       .subscribe(action => {

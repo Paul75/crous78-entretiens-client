@@ -82,10 +82,18 @@
           <ng-container *ngIf="item.entretienPro[0]?.statut; else noProStatut">
             <p-panel [toggleable]="true" [collapsed]="true">
               <ng-template #header>
-                <app-admin-liste-entretiens-header [entretien]="item.entretienPro[0]" />
+                <app-admin-liste-entretiens-header
+                  [entretien]="item.entretienPro[0]"
+                  (getPdf)="handleGetPdf($event)"
+                  (viewPdf)="handleViewPdf($event)"
+                />
               </ng-template>
               <p class="m-0">
-                <app-admin-liste-entretiens-content [entretiens]="item.entretienPro" />
+                <app-admin-liste-entretiens-content
+                  [entretiens]="item.entretienPro"
+                  (getPdf)="handleGetPdf($event)"
+                  (viewPdf)="handleViewPdf($event)"
+                />
               </p>
             </p-panel>
           </ng-container>
@@ -97,10 +105,18 @@
           <ng-container *ngIf="item.entretienForm[0]?.statut; else noStatut">
             <p-panel [toggleable]="true" [collapsed]="true">
               <ng-template #header>
-                <app-admin-liste-entretiens-header [entretien]="item.entretienForm[0]" />
+                <app-admin-liste-entretiens-header
+                  [entretien]="item.entretienForm[0]"
+                  (getPdf)="handleGetPdf($event)"
+                  (viewPdf)="handleViewPdf($event)"
+                />
               </ng-template>
               <p class="m-0">
-                <app-admin-liste-entretiens-content [entretiens]="item.entretienForm" />
+                <app-admin-liste-entretiens-content
+                  [entretiens]="item.entretienForm"
+                  (getPdf)="handleGetPdf($event)"
+                  (viewPdf)="handleViewPdf($event)"
+                />
               </p>
             </p-panel>
           </ng-container>
@@ -110,11 +126,11 @@
 
         <td>
           <div class="d-flex justify-content-center align-items-center gap-2">
-            <ng-container *ngIf="item.fichePoste; else noFichePoste">
+            <ng-container *ngIf="item.fichePoste[0]; else noFichePoste">
               <p-buttongroup>
                 <p-button
                   icon="pi pi-search"
-                  (click)="viewFicheDePostePDF(item.fichePoste.id)"
+                  (click)="viewFicheDePostePDF(item.fichePoste[0].id)"
                   severity="secondary"
                   pTooltip="Voir le PDF"
                   tooltipPosition="left"
@@ -123,7 +139,7 @@
 
                 <p-button
                   icon="pi pi-download"
-                  (click)="getFicheDePostePDF(item.fichePoste.id)"
+                  (click)="getFicheDePostePDF(item.fichePoste[0].id)"
                   severity="secondary"
                   pTooltip="Télécharger le PDF"
                   tooltipPosition="left"
@@ -194,229 +210,4 @@
       </button>
     </ng-container>
   </app-dialog-fiche-poste>
-
-  <!-- <p-dialog
-    #dialogFormPoste
-    [(visible)]="visibleDialogForm"
-    [modal]="true"
-    [style]="{ width: '80%' }"
-    (onHide)="onDialogHide()"
-  >
-    <ng-template #header>
-      <ng-container *ngIf="ficheSelectionnee">
-        <p-toolbar class="toolbar-fixe" [style]="{ width: '100%' }">
-          <ng-template #start></ng-template>
-          <ng-template #center></ng-template>
-          <ng-template #end>
-            <button
-              pButton
-              type="button"
-              label="Annuler"
-              class="p-button-danger"
-              (click)="annulerAjoutPoste()"
-            ></button>
-            <button pButton type="button" (click)="buttonSubmit()">Enregistrer</button>
-          </ng-template>
-        </p-toolbar>
-      </ng-container>
-    </ng-template>
-
-    <ng-container *ngIf="ficheSelectionnee">
-      <div class="content-scroll flex-grow-1 d-flex flex-column">
-        <form #form="ngForm" (ngSubmit)="onSubmit(form)">
-          <h2>Fiche de poste</h2>
-          <br /><br />
-
-          <input type="hidden" name="id" [(ngModel)]="ficheSelectionnee.id" />
-
-          <table>
-            <tr>
-              <th class="minimal withTitre" colspan="1">Fonctions :</th>
-              <td colspan="3">
-                <input pInputText name="fonction" [(ngModel)]="ficheSelectionnee.fonction" fluid />
-              </td>
-            </tr>
-            <tr>
-              <th class="minimal withTitre" colspan="1">Métier ou emploi type<sup>*</sup> :</th>
-              <td colspan="3">
-                <input
-                  pInputText
-                  name="emploiType"
-                  [(ngModel)]="ficheSelectionnee.emploiType"
-                  fluid
-                />
-              </td>
-            </tr>
-            <tr>
-              <th colspan="4" class="titre">Fiche descriptive du poste</th>
-            </tr>
-            <tr>
-              <th class="minimal withTitre" colspan="1">Catégorie :</th>
-              <td colspan="3">
-                <input
-                  pInputText
-                  name="fdpCategorie"
-                  [(ngModel)]="ficheSelectionnee.fdpCategorie"
-                  fluid
-                />
-              </td>
-            </tr>
-            <tr>
-              <th class="minimal withTitre" colspan="1">Corps :</th>
-              <td colspan="3">
-                <input pInputText name="fdpCorps" [(ngModel)]="ficheSelectionnee.fdpCorps" fluid />
-              </td>
-            </tr>
-            <tr>
-              <th colspan="4" class="titre">Affectation</th>
-            </tr>
-            <tr>
-              <th class="minimal withTitre" colspan="2">Administrative :</th>
-              <td colspan="2">
-                <input
-                  pInputText
-                  name="affectationAdministrative"
-                  [(ngModel)]="ficheSelectionnee.affectationAdministrative"
-                  fluid
-                />
-              </td>
-            </tr>
-            <tr>
-              <th class="minimal withTitre" colspan="2">Géographique :</th>
-              <td colspan="2">
-                <input
-                  pInputText
-                  name="affectationGeographique"
-                  [(ngModel)]="ficheSelectionnee.affectationGeographique"
-                  fluid
-                />
-              </td>
-            </tr>
-            <tr>
-              <th colspan="4" class="titre">Missions</th>
-            </tr>
-            <tr>
-              <td class="minimal" colspan="4">
-                <p>Activités principales :</p>
-                <p>
-                  <p-editor
-                    #content="ngModel"
-                    [(ngModel)]="ficheSelectionnee.missions"
-                    name="missions"
-                    [style]="{ height: '320px' }"
-                    fluid
-                  />
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td>Encadrement :</td>
-              <td style="width: 140px">
-                <p-selectbutton
-                  [options]="yesNoOptions"
-                  name="encadrement"
-                  [(ngModel)]="ficheSelectionnee.encadrement"
-                  optionLabel="label"
-                  optionValue="value"
-                  aria-labelledby="basic"
-                />
-              </td>
-              <td class="minimal" style="width: 270px">Nb agents encadrés par catégorie :</td>
-              <td>
-                <ul class="li-inline">
-                  <li>
-                    <p-inputnumber
-                      inputId="integeronly"
-                      size="small"
-                      name="cpeCategA"
-                      [(ngModel)]="ficheSelectionnee.cpeCategA"
-                    />
-                    A
-                  </li>
-                  <li>
-                    <p-inputnumber
-                      inputId="integeronly"
-                      size="small"
-                      name="cpeCategB"
-                      [(ngModel)]="ficheSelectionnee.cpeCategB"
-                    />
-                    B
-                  </li>
-                  <li>
-                    <p-inputnumber
-                      inputId="integeronly"
-                      size="small"
-                      name="cpeCategC"
-                      [(ngModel)]="ficheSelectionnee.cpeCategC"
-                    />
-                    C
-                  </li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <td>Conduite de projet :</td>
-              <td style="width: 140px">
-                <p-selectbutton
-                  [options]="yesNoOptions"
-                  name="conduiteProjet"
-                  [(ngModel)]="ficheSelectionnee.conduiteProjet"
-                  optionLabel="label"
-                  optionValue="value"
-                  aria-labelledby="basic"
-                />
-              </td>
-              <td colspan="2"></td>
-            </tr>
-
-            <tr>
-              <th class="titre" colspan="4">Compétences*</th>
-            </tr>
-            <tr>
-              <td class="minimal" colspan="4">
-                <p>Connaissance, savoir :</p>
-                <p>
-                  <p-editor
-                    #content="ngModel"
-                    [(ngModel)]="ficheSelectionnee.competencesConnaissances"
-                    name="competencesConnaissances"
-                    [style]="{ height: '320px' }"
-                    fluid
-                  />
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td class="minimal" colspan="4">
-                <p>Savoir faire :</p>
-                <p>
-                  <p-editor
-                    #content="ngModel"
-                    [(ngModel)]="ficheSelectionnee.competencesSavoirFaire"
-                    name="competencesSavoirFaire"
-                    [style]="{ height: '320px' }"
-                    fluid
-                  />
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td class="minimal" colspan="4">
-                <p>Savoir être :</p>
-                <p>
-                  <p-editor
-                    #content="ngModel"
-                    [(ngModel)]="ficheSelectionnee.competencesSavoirEtre"
-                    name="competencesSavoirEtre"
-                    [style]="{ height: '320px' }"
-                    fluid
-                  />
-                </p>
-              </td>
-            </tr>
-          </table>
-        </form>
-      </div>
-    </ng-container>
-  </p-dialog>-->
 </div>

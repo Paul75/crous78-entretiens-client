@@ -12,7 +12,7 @@
     <p-button
       *ngIf="displayButtonsViewDownload"
       icon="pi pi-search"
-      (click)="viewPDF()"
+      (click)="onClickViewPdf()"
       severity="secondary"
       rounded
       pTooltip="Voir le PDF"
@@ -21,7 +21,7 @@
     <p-button
       *ngIf="displayButtonsViewDownload"
       icon="pi pi-download"
-      (click)="getPDF()"
+      (click)="onClickGetPdf()"
       severity="secondary"
       pTooltip="Télécharger le PDF"
       rounded

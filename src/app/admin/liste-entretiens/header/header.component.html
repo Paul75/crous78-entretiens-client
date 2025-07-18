@@ -11,7 +11,11 @@
         {{ getEntretienStatut() }}
       </div>
       <div class="col-2" style="width: 5rem; padding: 0; margin: 0" *ngIf="buttons">
-        <app-admin-liste-entretiens-buttons [entretien]="entretien" />
+        <app-admin-liste-entretiens-buttons
+          [entretien]="entretien"
+          (getPdf)="handleGetPdf($event)"
+          (viewPdf)="handleViewPdf($event)"
+        />
       </div>
     </div>
   </div>

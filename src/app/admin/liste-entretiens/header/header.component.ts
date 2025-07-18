@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Entretien } from '@shared/models/entretien.model';
 import { TableModule } from 'primeng/table';
@@ -31,10 +31,10 @@ export class AdminListeEntretiensHeaderComponent implements OnInit {
 
   entretiens!: Entretien[];
 
-  ngOnInit(): void {
-    // this.entretiens = [this.entretien];
-    // console.log(this.entretien.dateEntretien);
-  }
+  @Output() getPdf = new EventEmitter<number>();
+  @Output() viewPdf = new EventEmitter<number>();
+
+  ngOnInit(): void {}
 
   getStatutClasses() {
     const statut: StatutDemandeEnum = this.entretien!.statut;
@@ -62,8 +62,6 @@ export class AdminListeEntretiensHeaderComponent implements OnInit {
       return '';
     }
 
-    // console.log(this.entretien.dateEntretien)
-
     return this.entretien.dateEntretien || '';
   }
 
@@ -72,5 +70,15 @@ export class AdminListeEntretiensHeaderComponent implements OnInit {
       return '';
     }
     return this.entretien.statut || '';
+  }
+
+  handleGetPdf(id: number) {
+    if (!id) return;
+    this.getPdf.emit(id);
+  }
+
+  handleViewPdf(id: number) {
+    if (!id) return;
+    this.viewPdf.emit(id);
   }
 }

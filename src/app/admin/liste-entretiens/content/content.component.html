@@ -22,10 +22,16 @@
           [entretien]="entretien"
           [buttons]="false"
           [displayDate]="false"
+          (getPdf)="handleGetPdf($event)"
+          (viewPdf)="handleViewPdf($event)"
         />
       </td>
       <td class="text-center" style="width: 5rem; padding: 0; margin: 0">
-        <app-admin-liste-entretiens-buttons [entretien]="entretien" />
+        <app-admin-liste-entretiens-buttons
+          [entretien]="entretien"
+          (getPdf)="handleGetPdf($event)"
+          (viewPdf)="handleViewPdf($event)"
+        />
       </td>
     </tr>
   </ng-template>

@@ -1,11 +1,19 @@
-import { Component, inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule, formatDate } from '@angular/common';
 import { Entretien } from '@shared/models/entretien.model';
 
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ButtonGroupModule } from 'primeng/buttongroup';
-import { CommunicationPdfService } from '@shared/services/communications/communication-pdf.service';
 import { TypeEntretien } from '@shared/enums/type-entretien.enum';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -43,6 +51,9 @@ export class AdminListeEntretiensButtonsComponent implements OnInit, OnDestroy {
   @Input()
   entretien!: Entretien;
 
+  @Output() getPdf = new EventEmitter<number>();
+  @Output() viewPdf = new EventEmitter<number>();
+
   anneeScolaire = AnneeScolaire.getAnneeScolaireActuelle();
 
   minDate = this.anneeScolaire.getDateDebut(); // 1er septembre
@@ -57,7 +68,6 @@ export class AdminListeEntretiensButtonsComponent implements OnInit, OnDestroy {
   private messageService = inject(MessageService);
 
   private entretienService = inject(EntretienService);
-  private communicationService = inject(CommunicationPdfService);
   private communicationSignatureService = inject(CommunicationSignatureService);
   private communicationEmailsService = inject(CommunicationEmailsService);
 
@@ -218,14 +228,14 @@ export class AdminListeEntretiensButtonsComponent implements OnInit, OnDestroy {
       });
   }
 
-  getPDF() {
+  onClickGetPdf() {
     if (!this.entretien) return;
-    this.communicationService.envoyerGetPdf(this.entretien.id);
+    this.getPdf.emit(this.entretien.id);
   }
 
-  viewPDF() {
+  onClickViewPdf() {
     if (!this.entretien) return;
-    this.communicationService.envoyerViewPdf(this.entretien.id);
+    this.viewPdf.emit(this.entretien.id);
   }
 
   goSignature() {
