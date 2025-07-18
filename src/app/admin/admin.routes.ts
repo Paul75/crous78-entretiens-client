@@ -23,6 +23,14 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'entretiens-fiches-poste',
+        canActivate: [AuthenticationGuard, AdminOrRhGuard],
+        loadComponent: () =>
+          import(`./entretiens-fiches-poste/entretiens-fiches-poste.component`).then(
+            mod => mod.EntretiensFichesPosteComponent,
+          ),
+      },
+      {
         path: 'personnes',
         canActivate: [AuthenticationGuard, AdminOrRhGuard],
         loadComponent: () =>

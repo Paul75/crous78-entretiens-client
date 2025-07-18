@@ -1,0 +1,143 @@
+<p-toast />
+<h2>Liste des entretiens</h2>
+
+<div class="content-scroll flex-grow-1 d-flex flex-column">
+  <p-table
+    #dt1
+    showGridlines
+    dataKey="id"
+    [value]="liste"
+    [loading]="loading"
+    [scrollable]="true"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[5, 10, 20, 50, 100]"
+    [globalFilterFields]="['id', 'personne.nom']"
+    [style]="{ width: '100%' }"
+    scrollHeight="flex"
+    [expandedRowKeys]="expandedRows"
+  >
+    <ng-template #caption>
+      <div
+        class="d-flex flex-wrap align-items-center gap-3 p-3 border rounded bg-light justify-content-center memo-step"
+      >
+        <div class="d-flex align-items-center">
+          <p-button class="me-2 no-click" icon="pi pi-pen-to-square" severity="help" rounded />
+          <span><b>Etape 1</b> : Préparation du formulaire</span>
+        </div>
+        <div class="d-flex align-items-center">
+          <p-button icon="pi pi-calendar" severity="secondary" rounded class="me-2 no-click" />
+          <span><b>Etape 2</b> : Prise de rendez-vous</span>
+        </div>
+        <div class="d-flex align-items-center">
+          <p-button icon="pi pi-plus" severity="success" rounded class="me-2 no-click" />
+          <span><b>Etape 3</b> : Remplir le formulaire avec l'agent</span>
+        </div>
+        <div class="d-flex align-items-center">
+          <p-button icon="pi pi-user-edit" severity="warn" rounded class="me-2 no-click" />
+          <span><b>Etape 4</b> : Envoyer pour signer à l'agent</span>
+        </div>
+        <div class="d-flex align-items-center">
+          <p-button icon="pi pi-pencil" severity="secondary" rounded class="me-2 no-click" />
+          <span><b>Etape 5</b> : Signatures (Agent puis Chef)</span>
+        </div>
+
+        <!-- Barre séparatrice -->
+        <div class="separator my-1 w-100"></div>
+
+        <div class="d-flex align-items-center">
+          <p-button icon="pi pi-search" severity="secondary" rounded class="me-2 no-click" />
+          <p-button icon="pi pi-download" severity="secondary" rounded class="me-2 no-click" />
+          <span>Visualiser et télécharger le formulaire</span>
+        </div>
+      </div>
+
+      <div class="flex">
+        <p-iconfield>
+          <input
+            pInputText
+            type="text"
+            (input)="applyFilterGlobal($event, dt1)"
+            placeholder="Rechercher..."
+          />
+        </p-iconfield>
+      </div>
+    </ng-template>
+    <ng-template #header>
+      <tr>
+        <th style="width: 5rem"></th>
+        <th class="text-center">Matricule</th>
+        <th class="text-center">Prénom</th>
+        <th class="text-center">Nom</th>
+
+        <th class="text-center">PROFESSIONNEL</th>
+        <th class="text-center">FORMATION</th>
+        <th class="text-center">FICHE DE POSTE</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-item let-expanded="expanded">
+      <tr>
+        <td>
+          <p-button
+            type="button"
+            pRipple
+            [pRowToggler]="item"
+            [text]="true"
+            severity="secondary"
+            [rounded]="true"
+            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+          />
+        </td>
+        <td class="text-center text-nowrap">{{ item.personne.matricule }}</td>
+        <td class="text-center text-nowrap">{{ item.personne.prenom }}</td>
+        <td class="text-center text-nowrap">{{ item.personne.nom }}</td>
+
+        <td class="text-center">
+          <p-badge value="{{ item.entretienPro?.length ?? 0 }}"></p-badge>
+        </td>
+        <td class="text-center">
+          <p-badge value="{{ item.entretienForm?.length ?? 0 }}"></p-badge>
+        </td>
+        <td class="text-center"><p-badge value="{{ item.fichePoste?.length ?? 0 }}"></p-badge></td>
+      </tr>
+    </ng-template>
+    <ng-template #expandedrow let-item>
+      <tr>
+        <td colspan="7">
+          <div class="p-7">
+            <p-tabs value="0">
+              <p-tablist>
+                <p-tab value="0"
+                  >Entretiens professionnels <p-badge value="{{ item.entretienPro?.length ?? 0 }}"
+                /></p-tab>
+                <p-tab value="1"
+                  >Entretiens de formation <p-badge value="{{ item.entretienForm?.length ?? 0 }}"
+                /></p-tab>
+                <p-tab value="2"
+                  >Fiches de poste <p-badge value="{{ item.fichePoste?.length ?? 0 }}"
+                /></p-tab>
+              </p-tablist>
+              <p-tabpanels>
+                <p-tabpanel value="0">
+                  <!-- Table ou contenu pour les entretiens pro -->
+                  <app-admin-liste-entretiens-pro-form [liste]="item.entretienPro" />
+                </p-tabpanel>
+                <p-tabpanel value="1">
+                  <!-- Table ou contenu pour les entretiens de formation -->
+                  <app-admin-liste-entretiens-pro-form [liste]="item.entretienForm" />
+                </p-tabpanel>
+                <p-tabpanel value="2">
+                  <!-- Table ou contenu pour les fiches de poste -->
+                  <app-admin-liste-fiches-poste
+                    [liste]="item.fichePoste"
+                    [personne]="item.personne"
+                  />
+                </p-tabpanel>
+              </p-tabpanels>
+            </p-tabs>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
