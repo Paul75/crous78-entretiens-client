@@ -68,15 +68,13 @@
         <th class="text-center">Personne</th>
         <th class="text-center equal-width-column">Entretiens pro</th>
         <th class="text-center equal-width-column">Entretiens formation</th>
-        <th class="text-center">Fiche de poste</th>
+        <th class="text-center">Fiche de<br />poste</th>
       </tr>
     </ng-template>
     <ng-template #body let-item>
       <tr>
         <td class="text-center">{{ item.id }}</td>
-        <td class="text-center text-nowrap">
-          {{ item.personne?.nom }} {{ item.personne?.prenom }}
-        </td>
+        <td class="text-center">{{ item.personne?.nom }} {{ item.personne?.prenom }}</td>
 
         <td class="text-center">
           <ng-container *ngIf="item.entretienPro[0]?.statut; else noProStatut">

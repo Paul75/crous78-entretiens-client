@@ -12,7 +12,9 @@ import localeFr from '@angular/common/locales/fr';
 import localeFRExtra from '@angular/common/locales/extra/fr';
 import { LoaderInterceptor } from '@shared/interceptor/loader.interceptor';
 
-registerLocaleData(localeFr, 'fr-FR', localeFRExtra);
+registerLocaleData(localeFr, 'fr', localeFRExtra);
+// registerLocaleData(localeFr, 'fr-FR', localeFRExtra);
+
 import { fr } from 'primelocale/fr.json';
 import { AuthenticationService } from '@core/authentication/authentication.service';
 import { DatasCoreService } from '@core/services/datas-core.service';
@@ -44,7 +46,8 @@ export const appConfig: ApplicationConfig = {
       },
       translation: fr,
     }),
-    { provide: LOCALE_ID, useValue: 'fr-FR' },
+    { provide: LOCALE_ID, useValue: 'fr' },
+    // { provide: LOCALE_ID, useValue: 'fr-FR' },
     // { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
     AuthenticationGuard,
