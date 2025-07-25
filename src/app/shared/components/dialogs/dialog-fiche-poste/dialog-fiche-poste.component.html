@@ -1,4 +1,11 @@
-<p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '80%' }" (onHide)="hide.emit()">
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [closeOnEscape]="false"
+  [closable]="false"
+  [style]="{ width: '80%' }"
+  (onHide)="hide.emit()"
+>
   <ng-template #header>
     <ng-container *ngIf="ficheSelectionnee">
       <p-toolbar class="toolbar-fixe" [style]="{ width: '100%' }">
