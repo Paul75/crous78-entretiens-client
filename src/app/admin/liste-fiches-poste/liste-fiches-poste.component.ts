@@ -7,17 +7,16 @@ import { PersonnesService } from '@shared/services/personnes/personnes.service';
 import { Personne } from '@shared/models/personne.model';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { Credentials, CredentialsService } from '@core/authentication/credentials.service';
 import { Router } from '@angular/router';
 import { Poste } from '@shared/models/poste.model';
 import { DialogModule } from 'primeng/dialog';
 import { PostesService } from '@shared/services/postes/postes.service';
 import { PdfService } from '@shared/services/pdf/pdf.service';
-import { HttpResponse } from '@angular/common/http';
-import { toBlob } from '@shared/utils/files.util';
 import { NgxExtendedPdfViewerComponent, NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { DialogFichePosteComponent } from '@shared/components/dialogs/dialog-fiche-poste/dialog-fiche-poste.component';
+import { PdfComponent } from '@shared/components/dialogs/pdf/pdf.component';
 
 @Component({
   selector: 'app-admin-liste-personnes',
@@ -30,6 +29,7 @@ import { DialogFichePosteComponent } from '@shared/components/dialogs/dialog-fic
     FormsModule,
     NgxExtendedPdfViewerModule,
     DialogFichePosteComponent,
+    PdfComponent,
   ],
   providers: [MessageService, PersonnesService],
   templateUrl: './liste-fiches-poste.component.html',
@@ -62,6 +62,8 @@ export class AdminListeFichesPosteComponent implements OnInit {
   src!: Blob;
   filename: string = '';
   public showViewer = false;
+
+  @ViewChild(PdfComponent) pdfComponent!: PdfComponent;
 
   constructor(public router: Router) {
     this._credentials = this.credentialsService.credentials;
@@ -233,45 +235,12 @@ export class AdminListeFichesPosteComponent implements OnInit {
     }
   }
 
-  viewFicheDePostePDF(posteId: number) {
-    if (!posteId) return;
-    this.loading = true;
-    this.pdfService.downloadFicheDePostePdf(posteId).subscribe({
-      next: (response: HttpResponse<Blob>) => {
-        const { blob, filename } = toBlob(response);
-        this.filename = filename;
-
-        if (blob) {
-          this.src = blob;
-          this.visibleDetailPdf = true;
-        }
-      },
-      error: e => console.error('viewPDF error: ', e),
-      complete: () => {
-        this.pdfService.resetCache(posteId);
-        this.loading = false;
-      },
-    });
+  handleGetPdf(id: number) {
+    this.pdfComponent.downloadFichePoste(id);
   }
 
-  getFicheDePostePDF(posteId: number) {
-    this.pdfService.downloadFicheDePostePdf(posteId).subscribe({
-      next: (response: HttpResponse<Blob>) => {
-        const { blob, filename } = toBlob(response);
-        const objectUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = objectUrl;
-        a.download = filename;
-        a.click();
-        URL.revokeObjectURL(objectUrl);
-        a.remove();
-      },
-      error: e => console.error('downloadFicheDePostePdf error: ', e),
-      complete: () => {
-        this.pdfService.resetCache(posteId);
-        this.loading = false;
-      },
-    });
+  handleViewPdf(id: number) {
+    this.pdfComponent.openFichePoste(id);
   }
 
   onActivatePdfTab() {
