@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Input, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -7,8 +7,6 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { PanelModule } from 'primeng/panel';
 import { DialogModule } from 'primeng/dialog';
 import { TooltipModule } from 'primeng/tooltip';
-import { PdfService } from '@shared/services/pdf/pdf.service';
-import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { environment } from '@environments/environment';
 import { Router, RouterModule } from '@angular/router';
 import { PersonnelService } from '@admin/services/personnel.service';
@@ -21,19 +19,16 @@ import {
   Personne,
 } from '@core/authentication/credentials.service';
 import { FormsModule } from '@angular/forms';
-import { Entretien } from '@shared/models/entretien.model';
-import { HttpResponse } from '@angular/common/http';
-import { toBlob } from '@shared/utils/files.util';
 import { Poste } from '@shared/models/poste.model';
 import { PostesService } from '@shared/services/postes/postes.service';
 import { DialogFichePosteComponent } from '@shared/components/dialogs/dialog-fiche-poste/dialog-fiche-poste.component';
+import { PdfComponent } from '@shared/components/dialogs/pdf/pdf.component';
 
 @Component({
   selector: 'app-admin-liste-fiches-poste',
   imports: [
     CommonModule,
     RouterModule,
-    NgxExtendedPdfViewerModule,
     TableModule,
     ButtonGroupModule,
     ButtonModule,
@@ -45,12 +40,13 @@ import { DialogFichePosteComponent } from '@shared/components/dialogs/dialog-fic
     PanelModule,
     FormsModule,
     DialogFichePosteComponent,
+    PdfComponent,
   ],
   providers: [MessageService, PersonnelService],
   templateUrl: './fiche-poste.component.html',
   styleUrl: './fiche-poste.component.scss',
 })
-export class ListeEntretiensFichePosteComponent implements OnInit, OnDestroy {
+export class ListeEntretiensFichePosteComponent {
   name = environment.application.name;
   angular = environment.application.angular;
   bootstrap = environment.application.bootstrap;
@@ -60,7 +56,6 @@ export class ListeEntretiensFichePosteComponent implements OnInit, OnDestroy {
   private postesService = inject(PostesService);
   private messageService = inject(MessageService);
   private _credentials!: Credentials | null;
-  private pdfService = inject(PdfService);
   public showViewer = false;
 
   private _currentUser!: number;
@@ -81,15 +76,12 @@ export class ListeEntretiensFichePosteComponent implements OnInit, OnDestroy {
   ficheSelectionnee: Poste | null = null;
 
   visibleDialogForm: boolean = false;
+  @ViewChild(PdfComponent) pdfComponent!: PdfComponent;
 
   constructor(public router: Router) {
     this._credentials = this.credentialsService.credentials;
     this._currentUser = this._credentials?.personne.matricule ?? 0;
   }
-
-  ngOnInit(): void {}
-
-  ngOnDestroy() {}
 
   get isAdmin(): boolean {
     return this.credentialsService.isAdmin;
@@ -97,10 +89,6 @@ export class ListeEntretiensFichePosteComponent implements OnInit, OnDestroy {
 
   get isRH(): boolean {
     return this.credentialsService.isRH;
-  }
-
-  onActivatePdfTab() {
-    setTimeout(() => (this.showViewer = true), 100);
   }
 
   onDialogHide() {
@@ -207,94 +195,11 @@ export class ListeEntretiensFichePosteComponent implements OnInit, OnDestroy {
     }
   }
 
-  getEntretienPDF(id: number) {
-    this.loading = true;
-    this.pdfService.downloadEntretienPdf(id).subscribe({
-      next: (response: HttpResponse<Blob>) => {
-        const { blob, filename } = toBlob(response);
-        const objectUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = objectUrl;
-        a.download = filename;
-        a.click();
-        URL.revokeObjectURL(objectUrl);
-        a.remove();
-      },
-      error: e => console.error('getEntretienPDF error: ', e),
-      complete: () => {
-        this.pdfService.resetCache(id);
-        this.loading = false;
-      },
-    });
-  }
-
-  viewEntretienPDF(id: number) {
-    if (!id) return;
-    this.loading = true;
-    this.pdfService.downloadEntretienPdf(id).subscribe({
-      next: (response: HttpResponse<Blob>) => {
-        const { blob, filename } = toBlob(response);
-        this.filename = filename;
-
-        if (blob) {
-          this.src = blob;
-          this.visibleDetailPdf = true;
-        }
-      },
-      error: e => console.error('viewEntretienPDF error: ', e),
-      complete: () => {
-        this.pdfService.resetCache(id);
-        this.loading = false;
-      },
-    });
-  }
-
-  viewFicheDePostePDF(posteId: number) {
-    if (!posteId) return;
-    this.loading = true;
-    this.pdfService.downloadFicheDePostePdf(posteId).subscribe({
-      next: (response: HttpResponse<Blob>) => {
-        const { blob, filename } = toBlob(response);
-        this.filename = filename;
-
-        if (blob) {
-          this.src = blob;
-          this.visibleDetailPdf = true;
-        }
-      },
-      error: e => console.error('viewFicheDePostePDF error: ', e),
-      complete: () => {
-        this.pdfService.resetCache(posteId);
-        this.loading = false;
-      },
-    });
-  }
-
-  getFicheDePostePDF(posteId: number) {
-    this.pdfService.downloadFicheDePostePdf(posteId).subscribe({
-      next: (response: HttpResponse<Blob>) => {
-        const { blob, filename } = toBlob(response);
-        const objectUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = objectUrl;
-        a.download = filename;
-        a.click();
-        URL.revokeObjectURL(objectUrl);
-        a.remove();
-      },
-      error: e => console.error('getFicheDePostePDF error: ', e),
-      complete: () => {
-        this.pdfService.resetCache(posteId);
-        this.loading = false;
-      },
-    });
-  }
-
   handleGetPdf(id: number) {
-    this.getEntretienPDF(id);
+    this.pdfComponent.downloadFichePoste(id);
   }
 
   handleViewPdf(id: number) {
-    this.viewEntretienPDF(id);
+    this.pdfComponent.openFichePoste(id);
   }
 }

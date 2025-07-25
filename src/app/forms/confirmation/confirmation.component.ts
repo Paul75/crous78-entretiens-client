@@ -2,11 +2,11 @@ import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { ViewPdfComponent } from '@shared/components/dialogs/pdf/view-pdf.component';
+import { PdfComponent } from '@shared/components/dialogs/pdf/pdf.component';
 
 @Component({
   selector: 'app-form-confirm',
-  imports: [CommonModule, RouterLink, ButtonModule, ViewPdfComponent],
+  imports: [CommonModule, RouterLink, ButtonModule, PdfComponent],
   templateUrl: './confirmation.component.html',
   styleUrl: './confirmation.component.scss',
 })
@@ -14,7 +14,7 @@ export class ConfirmationComponent {
   entretienId!: number;
 
   // PDF
-  @ViewChild('pdfDialog') pdfDialog!: ViewPdfComponent;
+  @ViewChild(PdfComponent) pdfDialog!: PdfComponent;
 
   constructor(private route: ActivatedRoute) {}
 
@@ -26,6 +26,6 @@ export class ConfirmationComponent {
 
   viewPDF(id: number) {
     if (!id) return;
-    this.pdfDialog.open(id);
+    this.pdfDialog.openEntretien(id);
   }
 }

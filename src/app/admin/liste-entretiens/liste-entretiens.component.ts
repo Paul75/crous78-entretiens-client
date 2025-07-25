@@ -5,10 +5,8 @@ import { ButtonModule } from 'primeng/button';
 import { ButtonGroupModule } from 'primeng/buttongroup';
 import { IconFieldModule } from 'primeng/iconfield';
 import { PanelModule } from 'primeng/panel';
-import { Dialog, DialogModule } from 'primeng/dialog';
+import { DialogModule } from 'primeng/dialog';
 import { TooltipModule } from 'primeng/tooltip';
-import { PdfService } from '@shared/services/pdf/pdf.service';
-import { NgxExtendedPdfViewerComponent, NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { environment } from '@environments/environment';
 import { SeoService } from '@core/services/seo/seo.service';
 import { TypeEntretien } from '@shared/enums/type-entretien.enum';
@@ -19,21 +17,19 @@ import { PersonnelService } from '@admin/services/personnel.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { Credentials, CredentialsService } from '@core/authentication/credentials.service';
-import { Subject, takeUntil } from 'rxjs';
-import { HttpResponse } from '@angular/common/http';
-import { toBlob } from '@shared/utils/files.util';
+import { Subject } from 'rxjs';
 import { PersonneImpl } from '@admin/admin.component';
 import { Poste } from '@shared/models/poste.model';
 import { PostesService } from '@shared/services/postes/postes.service';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { DialogFichePosteComponent } from '@shared/components/dialogs/dialog-fiche-poste/dialog-fiche-poste.component';
+import { PdfComponent } from '@shared/components/dialogs/pdf/pdf.component';
 
 @Component({
   selector: 'app-admin',
   imports: [
     CommonModule,
     RouterModule,
-    NgxExtendedPdfViewerModule,
     TableModule,
     ButtonGroupModule,
     ButtonModule,
@@ -46,6 +42,7 @@ import { DialogFichePosteComponent } from '@shared/components/dialogs/dialog-fic
     AdminListeEntretiensHeaderComponent,
     AdminListeEntretiensContentComponent,
     DialogFichePosteComponent,
+    PdfComponent,
   ],
   providers: [MessageService, PersonnelService],
   templateUrl: './liste-entretiens.component.html',
@@ -61,7 +58,6 @@ export class ListeEntretiensComponent implements OnInit, OnDestroy {
   private _credentials!: Credentials | null;
   private messageService = inject(MessageService);
   private personnelService = inject(PersonnelService);
-  private pdfService = inject(PdfService);
   private postesService = inject(PostesService);
   public showViewer = false;
 
@@ -73,8 +69,8 @@ export class ListeEntretiensComponent implements OnInit, OnDestroy {
 
   typeEntretienEnum = TypeEntretien;
 
-  @ViewChild(NgxExtendedPdfViewerComponent, { static: false })
-  private pdfViewer!: NgxExtendedPdfViewerComponent;
+  @ViewChild(PdfComponent) pdfComponent!: PdfComponent;
+
   visibleDetailPdf = false;
   src!: Blob;
   filename: string = '';
@@ -105,14 +101,6 @@ export class ListeEntretiensComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    /*this.communicationService.actionGet$.pipe(takeUntil(this.destroy)).subscribe(action => {
-      this.getEntretienPDF(action);
-    });
-
-    this.communicationService.actionView$.pipe(takeUntil(this.destroy)).subscribe(action => {
-      this.viewEntretienPDF(action);
-    });*/
-
     this.refreshDatas();
   }
 
@@ -151,104 +139,24 @@ export class ListeEntretiensComponent implements OnInit, OnDestroy {
     // console.log(ligne);
   }
 
-  getEntretienPDF(id: number) {
-    this.loading = true;
-    this.pdfService.downloadEntretienPdf(id).subscribe({
-      next: (response: HttpResponse<Blob>) => {
-        const { blob, filename } = toBlob(response);
-        const objectUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = objectUrl;
-        a.download = filename;
-        a.click();
-        URL.revokeObjectURL(objectUrl);
-        a.remove();
-      },
-      error: e => console.error('getEntretienPDF error: ', e),
-      complete: () => {
-        this.pdfService.resetCache(id);
-        this.loading = false;
-      },
-    });
-  }
-
   handleGetPdf(id: number) {
-    this.getEntretienPDF(id);
+    this.pdfComponent.downloadEntretien(id);
   }
 
   handleViewPdf(id: number) {
-    this.viewEntretienPDF(id);
+    this.pdfComponent.openEntretien(id);
   }
 
-  viewEntretienPDF(id: number) {
-    if (!id) return;
-    this.loading = true;
-    this.pdfService.downloadEntretienPdf(id).subscribe({
-      next: (response: HttpResponse<Blob>) => {
-        const { blob, filename } = toBlob(response);
-        this.filename = filename;
-
-        if (blob) {
-          this.src = blob;
-          this.visibleDetailPdf = true;
-        }
-      },
-      error: e => console.error('viewEntretienPDF error: ', e),
-      complete: () => {
-        this.pdfService.resetCache(id);
-        this.loading = false;
-      },
-    });
+  viewFicheDePostePDF(id: number) {
+    this.pdfComponent.openFichePoste(id);
   }
 
-  viewFicheDePostePDF(posteId: number) {
-    if (!posteId) return;
-    this.loading = true;
-    this.pdfService.downloadFicheDePostePdf(posteId).subscribe({
-      next: (response: HttpResponse<Blob>) => {
-        const { blob, filename } = toBlob(response);
-        this.filename = filename;
-
-        if (blob) {
-          this.src = blob;
-          this.visibleDetailPdf = true;
-        }
-      },
-      error: e => console.error('viewFicheDePostePDF error: ', e),
-      complete: () => {
-        this.pdfService.resetCache(posteId);
-        this.loading = false;
-      },
-    });
-  }
-
-  getFicheDePostePDF(posteId: number) {
-    this.pdfService.downloadFicheDePostePdf(posteId).subscribe({
-      next: (response: HttpResponse<Blob>) => {
-        const { blob, filename } = toBlob(response);
-        const objectUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = objectUrl;
-        a.download = filename;
-        a.click();
-        URL.revokeObjectURL(objectUrl);
-        a.remove();
-      },
-      error: e => console.error('getFicheDePostePDF error: ', e),
-      complete: () => {
-        this.pdfService.resetCache(posteId);
-        this.loading = false;
-      },
-    });
-  }
-
-  onActivatePdfTab() {
-    setTimeout(() => (this.showViewer = true), 100);
+  getFicheDePostePDF(id: number) {
+    this.pdfComponent.downloadFichePoste(id);
   }
 
   onDialogHide() {
     this.showViewer = false;
-    // this.pdfViewer.ngOnDestroy();
   }
 
   applyFilterGlobal(event: Event, table: Table): void {
@@ -272,7 +180,6 @@ export class ListeEntretiensComponent implements OnInit, OnDestroy {
 
   closeDialog() {
     this.ficheSelectionnee = null;
-    // this.ficheSelectionneeBack = null;
 
     this.visibleDialogForm = false;
   }

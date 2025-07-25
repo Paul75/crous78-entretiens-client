@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Input, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -7,9 +7,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { PanelModule } from 'primeng/panel';
 import { DialogModule } from 'primeng/dialog';
 import { TooltipModule } from 'primeng/tooltip';
-import { PdfService } from '@shared/services/pdf/pdf.service';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
-import { environment } from '@environments/environment';
 import { Router, RouterModule } from '@angular/router';
 import { PersonnelService } from '@admin/services/personnel.service';
 import { MessageService } from 'primeng/api';
@@ -19,9 +17,8 @@ import { Credentials, CredentialsService } from '@core/authentication/credential
 import { FormsModule } from '@angular/forms';
 import { Entretien } from '@shared/models/entretien.model';
 import { AdminListeEntretiensButtonsComponent } from '../buttons/buttons.component';
-import { HttpResponse } from '@angular/common/http';
-import { toBlob } from '@shared/utils/files.util';
 import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
+import { PdfComponent } from '@shared/components/dialogs/pdf/pdf.component';
 
 @Component({
   selector: 'app-admin-liste-entretiens-pro-form',
@@ -40,42 +37,29 @@ import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
     PanelModule,
     FormsModule,
     AdminListeEntretiensButtonsComponent,
+    PdfComponent,
   ],
   providers: [MessageService, PersonnelService],
   templateUrl: './pro-form.component.html',
   styleUrl: './pro-form.component.scss',
 })
-export class ListeEntretiensProFormComponent implements OnInit, OnDestroy {
-  name = environment.application.name;
-  angular = environment.application.angular;
-  bootstrap = environment.application.bootstrap;
-  fontawesome = environment.application.fontawesome;
+export class ListeEntretiensProFormComponent {
+  @Input()
+  liste!: Entretien[];
 
   private credentialsService = inject(CredentialsService);
   private _credentials!: Credentials | null;
-  private pdfService = inject(PdfService);
-  public showViewer = false;
 
   private _currentUser!: number;
 
   loading: boolean = false;
 
-  filename: string = '';
-
-  visibleDetailPdf = false;
-  src!: Blob;
-
-  @Input()
-  liste!: Entretien[];
+  @ViewChild(PdfComponent) pdfComponent!: PdfComponent;
 
   constructor(public router: Router) {
     this._credentials = this.credentialsService.credentials;
     this._currentUser = this._credentials?.personne.matricule ?? 0;
   }
-
-  ngOnInit(): void {}
-
-  ngOnDestroy() {}
 
   get isAdmin(): boolean {
     return this.credentialsService.isAdmin;
@@ -97,62 +81,11 @@ export class ListeEntretiensProFormComponent implements OnInit, OnDestroy {
     };
   }
 
-  onActivatePdfTab() {
-    setTimeout(() => (this.showViewer = true), 100);
-  }
-
-  onDialogHide() {
-    this.showViewer = false;
-    // this.pdfViewer.ngOnDestroy();
-  }
-
-  getEntretienPDF(id: number) {
-    this.loading = true;
-    this.pdfService.downloadEntretienPdf(id).subscribe({
-      next: (response: HttpResponse<Blob>) => {
-        const { blob, filename } = toBlob(response);
-        const objectUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = objectUrl;
-        a.download = filename;
-        a.click();
-        URL.revokeObjectURL(objectUrl);
-        a.remove();
-      },
-      error: e => console.error('getEntretienPDF error: ', e),
-      complete: () => {
-        this.pdfService.resetCache(id);
-        this.loading = false;
-      },
-    });
-  }
-
-  viewEntretienPDF(id: number) {
-    if (!id) return;
-    this.loading = true;
-    this.pdfService.downloadEntretienPdf(id).subscribe({
-      next: (response: HttpResponse<Blob>) => {
-        const { blob, filename } = toBlob(response);
-        this.filename = filename;
-
-        if (blob) {
-          this.src = blob;
-          this.visibleDetailPdf = true;
-        }
-      },
-      error: e => console.error('viewEntretienPDF error: ', e),
-      complete: () => {
-        this.pdfService.resetCache(id);
-        this.loading = false;
-      },
-    });
-  }
-
   handleGetPdf(id: number) {
-    this.getEntretienPDF(id);
+    this.pdfComponent.downloadEntretien(id);
   }
 
   handleViewPdf(id: number) {
-    this.viewEntretienPDF(id);
+    this.pdfComponent.openEntretien(id);
   }
 }

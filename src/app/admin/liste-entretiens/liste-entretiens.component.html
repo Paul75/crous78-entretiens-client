@@ -161,29 +161,7 @@
     </ng-template>
   </p-table>
 
-  <p-dialog
-    [header]="'Entretien'"
-    [(visible)]="visibleDetailPdf"
-    [modal]="true"
-    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
-    [style]="{ width: '75vw', 'max-width': '90vw' }"
-    [draggable]="false"
-    [resizable]="false"
-    [maximizable]="true"
-    (onShow)="onActivatePdfTab()"
-    (onHide)="onDialogHide()"
-  >
-    @if (showViewer) {
-      <ngx-extended-pdf-viewer
-        [src]="src"
-        [height]="'auto'"
-        [textLayer]="true"
-        [showHandToolButton]="true"
-        [filenameForDownload]="filename"
-      >
-      </ngx-extended-pdf-viewer>
-    }
-  </p-dialog>
+  <app-dialog-pdf />
 
   <app-dialog-fiche-poste
     [visible]="visibleDialogForm"

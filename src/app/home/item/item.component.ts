@@ -6,7 +6,7 @@ import { TypeEntretien } from '@shared/enums/type-entretien.enum';
 import { Entretien } from '@shared/models/entretien.model';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { SignatureComponent } from '@shared/components/dialogs/signature/signature.component';
-import { ViewPdfComponent } from '@shared/components/dialogs/pdf/view-pdf.component';
+import { PdfComponent } from '@shared/components/dialogs/pdf/pdf.component';
 import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
 import { TypesSignatureEnum } from '@shared/enums/types.signature.enum';
 import { CommunicationSignatureService } from '@shared/services/communications/communication-signature.service';
@@ -24,7 +24,7 @@ import { Subject, takeUntil } from 'rxjs';
     ButtonGroupModule,
     SignatureComponent,
     AgentCommentaireComponent,
-    ViewPdfComponent,
+    PdfComponent,
   ],
   templateUrl: './item.component.html',
   styleUrl: './item.component.scss',
@@ -39,7 +39,7 @@ export class HomeItemComponent implements OnInit, OnDestroy {
   @ViewChild('signatureDialog') signatureDialog!: SignatureComponent;
 
   // PDF
-  @ViewChild('pdfDialog') pdfDialog!: ViewPdfComponent;
+  @ViewChild('pdfDialog') pdfDialog!: PdfComponent;
 
   typeEntretienEnum = TypeEntretien;
   statutDemandeEnum = StatutDemandeEnum;
@@ -126,12 +126,12 @@ export class HomeItemComponent implements OnInit, OnDestroy {
 
   getPDF(id: number) {
     if (!id) return;
-    this.pdfDialog.getPDF(id);
+    this.pdfDialog.downloadEntretien(id);
   }
 
   viewPDF(id: number) {
     if (!id) return;
-    this.pdfDialog.viewPDF(id);
+    this.pdfDialog.openEntretien(id);
   }
 
   goSignature() {
