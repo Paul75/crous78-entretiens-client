@@ -17,6 +17,9 @@ import { SelectModule } from 'primeng/select';
 import { FormulaireService } from '@forms/services/formulaire.service';
 import { EntretienStepsService } from '@shared/services/entretiens/entretien-steps.service';
 import { firstValueFrom } from 'rxjs';
+import { FormationsContinue } from '@shared/models/formations-continue.model';
+import { Entretien } from '@shared/models/entretien.model';
+import { ActionsFormationsDemandees } from '@shared/models/ actions-formations-demandees.model';
 
 @Component({
   selector: 'app-entretien-form-step5',
@@ -73,7 +76,16 @@ export class EntretienFormStep5Component {
     this.form = this.formProvider.getForm();
   }
 
-  initializeFormContinueWithData(bddData?: any[]) {
+  initialize(entretien: Entretien) {
+    if (entretien?.formationsContinue) {
+      this.initializeFormationsContinue(entretien.formationsContinue);
+    }
+    if (entretien?.actionsFormationsDemandees) {
+      this.initializeActionFormDemandeesWithData(entretien.actionsFormationsDemandees);
+    }
+  }
+
+  private initializeFormationsContinue(formationsContinue?: FormationsContinue[]) {
     if (!this.form.contains('formationsContinue')) {
       this.form.addControl('formationsContinue', this.fb.array([]));
     }
@@ -83,7 +95,7 @@ export class EntretienFormStep5Component {
 
     const saved = this.formService.getCurrentValue().formationsContinue;
 
-    const source = saved.length ? saved : bddData;
+    const source = saved.length ? saved : formationsContinue;
 
     if (source?.length) {
       source.forEach(item => {
@@ -97,7 +109,9 @@ export class EntretienFormStep5Component {
     this.cdref.detectChanges();
   }
 
-  initializeActionFormDemandeesWithData(bddData?: any[]) {
+  private initializeActionFormDemandeesWithData(
+    actionsFormationsDemandees?: ActionsFormationsDemandees[],
+  ) {
     if (!this.form.contains('actionsFormationsDemandees')) {
       this.form.addControl('actionsFormationsDemandees', this.fb.array([]));
     }
@@ -107,7 +121,7 @@ export class EntretienFormStep5Component {
 
     const saved = this.formService.getCurrentValue().actionsFormationsDemandees;
 
-    const source = saved.length ? saved : bddData;
+    const source = saved.length ? saved : actionsFormationsDemandees;
 
     if (source?.length) {
       source.forEach(item => {

@@ -26,7 +26,10 @@
             qualité d’expression orale...)
           </p>
           <div class="mb-3">
-            <textarea class="form-control" rows="6" formControlName="caCompetences"></textarea>
+            <app-shared-editor
+              [formGroup]="form"
+              formControlName="caCompetences"
+            ></app-shared-editor>
           </div>
         </div>
       </li>
@@ -39,7 +42,10 @@
             professionnelle, capacité à respecter l’organisation collective du travail...)
           </p>
           <div class="mb-3">
-            <textarea class="form-control" rows="6" formControlName="caContribution"></textarea>
+            <app-shared-editor
+              [formGroup]="form"
+              formControlName="caContribution"
+            ></app-shared-editor>
           </div>
         </div>
       </li>
@@ -51,7 +57,7 @@
             capacité d’adaptation, capacité à travailler en équipe, etc.)
           </p>
           <div class="mb-3">
-            <textarea class="form-control" rows="6" formControlName="caCapacites"></textarea>
+            <app-shared-editor [formGroup]="form" formControlName="caCapacites"></app-shared-editor>
           </div>
         </div>
       </li>
@@ -65,7 +71,7 @@
             déléguer, aptitude au dialogue, à la communication et à la négociation, etc.)
           </p>
           <div class="mb-3">
-            <textarea class="form-control" rows="6" formControlName="caAptitude"></textarea>
+            <app-shared-editor [formGroup]="form" formControlName="caAptitude"></app-shared-editor>
           </div>
         </div>
       </li>
@@ -277,7 +283,10 @@
       </div>
       <div class="card-body">
         <div class="mb-3">
-          <textarea class="form-control" rows="6" formControlName="realisationObjectifs"></textarea>
+          <app-shared-editor
+            [formGroup]="form"
+            formControlName="realisationObjectifs"
+          ></app-shared-editor>
         </div>
       </div>
     </div>
@@ -290,11 +299,10 @@
       </div>
       <div class="card-body">
         <div class="mb-3">
-          <textarea
-            class="form-control"
-            rows="6"
+          <app-shared-editor
+            [formGroup]="form"
             formControlName="appreciationLitterale"
-          ></textarea>
+          ></app-shared-editor>
         </div>
       </div>
       <div class="card-footer">

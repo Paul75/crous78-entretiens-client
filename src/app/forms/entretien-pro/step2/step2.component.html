@@ -223,15 +223,7 @@
     <h4>Missions du poste :</h4>
 
     <div class="mb-3">
-      <textarea
-        class="form-control"
-        rows="6"
-        formControlName="missions"
-        [class.is-invalid]="
-          registerFormControl['missions'].invalid &&
-          (registerFormControl['missions'].touched || registerFormControl['missions'].dirty)
-        "
-      ></textarea>
+      <app-shared-editor [formGroup]="form" formControlName="missions"></app-shared-editor>
       <div
         class="invalid-feedback"
         *ngIf="registerFormControl['missions'].invalid && registerFormControl['missions'].touched"

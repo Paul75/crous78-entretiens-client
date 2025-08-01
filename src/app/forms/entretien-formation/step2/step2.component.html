@@ -1,617 +1,595 @@
-<div class="container-fluid">
-  <form [formGroup]="form">
-    <div class="flex-auto flex row">
-      <h2 class="text-uppercase">1 - DESCRIPTION DU POSTE OCCUPE PAR L'AGENT</h2>
+<form [formGroup]="form">
+  <div class="flex-auto flex row">
+    <h2 class="text-uppercase">1 - DESCRIPTION DU POSTE OCCUPE PAR L'AGENT</h2>
 
-      <div class="card">
-        <div class="card-body">
-          <div class="card-text">
-            <div class="row">
-              <div class="mb-3 row">
-                <label for="" class="col-sm-3 col-form-label">structure :</label>
-                <div class="col-sm-9">
-                  <input
-                    type="text"
-                    class="form-control"
-                    id=""
-                    formControlName="structure"
-                    [class.is-invalid]="
-                      registerFormControl['structure'].invalid &&
-                      (registerFormControl['structure'].touched ||
-                        registerFormControl['structure'].dirty)
-                    "
-                  />
-
-                  <div
-                    class="invalid-feedback"
-                    *ngIf="
-                      registerFormControl['structure'].invalid &&
-                      registerFormControl['structure'].touched
-                    "
-                  >
-                    <ng-container *ngIf="registerFormControl['structure']?.errors?.['required']">
-                      La structure est requise
-                    </ng-container>
-                    <ng-container *ngIf="registerFormControl['structure']?.errors?.['minlength']">
-                      Minimum 2 charactères
-                    </ng-container>
-                    <ng-container *ngIf="registerFormControl['structure']?.errors?.['maxlength']">
-                      Maximum de charactères atteint
-                    </ng-container>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="mb-3 row">
-                <label for="" class="col-sm-3 col-form-label">intitulé du poste :</label>
-                <div class="col-sm-9">
-                  <input
-                    type="text"
-                    class="form-control"
-                    id=""
-                    formControlName="intitulePoste"
-                    [class.is-invalid]="
-                      registerFormControl['intitulePoste'].invalid &&
-                      (registerFormControl['intitulePoste'].touched ||
-                        registerFormControl['intitulePoste'].dirty)
-                    "
-                  />
-
-                  <div
-                    class="invalid-feedback"
-                    *ngIf="
-                      registerFormControl['intitulePoste'].invalid &&
-                      registerFormControl['intitulePoste'].touched
-                    "
-                  >
-                    <ng-container
-                      *ngIf="registerFormControl['intitulePoste']?.errors?.['required']"
-                    >
-                      La intitulePoste est requise
-                    </ng-container>
-                    <ng-container
-                      *ngIf="registerFormControl['intitulePoste']?.errors?.['minlength']"
-                    >
-                      Minimum 2 charactères
-                    </ng-container>
-                    <ng-container
-                      *ngIf="registerFormControl['intitulePoste']?.errors?.['maxlength']"
-                    >
-                      Maximum de charactères atteint
-                    </ng-container>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="mb-3 row row-cols-sm-auto">
-                <label for="" class="col-sm-3 col-form-label">date d'affectation :</label>
-                <div class="col-sm-9">
-                  <p-datePicker
-                    formControlName="dateAffectation"
-                    [showIcon]="true"
-                    [dateFormat]="'dd/mm/yy'"
-                    [showButtonBar]="true"
-                    appendTo="body"
-                    [class.ng-invalid.ng-dirty]="
-                      registerFormControl['personne'].get('dateAffectation')?.invalid &&
-                      (registerFormControl['personne'].get('dateAffectation')?.touched ||
-                        registerFormControl['personne'].get('dateAffectation')?.dirty)
-                    "
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="mb-3 row">
-                <label for="" class="col-sm-3 col-form-label"
-                  >emploi type (cf REME ou REFERENS) :</label
-                >
-                <div class="col-sm-9">
-                  <input
-                    type="text"
-                    class="form-control"
-                    id=""
-                    formControlName="emploiType"
-                    [class.is-invalid]="
-                      registerFormControl['emploiType'].invalid &&
-                      (registerFormControl['emploiType'].touched ||
-                        registerFormControl['emploiType'].dirty)
-                    "
-                  />
-
-                  <div
-                    class="invalid-feedback"
-                    *ngIf="
-                      registerFormControl['emploiType'].invalid &&
-                      registerFormControl['emploiType'].touched
-                    "
-                  >
-                    <ng-container *ngIf="registerFormControl['emploiType']?.errors?.['required']">
-                      La emploiType est requise
-                    </ng-container>
-                    <ng-container *ngIf="registerFormControl['emploiType']?.errors?.['minlength']">
-                      Minimum 2 charactères
-                    </ng-container>
-                    <ng-container *ngIf="registerFormControl['emploiType']?.errors?.['maxlength']">
-                      Maximum de charactères atteint
-                    </ng-container>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="mb-3 row">
-                <label for="" class="col-sm-3 col-form-label"
-                  >poisitionnement du poste dans la structure :</label
-                >
-                <div class="col-sm-9">
-                  <input
-                    type="text"
-                    class="form-control"
-                    id=""
-                    formControlName="positionPoste"
-                    [class.is-invalid]="
-                      registerFormControl['positionPoste'].invalid &&
-                      (registerFormControl['positionPoste'].touched ||
-                        registerFormControl['positionPoste'].dirty)
-                    "
-                  />
-
-                  <div
-                    class="invalid-feedback"
-                    *ngIf="
-                      registerFormControl['positionPoste'].invalid &&
-                      registerFormControl['positionPoste'].touched
-                    "
-                  >
-                    <ng-container
-                      *ngIf="registerFormControl['positionPoste']?.errors?.['required']"
-                    >
-                      La positionPoste est requise
-                    </ng-container>
-                    <ng-container
-                      *ngIf="registerFormControl['positionPoste']?.errors?.['minlength']"
-                    >
-                      Minimum 2 charactères
-                    </ng-container>
-                    <ng-container
-                      *ngIf="registerFormControl['positionPoste']?.errors?.['maxlength']"
-                    >
-                      Maximum de charactères atteint
-                    </ng-container>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="mb-3 row">
-                <label for="" class="col-sm-3 col-form-label">quotité d'affectation :</label>
-                <div class="col-sm-9">
-                  <input
-                    type="text"
-                    class="form-control"
-                    id=""
-                    formControlName="quotiteAffectation"
-                    [class.is-invalid]="
-                      registerFormControl['quotiteAffectation'].invalid &&
-                      (registerFormControl['quotiteAffectation'].touched ||
-                        registerFormControl['quotiteAffectation'].dirty)
-                    "
-                  />
-
-                  <div
-                    class="invalid-feedback"
-                    *ngIf="
-                      registerFormControl['quotiteAffectation'].invalid &&
-                      registerFormControl['quotiteAffectation'].touched
-                    "
-                  >
-                    <ng-container
-                      *ngIf="registerFormControl['quotiteAffectation']?.errors?.['required']"
-                    >
-                      La quotiteAffectation est requise
-                    </ng-container>
-                    <ng-container
-                      *ngIf="registerFormControl['quotiteAffectation']?.errors?.['minlength']"
-                    >
-                      Minimum 2 charactères
-                    </ng-container>
-                    <ng-container
-                      *ngIf="registerFormControl['quotiteAffectation']?.errors?.['maxlength']"
-                    >
-                      Maximum de charactères atteint
-                    </ng-container>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <br />
-
-      <h4>Missions du poste :</h4>
-
-      <div class="mb-3">
-        <textarea
-          class="form-control"
-          rows="6"
-          formControlName="missions"
-          [class.is-invalid]="
-            registerFormControl['missions'].invalid &&
-            (registerFormControl['missions'].touched || registerFormControl['missions'].dirty)
-          "
-        ></textarea>
-        <div
-          class="invalid-feedback"
-          *ngIf="registerFormControl['missions'].invalid && registerFormControl['missions'].touched"
-        >
-          <ng-container *ngIf="registerFormControl['missions']?.errors?.['required']">
-            La missions est requise
-          </ng-container>
-          <ng-container *ngIf="registerFormControl['missions']?.errors?.['minlength']">
-            Minimum 2 charactères
-          </ng-container>
-          <ng-container *ngIf="registerFormControl['missions']?.errors?.['maxlength']">
-            Maximum de charactères atteint
-          </ng-container>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <h5>le cas échéant, fonctions d'encadrement ou de conduite de projet :</h5>
-        </div>
-        <div class="card-body">
-          <div class="card-text">
-            <div class="mb-3 row row-cols-2">
-              <div class="col">L'agent assume-t-il des fonctions de conduite de projet ?</div>
-              <div class="col">
-                <p-togglebutton formControlName="conduiteProjet" onLabel="Oui" offLabel="Non" />
-              </div>
-            </div>
-            <div class="mb-3 row row-cols-2">
-              <div class="col">L'agent assume-t-il des fonctions d'encadrement ?</div>
-              <div class="col">
-                <p-togglebutton formControlName="encadrement" onLabel="Oui" offLabel="Non" />
-              </div>
-            </div>
-            <div class="d-flex justify-content-center" *ngIf="form.get('encadrement')?.value">
-              <div class="card w-50">
-                <div class="card-header">
-                  <h5>Si OUI :</h5>
-                </div>
-                <div class="card-body">
-                  <div class="mb-3 row row-cols-2">
-                    <div class="col-6">préciser le nombre d'agents :</div>
-                    <div class="col">
-                      <p-inputnumber
-                        name="cpeNbAgent"
-                        inputId="cpeNbAgent"
-                        formControlName="cpeNbAgent"
-                        [allowEmpty]="true"
-                        [class.ng-invalid.ng-dirty]="
-                          registerFormControl['cpeNbAgent'].invalid &&
-                          (registerFormControl['cpeNbAgent'].touched ||
-                            registerFormControl['cpeNbAgent'].dirty)
-                        "
-                      />
-                    </div>
-                  </div>
-                  <div class="mb-3 row row-cols-2">
-                    <div class="col-6">et leur répartition par catégorie :</div>
-                    <div class="col">
-                      <div class="mb-3 row row-cols-2">
-                        <div class="col-5">
-                          <p-inputnumber
-                            name="cpeCategA"
-                            inputId="cpeCategA"
-                            formControlName="cpeCategA"
-                            fluid
-                            [allowEmpty]="true"
-                            [class.ng-invalid.ng-dirty]="
-                              registerFormControl['cpeCategA'].invalid &&
-                              (registerFormControl['cpeCategA'].touched ||
-                                registerFormControl['cpeCategA'].dirty)
-                            "
-                          />
-                        </div>
-                        <div class="col">A</div>
-                      </div>
-
-                      <div class="mb-3 row row-cols-2">
-                        <div class="col-5">
-                          <p-inputnumber
-                            name="cpeCategB"
-                            inputId="cpeCategB"
-                            formControlName="cpeCategB"
-                            [allowEmpty]="true"
-                            fluid
-                            [class.ng-invalid.ng-dirty]="
-                              registerFormControl['cpeCategB'].invalid &&
-                              (registerFormControl['cpeCategB'].touched ||
-                                registerFormControl['cpeCategB'].dirty)
-                            "
-                          />
-                        </div>
-                        <div class="col">B</div>
-                      </div>
-
-                      <div class="mb-3 row row-cols-2">
-                        <div class="col-5">
-                          <p-inputnumber
-                            name="cpeCategC"
-                            inputId="cpeCategC"
-                            formControlName="cpeCategC"
-                            [allowEmpty]="true"
-                            fluid
-                            [class.ng-invalid.ng-dirty]="
-                              registerFormControl['cpeCategC'].invalid &&
-                              (registerFormControl['cpeCategC'].touched ||
-                                registerFormControl['cpeCategC'].dirty)
-                            "
-                          />
-                        </div>
-                        <div class="col">C</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <br /><br />
-
-    <div class="table-responsive">
-      <table class="table table-bordered">
-        <thead class="">
-          <tr>
-            <th scope="col" colspan="2" class="w-100">
-              Activités de transfert de compétences ou d'accompagnement des agents
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="w-25">Formateur</td>
-            <td class="w-75">
-              <input
-                type="text"
-                class="form-control"
-                id="competenceTransferFormateur"
-                formControlName="competenceTransferFormateur"
-                [class.is-invalid]="
-                  registerFormControl['competenceTransferFormateur'].invalid &&
-                  (registerFormControl['competenceTransferFormateur'].touched ||
-                    registerFormControl['competenceTransferFormateur'].dirty)
-                "
-              />
-
-              <div
-                class="invalid-feedback"
-                *ngIf="
-                  registerFormControl['competenceTransferFormateur'].invalid &&
-                  registerFormControl['competenceTransferFormateur'].touched
-                "
-              >
-                <ng-container
-                  *ngIf="registerFormControl['competenceTransferFormateur']?.errors?.['required']"
-                >
-                  La competenceTransferFormateur est requise
-                </ng-container>
-                <ng-container
-                  *ngIf="registerFormControl['competenceTransferFormateur']?.errors?.['minlength']"
-                >
-                  Minimum 2 charactères
-                </ng-container>
-                <ng-container
-                  *ngIf="registerFormControl['competenceTransferFormateur']?.errors?.['maxlength']"
-                >
-                  Maximum de charactères atteint
-                </ng-container>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td class="w-25">Tuteur/mentor</td>
-            <td class="w-75">
-              <input
-                type="text"
-                class="form-control"
-                id="competenceTransferTuteur"
-                formControlName="competenceTransferTuteur"
-                [class.is-invalid]="
-                  registerFormControl['competenceTransferTuteur'].invalid &&
-                  (registerFormControl['competenceTransferTuteur'].touched ||
-                    registerFormControl['competenceTransferTuteur'].dirty)
-                "
-              />
-
-              <div
-                class="invalid-feedback"
-                *ngIf="
-                  registerFormControl['competenceTransferTuteur'].invalid &&
-                  registerFormControl['competenceTransferTuteur'].touched
-                "
-              >
-                <ng-container
-                  *ngIf="registerFormControl['competenceTransferTuteur']?.errors?.['required']"
-                >
-                  La competenceTransferTuteur est requise
-                </ng-container>
-                <ng-container
-                  *ngIf="registerFormControl['competenceTransferTuteur']?.errors?.['minlength']"
-                >
-                  Minimum 2 charactères
-                </ng-container>
-                <ng-container
-                  *ngIf="registerFormControl['competenceTransferTuteur']?.errors?.['maxlength']"
-                >
-                  Maximum de charactères atteint
-                </ng-container>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td class="w-25">Président/vice-président de jury</td>
-            <td class="w-75">
-              <input
-                type="text"
-                class="form-control"
-                id="competenceTransferPresident"
-                formControlName="competenceTransferPresident"
-                [class.is-invalid]="
-                  registerFormControl['competenceTransferPresident'].invalid &&
-                  (registerFormControl['competenceTransferPresident'].touched ||
-                    registerFormControl['competenceTransferPresident'].dirty)
-                "
-              />
-
-              <div
-                class="invalid-feedback"
-                *ngIf="
-                  registerFormControl['competenceTransferPresident'].invalid &&
-                  registerFormControl['competenceTransferPresident'].touched
-                "
-              >
-                <ng-container
-                  *ngIf="registerFormControl['competenceTransferPresident']?.errors?.['required']"
-                >
-                  La competenceTransferPresident est requise
-                </ng-container>
-                <ng-container
-                  *ngIf="registerFormControl['competenceTransferPresident']?.errors?.['minlength']"
-                >
-                  Minimum 2 charactères
-                </ng-container>
-                <ng-container
-                  *ngIf="registerFormControl['competenceTransferPresident']?.errors?.['maxlength']"
-                >
-                  Maximum de charactères atteint
-                </ng-container>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td class="w-25">Membre de jury</td>
-            <td class="w-75">
-              <input
-                type="text"
-                class="form-control"
-                id="competenceTransferMembre"
-                formControlName="competenceTransferMembre"
-                [class.is-invalid]="
-                  registerFormControl['competenceTransferMembre'].invalid &&
-                  (registerFormControl['competenceTransferMembre'].touched ||
-                    registerFormControl['competenceTransferMembre'].dirty)
-                "
-              />
-
-              <div
-                class="invalid-feedback"
-                *ngIf="
-                  registerFormControl['competenceTransferMembre'].invalid &&
-                  registerFormControl['competenceTransferMembre'].touched
-                "
-              >
-                <ng-container
-                  *ngIf="registerFormControl['competenceTransferMembre']?.errors?.['required']"
-                >
-                  La competenceTransferMembre est requise
-                </ng-container>
-                <ng-container
-                  *ngIf="registerFormControl['competenceTransferMembre']?.errors?.['minlength']"
-                >
-                  Minimum 2 charactères
-                </ng-container>
-                <ng-container
-                  *ngIf="registerFormControl['competenceTransferMembre']?.errors?.['maxlength']"
-                >
-                  Maximum de charactères atteint
-                </ng-container>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div formArrayName="formationsDispensees">
-      <p-table [value]="formationsDispensees.controls">
-        <ng-template pTemplate="caption">
-          <div class="d-flex align-items-center justify-content-between">
-            <span class="text-xl font-bold mx-auto mb-0 text-center flex-grow-1"
-              >Formations dispensées par l'agent</span
-            >
-            <p-button
-              class="ms-3"
-              size="small"
-              icon="pi pi-plus"
-              (click)="addFormationsDispensees()"
-              rounded
-              raised
-            />
-          </div>
-        </ng-template>
-        <ng-template pTemplate="header">
-          <tr>
-            <th *ngFor="let column of columnsFormationsDispensees">{{ columnLabels[column] }}</th>
-            <th>Actions</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-formation let-rowIndex="rowIndex">
-          <tr [formGroup]="formation">
-            <td *ngFor="let column of columnsFormationsDispensees">
-              <ng-container *ngIf="columnTypes[column] === 'string'; else isNumber">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-text">
+          <div class="row">
+            <div class="mb-3 row">
+              <label for="" class="col-sm-3 col-form-label">structure :</label>
+              <div class="col-sm-9">
                 <input
                   type="text"
                   class="form-control"
-                  pInputText
-                  [formControlName]="column"
-                  [placeholder]=""
+                  id=""
+                  formControlName="structure"
+                  [class.is-invalid]="
+                    registerFormControl['structure'].invalid &&
+                    (registerFormControl['structure'].touched ||
+                      registerFormControl['structure'].dirty)
+                  "
                 />
-              </ng-container>
-              <ng-template #isNumber>
-                <ng-container *ngIf="columnTypes[column] === 'number'; else isNumberYear">
-                  <p-inputnumber
-                    [formControlName]="column"
-                    [useGrouping]="false"
-                    [allowEmpty]="true"
-                  />
-                </ng-container>
-              </ng-template>
-              <ng-template #isNumberYear>
-                <ng-container *ngIf="columnTypes[column] === 'numberYear'; else unknownType">
-                  <p-inputmask [formControlName]="column" mask="9999" placeholder="" />
-                </ng-container>
-              </ng-template>
 
-              <ng-template #unknownType>
-                <span>Type inconnu pour {{ column }}</span>
-              </ng-template>
-            </td>
-            <td>
-              <p-button
-                icon="pi pi-trash"
-                (click)="removeFormation(rowIndex)"
-                severity="danger"
-                size="small"
-                rounded
-                raised
-              /><!-- [disabled]="rowIndex === 0" -->
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
+                <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    registerFormControl['structure'].invalid &&
+                    registerFormControl['structure'].touched
+                  "
+                >
+                  <ng-container *ngIf="registerFormControl['structure']?.errors?.['required']">
+                    La structure est requise
+                  </ng-container>
+                  <ng-container *ngIf="registerFormControl['structure']?.errors?.['minlength']">
+                    Minimum 2 charactères
+                  </ng-container>
+                  <ng-container *ngIf="registerFormControl['structure']?.errors?.['maxlength']">
+                    Maximum de charactères atteint
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="mb-3 row">
+              <label for="" class="col-sm-3 col-form-label">intitulé du poste :</label>
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id=""
+                  formControlName="intitulePoste"
+                  [class.is-invalid]="
+                    registerFormControl['intitulePoste'].invalid &&
+                    (registerFormControl['intitulePoste'].touched ||
+                      registerFormControl['intitulePoste'].dirty)
+                  "
+                />
+
+                <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    registerFormControl['intitulePoste'].invalid &&
+                    registerFormControl['intitulePoste'].touched
+                  "
+                >
+                  <ng-container *ngIf="registerFormControl['intitulePoste']?.errors?.['required']">
+                    La intitulePoste est requise
+                  </ng-container>
+                  <ng-container *ngIf="registerFormControl['intitulePoste']?.errors?.['minlength']">
+                    Minimum 2 charactères
+                  </ng-container>
+                  <ng-container *ngIf="registerFormControl['intitulePoste']?.errors?.['maxlength']">
+                    Maximum de charactères atteint
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="mb-3 row row-cols-sm-auto">
+              <label for="" class="col-sm-3 col-form-label">date d'affectation :</label>
+              <div class="col-sm-9">
+                <p-datePicker
+                  formControlName="dateAffectation"
+                  [showIcon]="true"
+                  [dateFormat]="'dd/mm/yy'"
+                  [showButtonBar]="true"
+                  appendTo="body"
+                  [class.ng-invalid.ng-dirty]="
+                    registerFormControl['personne'].get('dateAffectation')?.invalid &&
+                    (registerFormControl['personne'].get('dateAffectation')?.touched ||
+                      registerFormControl['personne'].get('dateAffectation')?.dirty)
+                  "
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="mb-3 row">
+              <label for="" class="col-sm-3 col-form-label"
+                >emploi type (cf REME ou REFERENS) :</label
+              >
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id=""
+                  formControlName="emploiType"
+                  [class.is-invalid]="
+                    registerFormControl['emploiType'].invalid &&
+                    (registerFormControl['emploiType'].touched ||
+                      registerFormControl['emploiType'].dirty)
+                  "
+                />
+
+                <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    registerFormControl['emploiType'].invalid &&
+                    registerFormControl['emploiType'].touched
+                  "
+                >
+                  <ng-container *ngIf="registerFormControl['emploiType']?.errors?.['required']">
+                    La emploiType est requise
+                  </ng-container>
+                  <ng-container *ngIf="registerFormControl['emploiType']?.errors?.['minlength']">
+                    Minimum 2 charactères
+                  </ng-container>
+                  <ng-container *ngIf="registerFormControl['emploiType']?.errors?.['maxlength']">
+                    Maximum de charactères atteint
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="mb-3 row">
+              <label for="" class="col-sm-3 col-form-label"
+                >poisitionnement du poste dans la structure :</label
+              >
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id=""
+                  formControlName="positionPoste"
+                  [class.is-invalid]="
+                    registerFormControl['positionPoste'].invalid &&
+                    (registerFormControl['positionPoste'].touched ||
+                      registerFormControl['positionPoste'].dirty)
+                  "
+                />
+
+                <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    registerFormControl['positionPoste'].invalid &&
+                    registerFormControl['positionPoste'].touched
+                  "
+                >
+                  <ng-container *ngIf="registerFormControl['positionPoste']?.errors?.['required']">
+                    La positionPoste est requise
+                  </ng-container>
+                  <ng-container *ngIf="registerFormControl['positionPoste']?.errors?.['minlength']">
+                    Minimum 2 charactères
+                  </ng-container>
+                  <ng-container *ngIf="registerFormControl['positionPoste']?.errors?.['maxlength']">
+                    Maximum de charactères atteint
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="mb-3 row">
+              <label for="" class="col-sm-3 col-form-label">quotité d'affectation :</label>
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  id=""
+                  formControlName="quotiteAffectation"
+                  [class.is-invalid]="
+                    registerFormControl['quotiteAffectation'].invalid &&
+                    (registerFormControl['quotiteAffectation'].touched ||
+                      registerFormControl['quotiteAffectation'].dirty)
+                  "
+                />
+
+                <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    registerFormControl['quotiteAffectation'].invalid &&
+                    registerFormControl['quotiteAffectation'].touched
+                  "
+                >
+                  <ng-container
+                    *ngIf="registerFormControl['quotiteAffectation']?.errors?.['required']"
+                  >
+                    La quotiteAffectation est requise
+                  </ng-container>
+                  <ng-container
+                    *ngIf="registerFormControl['quotiteAffectation']?.errors?.['minlength']"
+                  >
+                    Minimum 2 charactères
+                  </ng-container>
+                  <ng-container
+                    *ngIf="registerFormControl['quotiteAffectation']?.errors?.['maxlength']"
+                  >
+                    Maximum de charactères atteint
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <br /><br />
-  </form>
-</div>
+    <br />
+
+    <h4>Missions du poste :</h4>
+
+    <div class="mb-3">
+      <app-shared-editor [formGroup]="form" formControlName="missions"></app-shared-editor>
+      <div
+        class="invalid-feedback"
+        *ngIf="registerFormControl['missions'].invalid && registerFormControl['missions'].touched"
+      >
+        <ng-container *ngIf="registerFormControl['missions']?.errors?.['required']">
+          La missions est requise
+        </ng-container>
+        <ng-container *ngIf="registerFormControl['missions']?.errors?.['minlength']">
+          Minimum 2 charactères
+        </ng-container>
+        <ng-container *ngIf="registerFormControl['missions']?.errors?.['maxlength']">
+          Maximum de charactères atteint
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h5>le cas échéant, fonctions d'encadrement ou de conduite de projet :</h5>
+      </div>
+      <div class="card-body">
+        <div class="card-text">
+          <div class="mb-3 row row-cols-2">
+            <div class="col">L'agent assume-t-il des fonctions de conduite de projet ?</div>
+            <div class="col">
+              <p-togglebutton formControlName="conduiteProjet" onLabel="Oui" offLabel="Non" />
+            </div>
+          </div>
+          <div class="mb-3 row row-cols-2">
+            <div class="col">L'agent assume-t-il des fonctions d'encadrement ?</div>
+            <div class="col">
+              <p-togglebutton formControlName="encadrement" onLabel="Oui" offLabel="Non" />
+            </div>
+          </div>
+          <div class="d-flex justify-content-center" *ngIf="form.get('encadrement')?.value">
+            <div class="card w-50">
+              <div class="card-header">
+                <h5>Si OUI :</h5>
+              </div>
+              <div class="card-body">
+                <div class="mb-3 row row-cols-2">
+                  <div class="col-6">préciser le nombre d'agents :</div>
+                  <div class="col">
+                    <p-inputnumber
+                      name="cpeNbAgent"
+                      inputId="cpeNbAgent"
+                      formControlName="cpeNbAgent"
+                      [allowEmpty]="true"
+                      [class.ng-invalid.ng-dirty]="
+                        registerFormControl['cpeNbAgent'].invalid &&
+                        (registerFormControl['cpeNbAgent'].touched ||
+                          registerFormControl['cpeNbAgent'].dirty)
+                      "
+                    />
+                  </div>
+                </div>
+                <div class="mb-3 row row-cols-2">
+                  <div class="col-6">et leur répartition par catégorie :</div>
+                  <div class="col">
+                    <div class="mb-3 row row-cols-2">
+                      <div class="col-5">
+                        <p-inputnumber
+                          name="cpeCategA"
+                          inputId="cpeCategA"
+                          formControlName="cpeCategA"
+                          fluid
+                          [allowEmpty]="true"
+                          [class.ng-invalid.ng-dirty]="
+                            registerFormControl['cpeCategA'].invalid &&
+                            (registerFormControl['cpeCategA'].touched ||
+                              registerFormControl['cpeCategA'].dirty)
+                          "
+                        />
+                      </div>
+                      <div class="col">A</div>
+                    </div>
+
+                    <div class="mb-3 row row-cols-2">
+                      <div class="col-5">
+                        <p-inputnumber
+                          name="cpeCategB"
+                          inputId="cpeCategB"
+                          formControlName="cpeCategB"
+                          [allowEmpty]="true"
+                          fluid
+                          [class.ng-invalid.ng-dirty]="
+                            registerFormControl['cpeCategB'].invalid &&
+                            (registerFormControl['cpeCategB'].touched ||
+                              registerFormControl['cpeCategB'].dirty)
+                          "
+                        />
+                      </div>
+                      <div class="col">B</div>
+                    </div>
+
+                    <div class="mb-3 row row-cols-2">
+                      <div class="col-5">
+                        <p-inputnumber
+                          name="cpeCategC"
+                          inputId="cpeCategC"
+                          formControlName="cpeCategC"
+                          [allowEmpty]="true"
+                          fluid
+                          [class.ng-invalid.ng-dirty]="
+                            registerFormControl['cpeCategC'].invalid &&
+                            (registerFormControl['cpeCategC'].touched ||
+                              registerFormControl['cpeCategC'].dirty)
+                          "
+                        />
+                      </div>
+                      <div class="col">C</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <br /><br />
+
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead class="">
+        <tr>
+          <th scope="col" colspan="2" class="w-100">
+            Activités de transfert de compétences ou d'accompagnement des agents
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="w-25">Formateur</td>
+          <td class="w-75">
+            <input
+              type="text"
+              class="form-control"
+              id="competenceTransferFormateur"
+              formControlName="competenceTransferFormateur"
+              [class.is-invalid]="
+                registerFormControl['competenceTransferFormateur'].invalid &&
+                (registerFormControl['competenceTransferFormateur'].touched ||
+                  registerFormControl['competenceTransferFormateur'].dirty)
+              "
+            />
+
+            <div
+              class="invalid-feedback"
+              *ngIf="
+                registerFormControl['competenceTransferFormateur'].invalid &&
+                registerFormControl['competenceTransferFormateur'].touched
+              "
+            >
+              <ng-container
+                *ngIf="registerFormControl['competenceTransferFormateur']?.errors?.['required']"
+              >
+                La competenceTransferFormateur est requise
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['competenceTransferFormateur']?.errors?.['minlength']"
+              >
+                Minimum 2 charactères
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['competenceTransferFormateur']?.errors?.['maxlength']"
+              >
+                Maximum de charactères atteint
+              </ng-container>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="w-25">Tuteur/mentor</td>
+          <td class="w-75">
+            <input
+              type="text"
+              class="form-control"
+              id="competenceTransferTuteur"
+              formControlName="competenceTransferTuteur"
+              [class.is-invalid]="
+                registerFormControl['competenceTransferTuteur'].invalid &&
+                (registerFormControl['competenceTransferTuteur'].touched ||
+                  registerFormControl['competenceTransferTuteur'].dirty)
+              "
+            />
+
+            <div
+              class="invalid-feedback"
+              *ngIf="
+                registerFormControl['competenceTransferTuteur'].invalid &&
+                registerFormControl['competenceTransferTuteur'].touched
+              "
+            >
+              <ng-container
+                *ngIf="registerFormControl['competenceTransferTuteur']?.errors?.['required']"
+              >
+                La competenceTransferTuteur est requise
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['competenceTransferTuteur']?.errors?.['minlength']"
+              >
+                Minimum 2 charactères
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['competenceTransferTuteur']?.errors?.['maxlength']"
+              >
+                Maximum de charactères atteint
+              </ng-container>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="w-25">Président/vice-président de jury</td>
+          <td class="w-75">
+            <input
+              type="text"
+              class="form-control"
+              id="competenceTransferPresident"
+              formControlName="competenceTransferPresident"
+              [class.is-invalid]="
+                registerFormControl['competenceTransferPresident'].invalid &&
+                (registerFormControl['competenceTransferPresident'].touched ||
+                  registerFormControl['competenceTransferPresident'].dirty)
+              "
+            />
+
+            <div
+              class="invalid-feedback"
+              *ngIf="
+                registerFormControl['competenceTransferPresident'].invalid &&
+                registerFormControl['competenceTransferPresident'].touched
+              "
+            >
+              <ng-container
+                *ngIf="registerFormControl['competenceTransferPresident']?.errors?.['required']"
+              >
+                La competenceTransferPresident est requise
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['competenceTransferPresident']?.errors?.['minlength']"
+              >
+                Minimum 2 charactères
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['competenceTransferPresident']?.errors?.['maxlength']"
+              >
+                Maximum de charactères atteint
+              </ng-container>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="w-25">Membre de jury</td>
+          <td class="w-75">
+            <input
+              type="text"
+              class="form-control"
+              id="competenceTransferMembre"
+              formControlName="competenceTransferMembre"
+              [class.is-invalid]="
+                registerFormControl['competenceTransferMembre'].invalid &&
+                (registerFormControl['competenceTransferMembre'].touched ||
+                  registerFormControl['competenceTransferMembre'].dirty)
+              "
+            />
+
+            <div
+              class="invalid-feedback"
+              *ngIf="
+                registerFormControl['competenceTransferMembre'].invalid &&
+                registerFormControl['competenceTransferMembre'].touched
+              "
+            >
+              <ng-container
+                *ngIf="registerFormControl['competenceTransferMembre']?.errors?.['required']"
+              >
+                La competenceTransferMembre est requise
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['competenceTransferMembre']?.errors?.['minlength']"
+              >
+                Minimum 2 charactères
+              </ng-container>
+              <ng-container
+                *ngIf="registerFormControl['competenceTransferMembre']?.errors?.['maxlength']"
+              >
+                Maximum de charactères atteint
+              </ng-container>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div formArrayName="formationsDispensees">
+    <p-table [value]="formationsDispensees.controls">
+      <ng-template pTemplate="caption">
+        <div class="d-flex align-items-center justify-content-between">
+          <span class="text-xl font-bold mx-auto mb-0 text-center flex-grow-1"
+            >Formations dispensées par l'agent</span
+          >
+          <p-button
+            class="ms-3"
+            size="small"
+            icon="pi pi-plus"
+            (click)="addFormationsDispensees()"
+            rounded
+            raised
+          />
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th *ngFor="let column of columnsFormationsDispensees">{{ columnLabels[column] }}</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-formation let-rowIndex="rowIndex">
+        <tr [formGroup]="formation">
+          <td *ngFor="let column of columnsFormationsDispensees">
+            <ng-container *ngIf="columnTypes[column] === 'string'; else isNumber">
+              <input
+                type="text"
+                class="form-control"
+                pInputText
+                [formControlName]="column"
+                [placeholder]=""
+              />
+            </ng-container>
+            <ng-template #isNumber>
+              <ng-container *ngIf="columnTypes[column] === 'number'; else isNumberYear">
+                <p-inputnumber
+                  [formControlName]="column"
+                  [useGrouping]="false"
+                  [allowEmpty]="true"
+                />
+              </ng-container>
+            </ng-template>
+            <ng-template #isNumberYear>
+              <ng-container *ngIf="columnTypes[column] === 'numberYear'; else unknownType">
+                <p-inputmask [formControlName]="column" mask="9999" placeholder="" />
+              </ng-container>
+            </ng-template>
+
+            <ng-template #unknownType>
+              <span>Type inconnu pour {{ column }}</span>
+            </ng-template>
+          </td>
+          <td>
+            <p-button
+              icon="pi pi-trash"
+              (click)="removeFormation(rowIndex)"
+              severity="danger"
+              size="small"
+              rounded
+              raised
+            /><!-- [disabled]="rowIndex === 0" -->
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <br /><br />
+</form>

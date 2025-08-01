@@ -7,10 +7,11 @@ import { ButtonModule } from 'primeng/button';
 import { FormProvider } from '../../providers/form.provider';
 import { EntretienStepsService } from '@shared/services/entretiens/entretien-steps.service';
 import { firstValueFrom } from 'rxjs';
+import { EditorComponent } from '@shared/components/editor/editor.component';
 
 @Component({
   selector: 'app-entretien-pro-step7',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonModule, EditorComponent],
   providers: [],
   templateUrl: './step7.component.html',
   styleUrl: './step7.component.scss',

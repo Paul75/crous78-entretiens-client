@@ -16,6 +16,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { FormulaireService } from '@forms/services/formulaire.service';
 import { EntretienStepsService } from '@shared/services/entretiens/entretien-steps.service';
 import { firstValueFrom } from 'rxjs';
+import { Entretien } from '@shared/models/entretien.model';
+import { FormationsDemandees } from '@shared/models/formations-demandees.model';
 
 @Component({
   selector: 'app-entretien-form-step4',
@@ -55,7 +57,13 @@ export class EntretienFormStep4Component {
     this.form = this.formProvider.getForm();
   }
 
-  initializeFormWithData(bddData?: any[]) {
+  initialize(entretien: Entretien) {
+    if (entretien?.formationsRealisees) {
+      this.initializeFormationsDemandees(entretien.formationsDemandees);
+    }
+  }
+
+  private initializeFormationsDemandees(formationsDemandees?: FormationsDemandees[]) {
     if (!this.form.contains('formationsDemandees')) {
       this.form.addControl('formationsDemandees', this.fb.array([]));
     }
@@ -65,7 +73,7 @@ export class EntretienFormStep4Component {
 
     const saved = this.formService.getCurrentValue().formationsDemandees;
 
-    const source = saved.length ? saved : bddData;
+    const source = saved.length ? saved : formationsDemandees;
 
     if (source?.length) {
       source.forEach(item => {

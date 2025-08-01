@@ -1,158 +1,156 @@
 <p-toast />
-<div class="content-scroll flex-grow-1 d-flex flex-column">
-  <h2>Liste des fiches de poste</h2>
-  <p-table
-    #dtPersonnes
-    [value]="personnes"
-    showGridlines
-    stripedRows
-    dataKey="id"
-    [loading]="loading"
-    [scrollable]="true"
-    [paginator]="true"
-    [rows]="10"
-    [rowsPerPageOptions]="[5, 10, 15]"
-    [globalFilterFields]="['matricule', 'nom', 'prenom', 'email']"
-    [expandedRowKeys]="expandedRows"
-    (onRowExpand)="onRowExpand($event)"
-    (onRowCollapse)="onRowCollapse($event)"
-    scrollHeight="flex"
-    [style]="{ width: '100%' }"
-  >
-    <ng-template pTemplate="caption">
-      <input
-        pInputText
-        type="text"
-        (input)="dtPersonnes.filterGlobal($any($event.target)?.value || '', 'contains')"
-        placeholder="Rechercher..."
-      />
-      <div class="flex flex-wrap justify-end gap-2">
-        <p-button label="Tout développer" icon="pi pi-plus" text (onClick)="expandAll()" />
-        <p-button label="Tout réduire" icon="pi pi-minus" text (onClick)="collapseAll()" />
-      </div>
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr>
-        <th style="width: 5rem"></th>
-        <th>MATRICULE</th>
-        <th>NOM</th>
-        <th>PRENOM</th>
-      </tr>
-    </ng-template>
-    <ng-template #body let-personne let-ri="rowIndex" let-expanded="expanded">
-      <tr>
-        <td>
-          <p-button
-            type="button"
-            pRipple
-            [pRowToggler]="personne"
-            [text]="true"
-            severity="secondary"
-            [rounded]="true"
-            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-          />
-        </td>
-        <td class="text-nowrap">{{ personne.matricule }}</td>
-        <td class="text-nowrap">
-          {{ personne.nom }}
-        </td>
-        <td class="text-nowrap">
-          {{ personne.prenom }}
-        </td>
-      </tr>
-    </ng-template>
-    <ng-template #expandedrow let-personne>
-      <tr>
-        <td colspan="4">
-          <div class="p-4">
-            <p-table
-              #dtPostes
-              [value]="personne.postes"
-              dataKey="id"
-              [scrollable]="true"
-              [paginator]="true"
-              [rows]="10"
-              scrollHeight="300px"
-              selectionMode="single"
-              [(selection)]="ficheSelectionnee"
-              (onRowSelect)="afficherDetails($event.data)"
-              [globalFilterFields]="['dateAffectation', 'fonction']"
-            >
-              <ng-template #caption>
-                <div class="d-flex align-items-center justify-content-between">
-                  <p class="me-3">
-                    <input
-                      pInputText
-                      type="text"
-                      (input)="dtPostes.filterGlobal($any($event.target)?.value || '', 'contains')"
-                      placeholder="Rechercher..."
-                    />
-                  </p>
-                  <span class="text-xl font-bold mx-auto mb-0 text-center flex-grow-1">
-                    <h5>Fiches de poste pour {{ personne.prenom }} {{ personne.nom }}</h5>
-                  </span>
+<h2>Liste des fiches de poste</h2>
+<p-table
+  #dtPersonnes
+  [value]="personnes"
+  showGridlines
+  stripedRows
+  dataKey="id"
+  [loading]="loading"
+  [scrollable]="true"
+  [paginator]="true"
+  [rows]="10"
+  [rowsPerPageOptions]="[5, 10, 15]"
+  [globalFilterFields]="['matricule', 'nom', 'prenom', 'email']"
+  [expandedRowKeys]="expandedRows"
+  (onRowExpand)="onRowExpand($event)"
+  (onRowCollapse)="onRowCollapse($event)"
+  scrollHeight="flex"
+  [style]="{ width: '100%' }"
+>
+  <ng-template pTemplate="caption">
+    <input
+      pInputText
+      type="text"
+      (input)="dtPersonnes.filterGlobal($any($event.target)?.value || '', 'contains')"
+      placeholder="Rechercher..."
+    />
+    <div class="flex flex-wrap justify-end gap-2">
+      <p-button label="Tout développer" icon="pi pi-plus" text (onClick)="expandAll()" />
+      <p-button label="Tout réduire" icon="pi pi-minus" text (onClick)="collapseAll()" />
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 5rem"></th>
+      <th>MATRICULE</th>
+      <th>NOM</th>
+      <th>PRENOM</th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-personne let-ri="rowIndex" let-expanded="expanded">
+    <tr>
+      <td>
+        <p-button
+          type="button"
+          pRipple
+          [pRowToggler]="personne"
+          [text]="true"
+          severity="secondary"
+          [rounded]="true"
+          [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+        />
+      </td>
+      <td class="text-nowrap">{{ personne.matricule }}</td>
+      <td class="text-nowrap">
+        {{ personne.nom }}
+      </td>
+      <td class="text-nowrap">
+        {{ personne.prenom }}
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template #expandedrow let-personne>
+    <tr>
+      <td colspan="4">
+        <div class="p-4">
+          <p-table
+            #dtPostes
+            [value]="personne.postes"
+            dataKey="id"
+            [scrollable]="true"
+            [paginator]="true"
+            [rows]="10"
+            scrollHeight="300px"
+            selectionMode="single"
+            [(selection)]="ficheSelectionnee"
+            (onRowSelect)="afficherDetails($event.data)"
+            [globalFilterFields]="['dateAffectation', 'fonction']"
+          >
+            <ng-template #caption>
+              <div class="d-flex align-items-center justify-content-between">
+                <p class="me-3">
+                  <input
+                    pInputText
+                    type="text"
+                    (input)="dtPostes.filterGlobal($any($event.target)?.value || '', 'contains')"
+                    placeholder="Rechercher..."
+                  />
+                </p>
+                <span class="text-xl font-bold mx-auto mb-0 text-center flex-grow-1">
+                  <h5>Fiches de poste pour {{ personne.prenom }} {{ personne.nom }}</h5>
+                </span>
+
+                <p-button
+                  class="ms-3"
+                  icon="pi pi-plus"
+                  (click)="ajouterPoste(personne.id)"
+                  rounded
+                  raised
+                />
+              </div>
+              <div class="text-end pb-4"></div>
+            </ng-template>
+            <ng-template #header>
+              <tr>
+                <th>Date d'affectation</th>
+                <th>Fonction</th>
+                <th></th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="2">
+                  <p>Il n'y a pas de fiche de poste</p>
+                  <button
+                    pButton
+                    type="button"
+                    label="Ajouter un poste"
+                    (click)="ajouterPoste(personne.id)"
+                  ></button>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template #body let-poste>
+              <tr [pSelectableRow]="poste">
+                <td class="text-nowrap">{{ poste.dateAffectation | date: 'dd/MM/yyyy' }}</td>
+                <td class="text-nowrap">{{ poste.fonction }}</td>
+                <td>
+                  <p-button
+                    icon="pi pi-search"
+                    (click)="handleViewPdf(poste.id)"
+                    severity="secondary"
+                    rounded
+                    pTooltip="Voir le PDF"
+                  />
 
                   <p-button
-                    class="ms-3"
-                    icon="pi pi-plus"
-                    (click)="ajouterPoste(personne.id)"
+                    icon="pi pi-download"
+                    (click)="handleGetPdf(poste.id)"
+                    severity="secondary"
+                    pTooltip="Télécharger le PDF"
                     rounded
-                    raised
                   />
-                </div>
-                <div class="text-end pb-4"></div>
-              </ng-template>
-              <ng-template #header>
-                <tr>
-                  <th>Date d'affectation</th>
-                  <th>Fonction</th>
-                  <th></th>
-                </tr>
-              </ng-template>
-
-              <ng-template pTemplate="emptymessage">
-                <tr>
-                  <td colspan="2">
-                    <p>Il n'y a pas de fiche de poste</p>
-                    <button
-                      pButton
-                      type="button"
-                      label="Ajouter un poste"
-                      (click)="ajouterPoste(personne.id)"
-                    ></button>
-                  </td>
-                </tr>
-              </ng-template>
-              <ng-template #body let-poste>
-                <tr [pSelectableRow]="poste">
-                  <td class="text-nowrap">{{ poste.dateAffectation | date: 'dd/MM/yyyy' }}</td>
-                  <td class="text-nowrap">{{ poste.fonction }}</td>
-                  <td>
-                    <p-button
-                      icon="pi pi-search"
-                      (click)="handleViewPdf(poste.id)"
-                      severity="secondary"
-                      rounded
-                      pTooltip="Voir le PDF"
-                    />
-
-                    <p-button
-                      icon="pi pi-download"
-                      (click)="handleGetPdf(poste.id)"
-                      severity="secondary"
-                      pTooltip="Télécharger le PDF"
-                      rounded
-                    />
-                  </td>
-                </tr>
-              </ng-template>
-            </p-table>
-          </div>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-</div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
 
 <app-dialog-pdf />
 

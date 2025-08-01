@@ -3,7 +3,10 @@
     <h3>6.1 - Evolution des activités (préciser l'échéance envisagée)</h3>
 
     <div class="mb-3">
-      <textarea class="form-control" rows="6" formControlName="evolutionActivites"></textarea>
+      <app-shared-editor
+        [formGroup]="form"
+        formControlName="evolutionActivites"
+      ></app-shared-editor>
     </div>
 
     <br />
@@ -11,7 +14,7 @@
     <h3>6.2 - Evolution de carrière</h3>
 
     <div class="mb-3">
-      <textarea class="form-control" rows="6" formControlName="evolutionCarriere"></textarea>
+      <app-shared-editor [formGroup]="form" formControlName="evolutionCarriere"></app-shared-editor>
     </div>
   </div>
 </form>

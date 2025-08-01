@@ -10,3 +10,45 @@
   align-items: center;
   background: rgba(0, 0, 0, 0.3); /* overlay semi-transparent */
 }
+
+/* Layout global */
+.layout {
+  height: 100vh;
+  background-color: white !important;
+
+  /* Header fixe */
+  .header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 70px !important;
+    z-index: 10;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    box-sizing: border-box;
+  }
+
+  /* Footer fixe */
+  .footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 56px;
+    background: #fff;
+    border-top: 1px solid #eee;
+    box-sizing: border-box;
+    z-index: 10;
+  }
+
+  /* Contenu principal : placer sous header et au-dessus footer */
+  .content {
+    /* hauteur = 100vh - hauteur header - hauteur footer */
+    margin-top: 4.5rem;
+    margin-bottom: 4.5rem;
+
+    flex: 1 1 auto;
+    overflow: hidden; /* éviter scrollbar globale */
+    /* AJOUTE cette ligne : */
+    height: calc(100vh - 9rem);
+  }
+}

@@ -9,10 +9,18 @@ import { AppreciationGeneraleEnum } from '@shared/enums/appreciation_generale.en
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { EntretienStepsService } from '@shared/services/entretiens/entretien-steps.service';
 import { firstValueFrom } from 'rxjs';
+import { EditorComponent } from '@shared/components/editor/editor.component';
 
 @Component({
   selector: 'app-entretien-pro-step4',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonModule, RadioButtonModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ButtonModule,
+    RadioButtonModule,
+    EditorComponent,
+  ],
   providers: [],
   templateUrl: './step4.component.html',
   styleUrl: './step4.component.scss',

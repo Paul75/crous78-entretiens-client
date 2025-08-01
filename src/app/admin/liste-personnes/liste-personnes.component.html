@@ -1,450 +1,447 @@
 <p-toast />
 <h2>Liste des personnes</h2>
-<!-- Autres éléments éventuels (titre, toolbar, etc.) -->
-<div class="content-scroll flex-grow-1 d-flex flex-column">
-  <p-table
-    #dt
-    [value]="personnes"
-    showGridlines
-    stripedRows
-    dataKey="id"
-    editMode="row"
-    [loading]="loading"
-    [scrollable]="true"
-    [paginator]="true"
-    [rows]="5"
-    [tableStyle]="{ 'min-width': '50rem' }"
-    [style]="{ width: '100%' }"
-    [rowsPerPageOptions]="[5, 10, 15]"
-    [globalFilterFields]="['matricule', 'nom', 'prenom', 'email']"
-    scrollHeight="flex"
-  >
-    <ng-template #caption>
-      <div class="d-flex align-items-center justify-content-between">
-        <p class="me-3">
-          <input
-            pInputText
-            type="text"
-            (input)="dt.filterGlobal($any($event.target)?.value || '', 'contains')"
-            placeholder="Rechercher..."
-          />
-        </p>
-        <span class="text-xl font-bold mx-auto mb-0 text-center flex-grow-1"> </span>
+<p-table
+  #dt
+  [value]="personnes"
+  showGridlines
+  stripedRows
+  dataKey="id"
+  editMode="row"
+  [loading]="loading"
+  [scrollable]="true"
+  [paginator]="true"
+  [rows]="5"
+  [tableStyle]="{ 'min-width': '50rem' }"
+  [style]="{ width: '100%' }"
+  [rowsPerPageOptions]="[5, 10, 15]"
+  [globalFilterFields]="['matricule', 'nom', 'prenom', 'email']"
+  scrollHeight="flex"
+>
+  <ng-template #caption>
+    <div class="d-flex align-items-center justify-content-between">
+      <p class="me-3">
+        <input
+          pInputText
+          type="text"
+          (input)="dt.filterGlobal($any($event.target)?.value || '', 'contains')"
+          placeholder="Rechercher..."
+        />
+      </p>
+      <span class="text-xl font-bold mx-auto mb-0 text-center flex-grow-1"> </span>
 
-        <p-button class="ms-3" icon="pi pi-plus" (click)="addRow()" rounded raised />
-      </div>
-      <div class="text-end pb-4"></div>
-    </ng-template>
-    <ng-template #header>
-      <tr>
-        <th pFrozenColumn>MATRICULE</th>
-        <th>EST ACTIF</th>
-        <th>NOM</th>
-        <th>PRENOM</th>
-        <th>ENTITE</th>
-        <th>NIVEAU_HIERARCHIQUE</th>
-        <th>CHEF_DIRECT</th>
-        <th>CHEF_SERVICE</th>
-        <th>TITRE</th>
-        <th>EMAIL</th>
-        <th>LOGIN</th>
-        <th>STATUT</th>
-        <th>DATE_DEBUT</th>
-        <th>DATE_FIN</th>
-        <th>PHOTO</th>
-        <th>ETAT</th>
-        <th>NOM_AFFICHAGE</th>
-        <th>PRENOM_AFFICHAGE</th>
-        <th>FIXE</th>
-        <th>SEXE</th>
-        <th>date_naissance</th>
-        <th>corps_grade</th>
-        <th>echelon</th>
-        <th>date_promotion</th>
-        <th>fonction</th>
-        <th>structure</th>
-        <th>adresse</th>
-        <th>superieur</th>
-        <th pFrozenColumn></th>
-      </tr>
-    </ng-template>
-    <ng-template #body let-personne let-editing="editing" let-ri="rowIndex">
-      <tr [pEditableRow]="personne">
-        <td pFrozenColumn alignFrozen="left" class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <p-inputnumber
-                [(ngModel)]="personne.matricule"
-                mode="decimal"
-                inputId="withoutgrouping"
-                [useGrouping]="false"
-              />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.matricule }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <p-togglebutton
-                [(ngModel)]="personne.isActif"
-                onLabel="Oui"
-                offLabel="Non"
-                styleClass="w-24"
-              />
-            </ng-template>
-            <ng-template #output>
-              {{ displayIsActif(personne.isActif) }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="personne.nom" />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.nom }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="personne.prenom" />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.prenom }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="personne.entite" />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.entite }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="personne.niveauHierarchique" />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.niveauHierarchique }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="personne.chefDirect" />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.chefDirect }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="personne.chefService" />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.chefService }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="personne.titre" />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.titre }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="personne.email" />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.email }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="personne.login" />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.login }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="personne.statut" />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.statut }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <p-datePicker
-                dateFormat="dd/mm/yy"
-                appendTo="body"
-                [(ngModel)]="personne.dateDebut"
-                [iconDisplay]="'input'"
-                [showIcon]="true"
-                [style]="{ width: '150px' }"
-              />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.dateDebut | date: 'dd/MM/yyyy' }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <p-datePicker
-                dateFormat="dd/mm/yy"
-                appendTo="body"
-                [(ngModel)]="personne.dateFin"
-                [iconDisplay]="'input'"
-                [showIcon]="true"
-                [style]="{ width: '150px' }"
-              />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.dateFin | date: 'dd/MM/yyyy' }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="personne.photo" />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.photo }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="personne.etat" />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.etat }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="personne.nomAffichage" />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.nomAffichage }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="personne.prenomAffichage" />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.prenomAffichage }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <p-inputmask
-                mask="99 99 99 99 99"
-                [(ngModel)]="personne.fixe"
-                placeholder="99 99 99 99 99"
-              />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.fixe }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="personne.sexe" />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.sexe }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <p-datePicker
-                dateFormat="dd/mm/yy"
-                appendTo="body"
-                [(ngModel)]="personne.dateNaissance"
-                [iconDisplay]="'input'"
-                [showIcon]="true"
-                [style]="{ width: '150px' }"
-              />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.dateNaissance | date: 'dd/MM/yyyy' }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="personne.corpsGrade" />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.corpsGrade }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="personne.echelon" />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.echelon }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <p-datePicker
-                dateFormat="dd/mm/yy"
-                appendTo="body"
-                [(ngModel)]="personne.datePromotion"
-                [iconDisplay]="'input'"
-                [showIcon]="true"
-                [style]="{ width: '150px' }"
-              />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.datePromotion | date: 'dd/MM/yyyy' }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="personne.fonction" />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.fonction }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="personne.structure" />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.structure }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="personne.adresse" />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.adresse }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td class="text-nowrap">
-          <p-cellEditor>
-            <ng-template #input>
-              <input pInputText type="text" [(ngModel)]="personne.superieur" />
-            </ng-template>
-            <ng-template #output>
-              {{ personne.superieur }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <td pFrozenColumn alignFrozen="right">
-          <div class="flex items-center justify-center gap-2">
-            <button
-              *ngIf="!editing"
-              pButton
-              pRipple
-              type="button"
-              pInitEditableRow
-              icon="pi pi-pencil"
-              (click)="onRowEditInit(personne)"
-              text
-              rounded
-              severity="secondary"
-            ></button>
-            <button
-              *ngIf="!editing"
-              pButton
-              pRipple
-              type="button"
-              pCancelEditableRow
-              icon="pi pi-trash"
-              (click)="delRow(personne, ri)"
-              text
-              rounded
-              severity="secondary"
-            ></button>
-            <button
-              *ngIf="editing"
-              pButton
-              pRipple
-              type="button"
-              pSaveEditableRow
-              icon="pi pi-check"
-              (click)="onRowEditSave(personne)"
-              text
-              rounded
-              severity="secondary"
-            ></button>
-            <button
-              *ngIf="editing"
-              pButton
-              pRipple
-              type="button"
-              pCancelEditableRow
-              icon="pi pi-times"
-              (click)="onRowEditCancel(personne, ri)"
-              text
-              rounded
-              severity="secondary"
-            ></button>
-          </div>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-</div>
+      <p-button class="ms-3" icon="pi pi-plus" (click)="addRow()" rounded raised />
+    </div>
+    <div class="text-end pb-4"></div>
+  </ng-template>
+  <ng-template #header>
+    <tr>
+      <th pFrozenColumn>MATRICULE</th>
+      <th>EST ACTIF</th>
+      <th>NOM</th>
+      <th>PRENOM</th>
+      <th>ENTITE</th>
+      <th>NIVEAU_HIERARCHIQUE</th>
+      <th>CHEF_DIRECT</th>
+      <th>CHEF_SERVICE</th>
+      <th>TITRE</th>
+      <th>EMAIL</th>
+      <th>LOGIN</th>
+      <th>STATUT</th>
+      <th>DATE_DEBUT</th>
+      <th>DATE_FIN</th>
+      <th>PHOTO</th>
+      <th>ETAT</th>
+      <th>NOM_AFFICHAGE</th>
+      <th>PRENOM_AFFICHAGE</th>
+      <th>FIXE</th>
+      <th>SEXE</th>
+      <th>date_naissance</th>
+      <th>corps_grade</th>
+      <th>echelon</th>
+      <th>date_promotion</th>
+      <th>fonction</th>
+      <th>structure</th>
+      <th>adresse</th>
+      <th>superieur</th>
+      <th pFrozenColumn></th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-personne let-editing="editing" let-ri="rowIndex">
+    <tr [pEditableRow]="personne">
+      <td pFrozenColumn alignFrozen="left" class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <p-inputnumber
+              [(ngModel)]="personne.matricule"
+              mode="decimal"
+              inputId="withoutgrouping"
+              [useGrouping]="false"
+            />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.matricule }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <p-togglebutton
+              [(ngModel)]="personne.isActif"
+              onLabel="Oui"
+              offLabel="Non"
+              styleClass="w-24"
+            />
+          </ng-template>
+          <ng-template #output>
+            {{ displayIsActif(personne.isActif) }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <input pInputText type="text" [(ngModel)]="personne.nom" />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.nom }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <input pInputText type="text" [(ngModel)]="personne.prenom" />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.prenom }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <input pInputText type="text" [(ngModel)]="personne.entite" />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.entite }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <input pInputText type="text" [(ngModel)]="personne.niveauHierarchique" />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.niveauHierarchique }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <input pInputText type="text" [(ngModel)]="personne.chefDirect" />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.chefDirect }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <input pInputText type="text" [(ngModel)]="personne.chefService" />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.chefService }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <input pInputText type="text" [(ngModel)]="personne.titre" />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.titre }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <input pInputText type="text" [(ngModel)]="personne.email" />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.email }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <input pInputText type="text" [(ngModel)]="personne.login" />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.login }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <input pInputText type="text" [(ngModel)]="personne.statut" />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.statut }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <p-datePicker
+              dateFormat="dd/mm/yy"
+              appendTo="body"
+              [(ngModel)]="personne.dateDebut"
+              [iconDisplay]="'input'"
+              [showIcon]="true"
+              [style]="{ width: '150px' }"
+            />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.dateDebut | date: 'dd/MM/yyyy' }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <p-datePicker
+              dateFormat="dd/mm/yy"
+              appendTo="body"
+              [(ngModel)]="personne.dateFin"
+              [iconDisplay]="'input'"
+              [showIcon]="true"
+              [style]="{ width: '150px' }"
+            />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.dateFin | date: 'dd/MM/yyyy' }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <input pInputText type="text" [(ngModel)]="personne.photo" />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.photo }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <input pInputText type="text" [(ngModel)]="personne.etat" />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.etat }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <input pInputText type="text" [(ngModel)]="personne.nomAffichage" />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.nomAffichage }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <input pInputText type="text" [(ngModel)]="personne.prenomAffichage" />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.prenomAffichage }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <p-inputmask
+              mask="99 99 99 99 99"
+              [(ngModel)]="personne.fixe"
+              placeholder="99 99 99 99 99"
+            />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.fixe }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <input pInputText type="text" [(ngModel)]="personne.sexe" />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.sexe }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <p-datePicker
+              dateFormat="dd/mm/yy"
+              appendTo="body"
+              [(ngModel)]="personne.dateNaissance"
+              [iconDisplay]="'input'"
+              [showIcon]="true"
+              [style]="{ width: '150px' }"
+            />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.dateNaissance | date: 'dd/MM/yyyy' }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <input pInputText type="text" [(ngModel)]="personne.corpsGrade" />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.corpsGrade }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <input pInputText type="text" [(ngModel)]="personne.echelon" />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.echelon }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <p-datePicker
+              dateFormat="dd/mm/yy"
+              appendTo="body"
+              [(ngModel)]="personne.datePromotion"
+              [iconDisplay]="'input'"
+              [showIcon]="true"
+              [style]="{ width: '150px' }"
+            />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.datePromotion | date: 'dd/MM/yyyy' }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <input pInputText type="text" [(ngModel)]="personne.fonction" />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.fonction }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <input pInputText type="text" [(ngModel)]="personne.structure" />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.structure }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <input pInputText type="text" [(ngModel)]="personne.adresse" />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.adresse }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td class="text-nowrap">
+        <p-cellEditor>
+          <ng-template #input>
+            <input pInputText type="text" [(ngModel)]="personne.superieur" />
+          </ng-template>
+          <ng-template #output>
+            {{ personne.superieur }}
+          </ng-template>
+        </p-cellEditor>
+      </td>
+      <td pFrozenColumn alignFrozen="right">
+        <div class="flex items-center justify-center gap-2">
+          <button
+            *ngIf="!editing"
+            pButton
+            pRipple
+            type="button"
+            pInitEditableRow
+            icon="pi pi-pencil"
+            (click)="onRowEditInit(personne)"
+            text
+            rounded
+            severity="secondary"
+          ></button>
+          <button
+            *ngIf="!editing"
+            pButton
+            pRipple
+            type="button"
+            pCancelEditableRow
+            icon="pi pi-trash"
+            (click)="delRow(personne, ri)"
+            text
+            rounded
+            severity="secondary"
+          ></button>
+          <button
+            *ngIf="editing"
+            pButton
+            pRipple
+            type="button"
+            pSaveEditableRow
+            icon="pi pi-check"
+            (click)="onRowEditSave(personne)"
+            text
+            rounded
+            severity="secondary"
+          ></button>
+          <button
+            *ngIf="editing"
+            pButton
+            pRipple
+            type="button"
+            pCancelEditableRow
+            icon="pi pi-times"
+            (click)="onRowEditCancel(personne, ri)"
+            text
+            rounded
+            severity="secondary"
+          ></button>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

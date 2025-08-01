@@ -3,7 +3,10 @@
     <h3>5.1 - Objectifs d'activités attendus</h3>
 
     <div class="mb-3">
-      <textarea class="form-control" rows="6" formControlName="objectifsActivites"></textarea>
+      <app-shared-editor
+        [formGroup]="form"
+        formControlName="objectifsActivites"
+      ></app-shared-editor>
     </div>
 
     <br />
@@ -14,7 +17,7 @@
     </h3>
 
     <div class="mb-3">
-      <textarea class="form-control" rows="6" formControlName="demarcheEnvisagee"></textarea>
+      <app-shared-editor [formGroup]="form" formControlName="demarcheEnvisagee"></app-shared-editor>
     </div>
   </div>
 </form>

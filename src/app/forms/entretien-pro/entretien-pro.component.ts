@@ -3,12 +3,15 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ComponentRef,
   OnChanges,
   OnInit,
   QueryList,
   SimpleChanges,
+  Type,
   ViewChild,
   ViewChildren,
+  ViewContainerRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -29,8 +32,6 @@ import { EntretienProStep8Component } from './step8/step8.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Entretien } from '@shared/models/entretien.model';
 import { EntretienService } from '@shared/services/entretiens/entretien.service';
-import { environment } from '@environments/environment';
-import { StatutDemandeEnum } from '@shared/enums/statut.demande.enum';
 import { DatePickerModule } from 'primeng/datepicker';
 import { EntretienProProvider } from '@forms/providers/entretien-pro.provider';
 import { transformDatesToDisplay } from '@shared/utils/dates.utils';
@@ -51,14 +52,6 @@ import { MessageService } from 'primeng/api';
     DatePickerModule,
     ToastModule,
     DrawerModule,
-    EntretienProStep1Component,
-    EntretienProStep2Component,
-    EntretienProStep3Component,
-    EntretienProStep4Component,
-    EntretienProStep5Component,
-    EntretienProStep6Component,
-    EntretienProStep7Component,
-    EntretienProStep8Component,
   ],
   providers: [
     MessageService,
@@ -73,11 +66,6 @@ export class EntretienProComponent
   extends FormProvider
   implements OnInit, OnChanges, AfterViewInit
 {
-  name = environment.application.name;
-  angular = environment.application.angular;
-  bootstrap = environment.application.bootstrap;
-  fontawesome = environment.application.fontawesome;
-
   displayId = false;
 
   today = new Date();
@@ -85,32 +73,49 @@ export class EntretienProComponent
 
   typeForm = 'professionnel';
 
-  // Utilisez ViewChildren au lieu de ViewChild
-  @ViewChildren(EntretienProStep1Component)
-  step1ChildComponents!: QueryList<EntretienProStep1Component>;
-
-  @ViewChildren(EntretienProStep2Component)
-  step2ChildComponents!: QueryList<EntretienProStep2Component>;
-
-  @ViewChildren(EntretienProStep3Component)
-  step3ChildComponents!: QueryList<EntretienProStep3Component>;
-
-  @ViewChildren(EntretienProStep4Component)
-  step4ChildComponents!: QueryList<EntretienProStep4Component>;
-
-  @ViewChildren(EntretienProStep5Component)
-  step5ChildComponents!: QueryList<EntretienProStep5Component>;
-
-  @ViewChildren(EntretienProStep6Component)
-  step6ChildComponents!: QueryList<EntretienProStep6Component>;
-
-  @ViewChildren(EntretienProStep7Component)
-  step7ChildComponents!: QueryList<EntretienProStep7Component>;
-
   entretienForm!: FormGroup;
 
   stepsCount = 0;
   currentStepIndex: number = 1;
+
+  @ViewChild('dynamicStepContainer', { read: ViewContainerRef, static: false })
+  dynamicStepContainer!: ViewContainerRef;
+
+  currentStepComponentRef: ComponentRef<any> | null = null;
+
+  steps: { value: number; label: string; component: Type<any> }[] = [
+    { value: 1, label: 'Informations générales', component: EntretienProStep1Component },
+    {
+      value: 2,
+      label: "DESCRIPTION DU POSTE OCCUPE PAR L'AGENT",
+      component: EntretienProStep2Component,
+    },
+    { value: 3, label: "EVALUATION DE L'ANNEE ECOULEE", component: EntretienProStep3Component },
+    {
+      value: 4,
+      label: 'VALEUR PROFESSIONNELLE ET MANIERE DE SERVIR DU FONCTIONNAIRE',
+      component: EntretienProStep4Component,
+    },
+    {
+      value: 5,
+      label: 'ACQUIS DE L’EXPERIENCE PROFESSIONNELLE',
+      component: EntretienProStep5Component,
+    },
+    {
+      value: 6,
+      label: "OBJECTIFS FIXES POUR L'ANNEE A VENIR",
+      component: EntretienProStep6Component,
+    },
+    {
+      value: 7,
+      label: "PERSPECTIVES D'EVOLUTION PROFESSIONNELLE",
+      component: EntretienProStep7Component,
+    },
+    { value: 8, label: 'ENTRETIEN TERMINE', component: EntretienProStep8Component },
+  ];
+
+  activateNavClick = true;
+
   @ViewChild('stepper') stepper!: Stepper;
   @ViewChildren(StepItem) stepItems!: QueryList<StepItem>;
   private fromNextStep = false;
@@ -136,6 +141,8 @@ export class EntretienProComponent
   ngAfterViewInit(): void {
     this.stepsCount = this.stepItems.length;
     this.getEntretienById();
+
+    this.loadCurrentStepComponent();
     this.cdref.detectChanges();
   }
 
@@ -147,30 +154,69 @@ export class EntretienProComponent
     this.cdref.detectChanges();
   }
 
-  isLastStep(): boolean {
-    return this.currentStepIndex === this.stepsCount;
-  }
+  loadCurrentStepComponent() {
+    this.dynamicStepContainer.clear();
+    const step = this.steps.find(s => s.value === this.currentStepIndex);
 
-  goToAdminForm() {
-    this.router.navigate(['/admin']);
-  }
-
-  goToPreviousStep() {
-    if (this.currentStepIndex > 1) {
-      this.currentStepIndex--;
+    if (step) {
+      const componentRef = this.dynamicStepContainer.createComponent(step.component);
+      this.currentStepComponentRef = componentRef;
     }
   }
+
+  get currentStepComponent() {
+    const step = this.steps.find(s => s.value === this.currentStepIndex);
+    return step ? step.component : null;
+  }
+
+  async goToPreviousStep() {
+    if (this.currentStepIndex > 1) {
+      await this.saveCurrentStep();
+      this.currentStepIndex--;
+
+      this.loadCurrentStepComponent();
+    }
+  }
+
   async goToNextStep() {
     if (!this.isLastStep()) {
       try {
         this.fromNextStep = true;
         await this.saveCurrentStep();
         this.currentStepIndex++;
+
+        this.loadCurrentStepComponent();
+        this.cdref.detectChanges(); // force la mise à jour visuelle immédiatement
       } catch (e) {
         console.error('Erreur lors de la sauvegarde', e);
         // éventuellement afficher un message à l'utilisateur
       }
     }
+  }
+
+  async goToStep(step: number) {
+    if (this.activateNavClick && !this.isLastStep()) {
+      try {
+        this.fromNextStep = true;
+        await this.saveCurrentStep();
+
+        this.currentStepIndex = step;
+
+        this.loadCurrentStepComponent();
+        this.cdref.detectChanges(); // force la mise à jour visuelle immédiatement
+      } catch (e) {
+        console.error('Erreur lors de la sauvegarde', e);
+        // éventuellement afficher un message à l'utilisateur
+      }
+    }
+  }
+
+  isLastStep(): boolean {
+    return this.currentStepIndex === this.stepsCount;
+  }
+
+  goToAdminForm() {
+    this.router.navigate(['/admin']);
   }
 
   getEntretienById() {
@@ -220,30 +266,10 @@ export class EntretienProComponent
   }
 
   async saveCurrentStep() {
-    switch (this.currentStepIndex) {
-      case 1:
-        await this.step1ChildComponents.first.saveDatas();
-        transformDatesToDisplay(this.entretienForm);
-        break;
-      case 2:
-        await this.step2ChildComponents.first.saveDatas();
-        transformDatesToDisplay(this.entretienForm);
-        break;
-      case 3:
-        await this.step3ChildComponents.first.saveDatas();
-        break;
-      case 4:
-        await this.step4ChildComponents.first.saveDatas();
-        break;
-      case 5:
-        await this.step5ChildComponents.first.saveDatas();
-        break;
-      case 6:
-        await this.step6ChildComponents.first.saveDatas();
-        break;
-      case 7:
-        await this.step7ChildComponents.first.saveDatas();
-        break;
+    const instance = this.currentStepComponentRef?.instance as any;
+    if (instance?.saveDatas) {
+      await instance.saveDatas();
+      transformDatesToDisplay(this.entretienForm);
     }
   }
 
@@ -264,11 +290,5 @@ export class EntretienProComponent
         });
         console.error('Erreur de sauvegarde:', error);
       });
-  }
-
-  get boutonLabelSubmit(): string {
-    const statut = this.entretienForm.value.statut;
-    const statutsEnregistrer = [StatutDemandeEnum.PREPARE, StatutDemandeEnum.RDV];
-    return statutsEnregistrer.includes(statut) ? 'ENREGISTRER' : 'VALIDER';
   }
 }

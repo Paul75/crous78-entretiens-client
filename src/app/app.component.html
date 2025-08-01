@@ -1,8 +1,11 @@
-<app-header (logout)="onLogout()" />
-<main>
-  <div class="progress-spinner" *ngIf="loaderService.isLoading$ | async">
-    <p-progressSpinner></p-progressSpinner>
+<div class="layout">
+  <div class="header"><app-header (logout)="onLogout()" /></div>
+
+  <div class="content">
+    <router-outlet />
   </div>
-  <router-outlet />
-</main>
-<app-footer />
+
+  <div class="footer">
+    <app-footer />
+  </div>
+</div>

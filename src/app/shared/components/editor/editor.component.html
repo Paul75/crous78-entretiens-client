@@ -1,0 +1,21 @@
+<p-editor
+  class="form-control"
+  [style]="style"
+  [formControl]="control"
+  [class.is-invalid]="control.invalid && (control.touched || control.dirty)"
+  (onTextChange)="handleChange($event)"
+>
+  <ng-template #header>
+    <span class="ql-formats">
+      <button class="ql-bold"></button>
+      <button class="ql-italic"></button>
+      <button class="ql-underline"></button>
+    </span>
+    <span class="ql-formats">
+      <button class="ql-list" value="ordered"></button>
+      <button class="ql-list" value="bullet"></button>
+      <button class="ql-indent" value="-1"></button>
+      <button class="ql-indent" value="+1"></button>
+    </span>
+  </ng-template>
+</p-editor>

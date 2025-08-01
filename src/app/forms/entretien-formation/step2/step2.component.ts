@@ -20,6 +20,9 @@ import { InputMaskModule } from 'primeng/inputmask';
 import { firstValueFrom } from 'rxjs';
 import { EntretienStepsService } from '@shared/services/entretiens/entretien-steps.service';
 import { transformDatesToBdd } from '@shared/utils/dates.utils';
+import { Entretien } from '@shared/models/entretien.model';
+import { FormationsDispensees } from '@shared/models/formations-dispensees.model';
+import { EditorComponent } from '@shared/components/editor/editor.component';
 
 @Component({
   selector: 'app-entretien-form-step2',
@@ -33,6 +36,7 @@ import { transformDatesToBdd } from '@shared/utils/dates.utils';
     TableModule,
     ToggleButtonModule,
     DatePickerModule,
+    EditorComponent,
   ],
   providers: [],
   templateUrl: './step2.component.html',
@@ -64,7 +68,13 @@ export class EntretienFormStep2Component {
     this.form = this.formProvider.getForm();
   }
 
-  public initializeFormWithData(bddData?: any[]) {
+  initialize(entretien: Entretien) {
+    if (entretien?.formationsDispensees) {
+      this.initializeFormationsDispensees(entretien.formationsDispensees);
+    }
+  }
+
+  private initializeFormationsDispensees(formationsDispensees?: FormationsDispensees[]) {
     if (!this.form.contains('formationsDispensees')) {
       this.form.addControl('formationsDispensees', this.fb.array([]));
     }
@@ -74,7 +84,7 @@ export class EntretienFormStep2Component {
 
     const saved = this.formService.getCurrentValue().formationsDispensees;
 
-    const source = saved.length ? saved : bddData;
+    const source = saved.length ? saved : formationsDispensees;
 
     if (source?.length) {
       source.forEach(item => {

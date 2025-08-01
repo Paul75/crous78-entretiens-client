@@ -10,6 +10,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { EntretienStepsService } from '@shared/services/entretiens/entretien-steps.service';
 import { firstValueFrom } from 'rxjs';
 import { transformDatesToBdd } from '@shared/utils/dates.utils';
+import { EditorComponent } from '@shared/components/editor/editor.component';
 
 @Component({
   selector: 'app-entretien-pro-step2',
@@ -20,6 +21,7 @@ import { transformDatesToBdd } from '@shared/utils/dates.utils';
     ButtonModule,
     ToggleButtonModule,
     DatePickerModule,
+    EditorComponent,
   ],
   providers: [],
   templateUrl: './step2.component.html',

@@ -39,11 +39,8 @@
   </li>
 </ul>
 <form [formGroup]="form">
-  <textarea
-    rows="7"
-    class="form-control"
-    pTextarea
+  <app-shared-editor
+    [formGroup]="form"
     formControlName="formationsConstruireProjet"
-  ></textarea>
-  <br /><br />
+  ></app-shared-editor>
 </form>

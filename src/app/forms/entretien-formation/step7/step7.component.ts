@@ -6,9 +6,9 @@ import { FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { FormProvider } from '../../providers/form.provider';
 import { TableModule } from 'primeng/table';
-import { TextareaModule } from 'primeng/textarea';
 import { firstValueFrom } from 'rxjs';
 import { EntretienStepsService } from '@shared/services/entretiens/entretien-steps.service';
+import { EditorComponent } from '@shared/components/editor/editor.component';
 
 @Component({
   selector: 'app-entretien-form-step7',
@@ -18,7 +18,7 @@ import { EntretienStepsService } from '@shared/services/entretiens/entretien-ste
     ReactiveFormsModule,
     ButtonModule,
     TableModule,
-    TextareaModule,
+    EditorComponent,
   ],
   providers: [],
   templateUrl: './step7.component.html',

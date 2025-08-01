@@ -6,7 +6,10 @@
     >
 
     <div class="mb-3">
-      <textarea class="form-control" rows="6" formControlName="acquisExperiencePro"></textarea>
+      <app-shared-editor
+        [formGroup]="form"
+        formControlName="acquisExperiencePro"
+      ></app-shared-editor>
     </div>
   </div>
 </form>

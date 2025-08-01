@@ -1,25 +1,71 @@
-.infos_title {
-  font-weight: bold;
+:host {
+  display: block;
+  height: 100%;
 }
 
-input.form-check-input {
-  border: 1px solid black !important;
-}
-
-.formPage {
-  margin-bottom: 70px;
-}
-
-.action-bar {
-  position: fixed;
-  bottom: 60px;
-  left: 0;
-  right: 0;
-  background-color: #fff;
-  padding: 1rem;
-  border-top: 1px solid #ccc;
+.content-wrapper {
   display: flex;
-  justify-content: end;
+  flex-direction: column; /* empile header et colonnes verticalement */
+  height: 100%;
+  width: 100%;
   gap: 1rem;
-  z-index: 1000; // pour qu'elle reste au-dessus
+
+  .header-title {
+    flex: 0 0 auto; /* hauteur naturelle, ne prend pas plus */
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid #ccc;
+
+    text-align: center;
+  }
+
+  .columns {
+    flex: 1 1 auto; /* prend tout l’espace restant */
+    display: flex; /* conteneur flex horizontal pour colonnes */
+    gap: 1rem;
+    height: 0; /* clé maligne pour forcer le calcul de hauteur */
+
+    .left-content {
+      flex: 0 0 300px;
+      box-sizing: border-box;
+      overflow-y: auto;
+      height: 100%;
+      background-color: #f8f9fa; /* Light background for left content */
+    }
+    .right-content {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      min-width: 0;
+      height: 100%; /* prend toute la hauteur disponible */
+      box-sizing: border-box;
+      background-color: #ffffff;
+
+      .my-form-in-right {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      .content-scrollable {
+        flex: 1 1 auto; /* prend tout l’espace restant au-dessus de la barre */
+        overflow-y: auto; /* scroll vertical */
+        padding: 1rem;
+        box-sizing: border-box;
+      }
+
+      .bottom-bar {
+        flex: 0 0 60px; /* hauteur fixe (ex: 50px) */
+        border-top: 1px solid #ccc;
+        background: #f0f0f0;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center; /* centre vertical bouton */
+        padding: 0 1rem;
+        gap: 0.5rem;
+        box-sizing: border-box;
+      }
+    }
+  }
 }

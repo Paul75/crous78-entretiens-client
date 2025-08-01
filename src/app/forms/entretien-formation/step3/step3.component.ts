@@ -17,6 +17,8 @@ import { AnneeScolaire } from '@shared/utils/annee-scolaire.util';
 import { FormulaireService } from '@forms/services/formulaire.service';
 import { EntretienStepsService } from '@shared/services/entretiens/entretien-steps.service';
 import { firstValueFrom } from 'rxjs';
+import { Entretien } from '@shared/models/entretien.model';
+import { FormationsRealisees } from '@shared/models/formations-realisees.model';
 
 @Component({
   selector: 'app-entretien-form-step3',
@@ -67,7 +69,13 @@ export class EntretienFormStep3Component {
       AnneeScolaire.getAnneeScolaireActuelle().endFormat();
   }
 
-  initializeFormWithData(bddData?: any[]) {
+  initialize(entretien: Entretien) {
+    if (entretien?.formationsRealisees) {
+      this.initializeFormationsRealisees(entretien.formationsRealisees);
+    }
+  }
+
+  private initializeFormationsRealisees(formationsRealisees?: FormationsRealisees[]) {
     if (!this.form.contains('formationsRealisees')) {
       this.form.addControl('formationsRealisees', this.fb.array([]));
     }
@@ -77,7 +85,7 @@ export class EntretienFormStep3Component {
 
     const saved = this.formService.getCurrentValue().formationsRealisees;
 
-    const source = saved.length ? saved : bddData;
+    const source = saved.length ? saved : formationsRealisees;
 
     if (source?.length) {
       source.forEach(item => {

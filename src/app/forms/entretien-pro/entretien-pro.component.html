@@ -1,167 +1,67 @@
 <p-toast />
-<div class="container-fluid py-5 formPage">
-  <div class="row">
-    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mb-2">
-      <h1 class="h5">Entretien professionnel</h1>
+<div class="content-wrapper">
+  <div class="header-title"><h1 class="h5">Entretien professionnel</h1></div>
+  <div class="columns">
+    <div class="left-content">
+      <nav class="border-end bg-light">
+        <div
+          *ngFor="let step of steps"
+          (click)="goToStep(step.value)"
+          [ngClass]="{ 'bg-primary text-white': currentStepIndex === step.value }"
+          class="px-3 py-3 border-bottom cursor-pointer fw-semibold"
+          style="cursor: pointer"
+        >
+          {{ step.value }} {{ step.label }}
+        </div>
+      </nav>
     </div>
-  </div>
-
-  <div class="step-form-container">
-    <form [formGroup]="entretienForm" novalidate *ngIf="entretienForm">
-      <div class="container">
-        <div class="row row-cols-sm-auto">
-          <div class="input-group">
-            <label for="dateEntretien" class="col-sm-4 col-form-label">Date de l'entretien :</label>
-            <p-datePicker
-              formControlName="dateEntretien"
-              [showIcon]="true"
-              [dateFormat]="'dd/mm/yy'"
-              appendTo="body"
-              [minDate]="minDate"
-              [showButtonBar]="true"
-              [class.ng-invalid.ng-dirty]="
-                entretienForm.get('dateEntretien')?.invalid &&
-                (entretienForm.get('dateEntretien')?.touched ||
-                  entretienForm.get('dateEntretien')?.dirty)
-              "
-            />
-          </div>
+    <div class="right-content">
+      <form [formGroup]="entretienForm" novalidate *ngIf="entretienForm" class="my-form-in-right">
+        <div class="content-scrollable">
+          <ng-template #dynamicStepContainer></ng-template>
         </div>
-        <br />
-        <div class="card">
-          <p-stepper #stepper [value]="currentStepIndex" [linear]="true">
-            <p-step-item [value]="1">
-              <p-step>Informations générales</p-step>
-              <p-step-panel>
-                <ng-template #content let-activateCallback="activateCallback">
-                  <div class="flex flex-col">
-                    <app-entretien-pro-step1 />
-                  </div>
-                </ng-template>
-              </p-step-panel>
-            </p-step-item>
-
-            <p-step-item [value]="2">
-              <p-step>1 - DESCRIPTION DU POSTE OCCUPE PAR L'AGENT</p-step>
-              <p-step-panel>
-                <ng-template #content let-activateCallback="activateCallback">
-                  <div class="flex flex-col h-48">
-                    <app-entretien-pro-step2 />
-                  </div>
-                </ng-template>
-              </p-step-panel>
-            </p-step-item>
-
-            <p-step-item [value]="3">
-              <p-step>2 - Evaluation de l'année écoulée</p-step>
-              <p-step-panel>
-                <ng-template #content let-activateCallback="activateCallback">
-                  <div class="flex flex-col h-48">
-                    <app-entretien-pro-step3 />
-                  </div>
-                </ng-template>
-              </p-step-panel>
-            </p-step-item>
-
-            <p-step-item [value]="4">
-              <p-step>3 - VALEUR PROFESSIONNELLE ET MANIERE DE SERVIR DU FONCTIONNAIRE</p-step>
-              <p-step-panel>
-                <ng-template #content let-activateCallback="activateCallback">
-                  <div class="flex flex-col h-48">
-                    <app-entretien-pro-step4 />
-                  </div>
-                </ng-template>
-              </p-step-panel>
-            </p-step-item>
-
-            <p-step-item [value]="5">
-              <p-step>4 - ACQUIS DE L’EXPERIENCE PROFESSIONNELLE</p-step>
-              <p-step-panel>
-                <ng-template #content let-activateCallback="activateCallback">
-                  <div class="flex flex-col h-48">
-                    <app-entretien-pro-step5 />
-                  </div>
-                </ng-template>
-              </p-step-panel>
-            </p-step-item>
-
-            <p-step-item [value]="6">
-              <p-step>5 - OBJECTIFS FIXÉS POUR LA NOUVELLE ANNÉE</p-step>
-              <p-step-panel>
-                <ng-template #content let-activateCallback="activateCallback">
-                  <div class="flex flex-col h-48">
-                    <app-entretien-pro-step6 />
-                  </div>
-                </ng-template>
-              </p-step-panel>
-            </p-step-item>
-
-            <p-step-item [value]="7">
-              <p-step>6 - PERSPECTIVES D'EVOLUTION PROFESSIONNELLE</p-step>
-              <p-step-panel>
-                <ng-template #content let-activateCallback="activateCallback">
-                  <div class="flex flex-col h-48">
-                    <app-entretien-pro-step7 />
-                  </div>
-                </ng-template>
-              </p-step-panel>
-            </p-step-item>
-
-            <p-step-item [value]="8">
-              <p-step>ENTRETIEN TERMINE</p-step>
-              <p-step-panel>
-                <ng-template #content let-activateCallback="activateCallback">
-                  <div class="flex flex-col h-48">
-                    <app-entretien-pro-step8 />
-                  </div>
-                </ng-template>
-              </p-step-panel>
-            </p-step-item>
-          </p-stepper>
+        <div class="bottom-bar">
+          <p-button
+            label="Quitter le formulaire"
+            icon="pi pi-times"
+            size="large"
+            severity="secondary"
+            (click)="goToAdminForm()"
+            [rounded]="true"
+            [raised]="true"
+          />
+          <p-button
+            label="Précédent"
+            icon="pi pi-arrow-left"
+            size="large"
+            severity="secondary"
+            [outlined]="true"
+            (click)="goToPreviousStep()"
+            [rounded]="true"
+            [raised]="true"
+            [disabled]="currentStepIndex === 1"
+          />
+          <p-button
+            label="Suivant"
+            icon="pi pi-arrow-right"
+            size="large"
+            severity="info"
+            (click)="goToNextStep()"
+            [rounded]="true"
+            [raised]="true"
+            [disabled]="isLastStep()"
+          />
+          <p-button
+            label="Enregistrer"
+            icon="pi pi-save"
+            size="large"
+            severity="danger"
+            (click)="goSaveStep()"
+            [rounded]="true"
+            [raised]="true"
+          />
         </div>
-      </div>
-
-      <div class="action-bar fixed-bottom bg-white p-3 border-top text-end">
-        <p-button
-          label="Quitter le formulaire"
-          icon="pi pi-times"
-          size="large"
-          severity="secondary"
-          (click)="goToAdminForm()"
-          [rounded]="true"
-          [raised]="true"
-        />
-        <p-button
-          label="Précédent"
-          icon="pi pi-arrow-left"
-          size="large"
-          severity="secondary"
-          [outlined]="true"
-          (click)="goToPreviousStep()"
-          [rounded]="true"
-          [raised]="true"
-          [disabled]="currentStepIndex === 1"
-        />
-        <p-button
-          label="Suivant"
-          icon="pi pi-arrow-right"
-          size="large"
-          severity="info"
-          (click)="goToNextStep()"
-          [rounded]="true"
-          [raised]="true"
-          [disabled]="isLastStep()"
-        />
-        <p-button
-          label="Enregistrer"
-          icon="pi pi-save"
-          size="large"
-          severity="danger"
-          (click)="goSaveStep()"
-          [rounded]="true"
-          [raised]="true"
-        />
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </div>
